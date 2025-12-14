@@ -1,5 +1,6 @@
 import BookingStepsSection from './components/BookingStepsSection';
 import HeroSection from './components/HeroSection';
+import MobileAppSection from './components/MobileAppSection';
 import NewsSection from './components/NewsSection';
 import ServiceSection from './components/ServiceSection';
 
@@ -9,6 +10,7 @@ const HomePage = () => {
       <HeroSection />
       <BookingStepsSection />
       <ServiceSection />
+      <MobileAppSection />
       <NewsSection />
     </div>
   );
