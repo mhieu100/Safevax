@@ -6,6 +6,7 @@
     "description": "Hồ sơ vắc-xin an toàn, minh bạch và bất biến được hỗ trợ bởi công nghệ blockchain. Dữ liệu sức khỏe của bạn, do bạn sở hữu.",
     "viewVaccines": "Xem Vắc-xin",
     "learnMore": "Tìm hiểu thêm",
+    "verify": "Tra cứu & Xác minh",
     "security": "Bảo mật cấp ngân hàng",
     "verifiedRecords": "Hồ sơ đã xác minh",
     "passportCard": {
@@ -17,7 +18,8 @@
       "fullyVaccinated": "Đã tiêm đầy đủ",
       "blockchainHash": "Mã băm Blockchain",
       "verified": "Đã xác minh"
-    }
+    },
+    "scrollDown": "Cuộn xuống"
   },
   "steps": {
     "subtitle": "Cách thức hoạt động",

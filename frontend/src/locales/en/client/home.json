@@ -6,6 +6,7 @@
     "description": "Secure, transparent, and immutable vaccine records powered by blockchain technology. Your health data, owned by you.",
     "viewVaccines": "View Vaccines",
     "learnMore": "Learn More",
+    "verify": "Verify & Lookup",
     "security": "Bank-grade Security",
     "verifiedRecords": "Verified Records",
     "passportCard": {
@@ -17,7 +18,8 @@
       "fullyVaccinated": "Fully Vaccinated",
       "blockchainHash": "Blockchain Hash",
       "verified": "Verified"
-    }
+    },
+    "scrollDown": "Scroll Down"
   },
   "steps": {
     "subtitle": "How It Works",
