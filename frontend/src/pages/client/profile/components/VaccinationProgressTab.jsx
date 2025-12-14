@@ -2,13 +2,27 @@ import {
   CalendarOutlined,
   CheckCircleFilled,
   ClockCircleFilled,
+  InfoCircleOutlined,
   RightOutlined,
+  SafetyCertificateOutlined,
 } from '@ant-design/icons';
-import { Button, Card, Empty, Skeleton, Steps, Tag, Typography } from 'antd';
+import {
+  Alert,
+  Button,
+  Card,
+  Empty,
+  Progress,
+  Skeleton,
+  Steps,
+  Tag,
+  Tooltip,
+  Typography,
+} from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import apiClient from '@/services/apiClient';
 import { getGroupedBookingHistory } from '@/services/booking.service';
 import useAccountStore from '@/stores/useAccountStore';
 
@@ -20,6 +34,8 @@ const VaccinationProgressTab = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [journeyData, setJourneyData] = useState([]);
+  const [recommendation, setRecommendation] = useState(null);
+  const [stats, setStats] = useState({ total: 0, completed: 0, verified: 0 });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,12 +43,21 @@ const VaccinationProgressTab = () => {
       try {
         setLoading(true);
 
-        const response = await getGroupedBookingHistory();
-        const routes = response.data || [];
+        const [bookingResponse, recordResponse] = await Promise.all([
+          getGroupedBookingHistory(),
+          apiClient.post('/api/vaccine-records/my-records').catch(() => ({ data: [] })),
+        ]);
+
+        const routes = bookingResponse.data || [];
+        const records = recordResponse.data || [];
+
+        let nextVaccine = null;
+        let totalDoses = 0;
+        let completedDoses = 0;
+        let verifiedDoses = 0;
 
         const journeyList = routes.map((route) => {
           const steps = [];
-
           const appointments = route.appointments || [];
 
           for (let i = 1; i <= route.requiredDoses; i++) {
@@ -42,12 +67,27 @@ const VaccinationProgressTab = () => {
             let description = t('client:vaccinationHistory.notScheduled');
             const title = `${t('client:vaccinationHistory.dose')} ${i}`;
             let date = null;
+            let isVerified = false;
 
             if (apt) {
+              // Check verification for MAIN user ONLY (since we fetched my-records)
+              if (!route.isFamily) {
+                const record = records.find(
+                  (r) =>
+                    (r.appointmentId && r.appointmentId === apt.id) ||
+                    (r.vaccineSlug === route.vaccineSlug && r.doseNumber === i)
+                );
+                if (record) {
+                  isVerified = true;
+                  verifiedDoses++;
+                }
+              }
+
               if (apt.appointmentStatus === 'COMPLETED') {
                 stepStatus = 'finish';
                 description = t('client:vaccinationHistory.completed');
                 date = apt.vaccinationDate || apt.scheduledDate;
+                if (!route.isFamily) completedDoses++;
               } else if (apt.appointmentStatus !== 'CANCELLED') {
                 stepStatus = 'process';
                 description = t('client:vaccinationHistory.scheduled');
@@ -59,11 +99,27 @@ const VaccinationProgressTab = () => {
               if (i === 1 && !apt) {
                 stepStatus = 'wait';
                 description = t('client:progress.readyToBook');
+                // Recommendation Logic (Prioritize User's In-Progress)
+                if (!nextVaccine && !route.isFamily && route.status === 'IN_PROGRESS') {
+                  // prioritized
+                }
               } else if (prevApt && prevApt.appointmentStatus === 'COMPLETED') {
                 stepStatus = 'wait';
                 description = t('client:progress.needToBook');
               }
             }
+
+            // Set Recommendation
+            if (!nextVaccine && stepStatus === 'wait' && !route.isFamily) {
+              nextVaccine = {
+                vaccineName: route.vaccineName,
+                doseNumber: i,
+                vaccineSlug: route.vaccineSlug,
+                vaccinationCourseId: route.routeId,
+              };
+            }
+
+            if (!route.isFamily) totalDoses++;
 
             steps.push({
               title,
@@ -71,6 +127,7 @@ const VaccinationProgressTab = () => {
               status: stepStatus,
               date: date ? dayjs(date).format('DD/MM/YYYY') : null,
               doseNumber: i,
+              isVerified,
             });
           }
 
@@ -93,6 +150,8 @@ const VaccinationProgressTab = () => {
         );
 
         setJourneyData(activeJourneys);
+        setRecommendation(nextVaccine);
+        setStats({ total: totalDoses, completed: completedDoses, verified: verifiedDoses });
       } catch (err) {
         console.error(err);
       } finally {
@@ -112,6 +171,62 @@ const VaccinationProgressTab = () => {
         <Title level={4}>{t('client:progress.title')}</Title>
         <Text type="secondary">{t('client:progress.subtitle')}</Text>
       </div>
+
+      {/* My Status Section */}
+      <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6">
+        <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+          <div className="flex-1 w-full">
+            <h4 className="text-gray-600 mb-2 font-medium">My Protection Status</h4>
+            <Progress
+              percent={stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}
+              strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
+            />
+          </div>
+          <div className="flex gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">{stats.verified}</div>
+              <div className="text-xs text-gray-400 uppercase tracking-wider">Verified</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">{stats.completed}</div>
+              <div className="text-xs text-gray-400 uppercase tracking-wider">Completed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {recommendation && (
+        <Alert
+          message={<span className="font-semibold text-blue-800">{t('Recommendation')}</span>}
+          description={
+            <div className="flex flex-col gap-2 mt-1">
+              <span className="text-blue-700">
+                To ensure full protection, the next recommended step is:
+                <b>
+                  {' '}
+                  {recommendation.vaccineName} - Dose {recommendation.doseNumber}
+                </b>
+              </span>
+              <Button
+                type="primary"
+                size="small"
+                className="w-fit bg-blue-600"
+                onClick={() =>
+                  navigate(
+                    `/booking?slug=${recommendation.vaccineSlug}&doseNumber=${recommendation.doseNumber}&vaccinationCourseId=${recommendation.vaccinationCourseId}`
+                  )
+                }
+              >
+                Book Now
+              </Button>
+            </div>
+          }
+          type="info"
+          showIcon
+          icon={<InfoCircleOutlined className="text-blue-600" />}
+          className="border-blue-100 bg-blue-50 rounded-xl mb-6"
+        />
+      )}
 
       {journeyData.length === 0 ? (
         <Empty description={t('client:dashboard.noData')} className="py-8" />
@@ -169,7 +284,16 @@ const VaccinationProgressTab = () => {
                   : journey.steps.filter((s) => s.status === 'finish').length
               }
               items={journey.steps.map((step) => ({
-                title: step.title,
+                title: (
+                  <div className="flex items-center gap-1">
+                    <span>{step.title}</span>
+                    {step.isVerified && (
+                      <Tooltip title="Verified on Blockchain">
+                        <SafetyCertificateOutlined className="text-emerald-500" />
+                      </Tooltip>
+                    )}
+                  </div>
+                ),
                 description: (
                   <div>
                     <div>{step.description}</div>
