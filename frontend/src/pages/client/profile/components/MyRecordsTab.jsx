@@ -1,27 +1,21 @@
 import { Tabs } from 'antd';
 import { useTranslation } from 'react-i18next';
 import VaccinationHistoryTab from './VaccinationHistoryTab';
-import VaccinationProgressTab from './VaccinationProgressTab';
 import VaccinePassportTab from './VaccinePassportTab';
 import VaccineRecordTab from './VaccineRecordTab';
 
-const MyRecordsTab = ({ editMode, setEditMode }) => {
+const MyRecordsTab = () => {
   const { t } = useTranslation(['client']);
   const items = [
     {
-      key: 'progress',
-      label: t('client:myRecords.progress'),
-      children: <VaccinationProgressTab />,
+      key: 'passport',
+      label: t('client:myRecords.digitalPassport'),
+      children: <VaccinePassportTab />,
     },
     {
       key: 'history',
       label: t('client:myRecords.vaccinationHistory'),
       children: <VaccinationHistoryTab />,
-    },
-    {
-      key: 'passport',
-      label: t('client:myRecords.digitalPassport'),
-      children: <VaccinePassportTab />,
     },
     {
       key: 'records',
@@ -32,7 +26,7 @@ const MyRecordsTab = ({ editMode, setEditMode }) => {
 
   return (
     <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-      <Tabs defaultActiveKey="progress" items={items} type="card" />
+      <Tabs defaultActiveKey="passport" items={items} type="card" />
     </div>
   );
 };

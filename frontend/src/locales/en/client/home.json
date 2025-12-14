@@ -96,20 +96,20 @@
       "history": {
         "title": "Track Vaccination History",
         "desc": "Optimize user experience by storing vaccination history of all members."
+      }
+    },
+    "cta": {
+      "download": "Download App Now",
+      "book": "Book Appointment Now"
+    },
+    "buttons": {
+      "appStore": {
+        "sub": "Download on the",
+        "main": "App Store"
       },
-      "cta": {
-        "download": "Download App Now",
-        "book": "Book Appointment Now"
-      },
-      "buttons": {
-        "appStore": {
-          "sub": "Download on the",
-          "main": "App Store"
-        },
-        "googlePlay": {
-          "sub": "Get it on",
-          "main": "Google Play"
-        }
+      "googlePlay": {
+        "sub": "Get it on",
+        "main": "Google Play"
       }
     }
   }

@@ -45,6 +45,7 @@ import UserProfilePage from '@/pages/client/profile';
 import SuccessPage from '@/pages/client/success';
 import VaccineDetailPage from '@/pages/client/vaccine-detail';
 import VaccineListPage from '@/pages/client/vaccine-list';
+import WalletVaccinePassport from '@/pages/client/wallet/WalletVaccinePassport';
 import VerifyLandingPage from '@/pages/public/verify/VerifyLandingPage';
 import VerifyResultPage from '@/pages/public/verify/VerifyResultPage';
 import CalendarView from '@/pages/staff/calendar-view';
@@ -136,6 +137,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedUserRoute>
             <AppointmentSchedulePage />
+          </ProtectedUserRoute>
+        ),
+      },
+      {
+        path: 'wallet',
+        element: (
+          <ProtectedUserRoute>
+            <WalletVaccinePassport />
           </ProtectedUserRoute>
         ),
       },

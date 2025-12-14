@@ -63,14 +63,11 @@ const DashboardTab = ({ onTabChange }) => {
         const uniqueVaccines = new Set(records.map((r) => r.vaccineName)).size;
 
         const upcoming = bookings.filter((b) => {
-          return (
-            b.appointments &&
-            b.appointments.some(
-              (apt) =>
-                apt.appointmentStatus !== 'CANCELLED' &&
-                apt.appointmentStatus !== 'COMPLETED' &&
-                dayjs(apt.scheduledDate).isSameOrAfter(dayjs(), 'day')
-            )
+          return b.appointments?.some(
+            (apt) =>
+              apt.appointmentStatus !== 'CANCELLED' &&
+              apt.appointmentStatus !== 'COMPLETED' &&
+              dayjs(apt.scheduledDate).isSameOrAfter(dayjs(), 'day')
           );
         });
 

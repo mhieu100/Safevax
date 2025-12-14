@@ -29,6 +29,7 @@ const VaccineCard = ({ vaccine }) => {
   };
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: Card is interactive and contains buttons
     <div
       role="button"
       tabIndex={0}

@@ -106,7 +106,6 @@ const VaccinationProgressTab = () => {
   if (loading) {
     return <Skeleton active />;
   }
-
   return (
     <div className="space-y-6">
       <div className="mb-4">
@@ -117,8 +116,11 @@ const VaccinationProgressTab = () => {
       {journeyData.length === 0 ? (
         <Empty description={t('client:dashboard.noData')} className="py-8" />
       ) : (
-        journeyData.map((journey, index) => (
-          <Card key={index} className="shadow-sm rounded-2xl border-slate-100">
+        journeyData.map((journey) => (
+          <Card
+            key={journey.vaccinationCourseId}
+            className="shadow-sm rounded-2xl border-slate-100"
+          >
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h3 className="text-lg font-bold text-blue-800">{journey.vaccineName}</h3>

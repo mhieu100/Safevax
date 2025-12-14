@@ -89,14 +89,14 @@ const CompletionModal = ({ open, onCancel, appointment, onSuccess }) => {
 
   const handleDoctorSign = () => {
     // Mocking a digital signature generation
-    const mockSig = `DOC_SIG_${new Date().getTime()}_${Math.random().toString(36).substring(7)}`;
+    const mockSig = `DOC_SIG_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     setDoctorSignature(mockSig);
     message.success('Bác sĩ đã ký xác nhận điện tử!');
   };
 
   const handlePatientConsent = () => {
     // Mocking patient consent signature
-    const mockSig = `PAT_CONSENT_${new Date().getTime()}_${Math.random().toString(36).substring(7)}`;
+    const mockSig = `PAT_CONSENT_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     setPatientConsentSignature(mockSig);
     message.success('Bệnh nhân đã xác nhận đồng thuận!');
   };

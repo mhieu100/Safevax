@@ -4,11 +4,11 @@
 }
 
 .ant-menu-horizontal {
-  border-bottom: unset !important;
+  border-bottom: unset;
 }
 
 .ql-editor {
-  min-height: 350px !important;
+  min-height: 350px;
   overflow: hidden;
 }
 
@@ -21,9 +21,9 @@
 }
 
 .modal-company-root.close .ant-modal-mask {
-  background-color: unset !important;
+  background-color: unset;
 }
 
 .customize-form-item .ant-form-item {
-  margin-bottom: 0 !important;
+  margin-bottom: 0;
 }

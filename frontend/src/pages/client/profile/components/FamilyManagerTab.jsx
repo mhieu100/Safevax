@@ -372,7 +372,7 @@ const FamilyManagerTab = () => {
           }}
           expandable={{
             expandedRowRender: (record) => <MemberVaccinationProgress memberId={record.id} />,
-            rowExpandable: (record) => true,
+            rowExpandable: (_record) => true,
           }}
           className="custom-table"
         />

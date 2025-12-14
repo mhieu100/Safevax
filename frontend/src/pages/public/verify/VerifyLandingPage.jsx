@@ -14,286 +14,120 @@ const VerifyLandingPage = () => {
   };
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        background: 'linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%)',
-        position: 'relative',
-      }}
-    >
+    <div className="min-h-screen w-full flex flex-col overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50 relative selection:bg-blue-100 selection:text-blue-900">
       {/* Background Decor */}
-      <div
-        style={{
-          position: 'absolute',
-          top: -100,
-          right: -100,
-          width: 600,
-          height: 600,
-          background: 'radial-gradient(circle, rgba(59,130,246,0.1) 0%, rgba(255,255,255,0) 70%)',
-          borderRadius: '50%',
-        }}
-      ></div>
-      <div
-        style={{
-          position: 'absolute',
-          bottom: -100,
-          left: -200,
-          width: 500,
-          height: 500,
-          background: 'radial-gradient(circle, rgba(16,185,129,0.1) 0%, rgba(255,255,255,0) 70%)',
-          borderRadius: '50%',
-        }}
-      ></div>
+      <div className="absolute -top-24 -right-24 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -left-48 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Navbar */}
-      <header
-        style={{
-          padding: '24px 48px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          zIndex: 10,
-        }}
-      >
+      <header className="px-6 md:px-12 py-6 flex items-center justify-between z-10">
+        {/* biome-ignore lint/a11y/useSemanticElements: interactive logo */}
         <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            fontWeight: '800',
-            fontSize: '1.4rem',
-            color: '#0F172A',
-            letterSpacing: '-0.5px',
-          }}
+          className="flex items-center gap-3 font-extrabold text-2xl text-slate-900 tracking-tight cursor-pointer"
+          onClick={() => navigate('/')}
+          onKeyDown={(e) => e.key === 'Enter' && navigate('/')}
+          role="button"
+          tabIndex={0}
         >
-          <div
-            style={{ background: '#0F172A', padding: '6px', borderRadius: '8px', display: 'flex' }}
-          >
+          <div className="bg-slate-900 p-2 rounded-xl flex items-center justify-center shadow-lg shadow-slate-900/20">
             <Activity size={20} color="#fff" />
           </div>
-          <span>VaxSafe</span>
+          <span>
+            Safe<span className="text-blue-600">Vax</span>
+          </span>
         </div>
       </header>
 
       {/* Main Content */}
-      <main
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          padding: '0 24px',
-          zIndex: 10,
-        }}
-      >
-        <div className="animate-fade-up">
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'rgba(255, 255, 255, 0.8)',
-              border: '1px solid rgba(59, 130, 246, 0.2)',
-              padding: '8px 16px',
-              borderRadius: '30px',
-              fontSize: '0.85rem',
-              fontWeight: '600',
-              color: '#3B82F6',
-              marginBottom: '32px',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-            }}
-          >
-            <span style={{ position: 'relative', display: 'flex', height: '8px', width: '8px' }}>
-              <span
-                style={{
-                  position: 'absolute',
-                  display: 'inline-flex',
-                  height: '100%',
-                  width: '100%',
-                  borderRadius: '50%',
-                  background: '#3B82F6',
-                  opacity: 0.75,
-                  animation: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
-                }}
-              ></span>
-              <span
-                style={{
-                  position: 'relative',
-                  display: 'inline-flex',
-                  borderRadius: '50%',
-                  height: '8px',
-                  width: '8px',
-                  background: '#3B82F6',
-                }}
-              ></span>
+      <main className="flex-1 flex flex-col items-center justify-center text-center px-6 z-10 w-full max-w-5xl mx-auto">
+        <div className="w-full animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 bg-white/80 border border-blue-100 px-4 py-2 rounded-full text-sm font-semibold text-blue-600 mb-8 shadow-sm backdrop-blur-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
             </span>
             Decentralized Verification System
           </div>
 
-          <h1
-            style={{
-              fontSize: '4.5rem',
-              fontWeight: '800',
-              letterSpacing: '-0.03em',
-              lineHeight: '1.05',
-              marginBottom: '24px',
-              color: '#0F172A',
-            }}
-          >
-            Truth.
-            <br />
-            <span
-              style={{
-                color: 'transparent',
-                WebkitBackgroundClip: 'text',
-                backgroundImage: 'linear-gradient(90deg, #3B82F6, #10B981)',
-              }}
-            >
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight mb-6 text-slate-900">
+            Truth. <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-500">
               Cryptographically Verified.
             </span>
           </h1>
 
-          <p
-            style={{
-              fontSize: '1.25rem',
-              color: '#64748B',
-              maxWidth: '580px',
-              margin: '0 auto 48px',
-              lineHeight: 1.6,
-            }}
-          >
+          <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
             Instant validation of global health records using advanced blockchain technology and
-            IPFS decentralized storage. Make sure, be safe.
+            IPFS decentralized storage. Transparent, secure, and immutable.
           </p>
 
           {/* Search Bar */}
-          <form
-            onSubmit={handleVerify}
-            style={{ position: 'relative', width: '100%', maxWidth: '520px', margin: '0 auto' }}
-          >
-            <div
-              style={{
-                background: 'white',
-                padding: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                borderRadius: '100px',
-                boxShadow:
-                  '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                border: '1px solid rgba(0,0,0,0.05)',
-              }}
-            >
-              <div style={{ paddingLeft: '16px', color: '#64748B', display: 'flex' }}>
-                <Search size={22} />
-              </div>
+          <form onSubmit={handleVerify} className="w-full max-w-xl mx-auto relative group">
+            <div className="bg-white p-2 pl-6 flex items-center gap-3 rounded-full shadow-2xl shadow-blue-900/5 border border-slate-100 transition-all focus-within:ring-4 focus-within:ring-blue-500/10 focus-within:border-blue-200">
+              <Search
+                className="text-slate-400 group-focus-within:text-blue-500 transition-colors"
+                size={24}
+              />
               <input
                 type="text"
-                placeholder="Paste Hash or Record ID..."
+                placeholder="Paste Transaction Hash or Record ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  flex: 1,
-                  border: 'none',
-                  background: 'transparent',
-                  outline: 'none',
-                  fontSize: '1.05rem',
-                  color: '#1E293B',
-                  padding: '14px 0',
-                }}
+                className="flex-1 bg-transparent border-none outline-none text-lg text-slate-800 placeholder:text-slate-400 py-3"
               />
               <button
                 type="submit"
-                style={{
-                  background: '#0F172A',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '100px',
-                  width: '48px',
-                  height: '48px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s',
-                  marginRight: '4px',
-                }}
+                className="bg-slate-900 hover:bg-blue-600 text-white p-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95"
               >
-                <ArrowRight size={20} />
+                <ArrowRight size={24} />
               </button>
+            </div>
+            <div className="mt-4 text-xs font-medium text-slate-400 uppercase tracking-widest">
+              Secured by Ethereum & IPFS
             </div>
           </form>
         </div>
       </main>
 
       {/* Footer Features */}
-      <footer
-        style={{
-          padding: '40px 48px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '80px',
-          zIndex: 10,
-          borderTop: '1px solid rgba(0,0,0,0.05)',
-          background: 'rgba(255,255,255,0.4)',
-          backdropFilter: 'blur(10px)',
-        }}
-      >
+      <footer className="px-6 md:px-12 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-20 z-10 border-t border-slate-200/60 bg-white/40 backdrop-blur-md">
         <MinimalFeature
-          icon={<Shield size={20} color="#10B981" />}
+          icon={<Shield size={24} className="text-emerald-500" />}
           title="Immutable"
-          desc="Tamper-proof records on blockchain."
+          desc="Tamper-proof records stored permanently on the blockchain."
         />
         <MinimalFeature
-          icon={<Globe size={20} color="#3B82F6" />}
+          icon={<Globe size={24} className="text-blue-500" />}
           title="Global Standard"
-          desc="FHIR compliant data structure."
+          desc="FHIR compliant data structure interoperable worldwide."
         />
         <MinimalFeature
-          icon={<Lock size={20} color="#F59E0B" />}
+          icon={<Lock size={24} className="text-amber-500" />}
           title="Privacy Preserving"
-          desc="Zero-knowledge proof verification."
+          desc="Zero-knowledge proof verification ensures data privacy."
         />
       </footer>
 
       <style>{`
-                @keyframes ping {
-                    75%, 100% { transform: scale(2); opacity: 0; }
-                }
-                .animate-fade-up {
-                    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                @keyframes fadeUp {
-                    to { opacity: 1; transform: translateY(0); }
-                }
-            `}</style>
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
     </div>
   );
 };
 
 const MinimalFeature = ({ icon, title, desc }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        fontWeight: '700',
-        color: '#0F172A',
-      }}
-    >
+  <div className="flex flex-col items-center md:items-start gap-2 text-center md:text-left transition-transform hover:-translate-y-1 duration-300">
+    <div className="flex items-center gap-3 font-bold text-slate-800 text-lg">
       {icon}
       <span>{title}</span>
     </div>
-    <p style={{ margin: 0, fontSize: '0.9rem', color: '#64748B', lineHeight: 1.5 }}>{desc}</p>
+    <p className="text-sm text-slate-500 leading-relaxed max-w-xs">{desc}</p>
   </div>
 );
 

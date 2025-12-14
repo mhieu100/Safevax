@@ -6,7 +6,7 @@ import AppTour from '@/components/common/tour/AppTour';
 import Footer from './client/ClientFooter';
 import Navbar from './client/ClientHeader';
 
-const NO_FOOTER_ROUTES = ['/success', '/profile', '/appointments', '/cart'];
+const NO_FOOTER_ROUTES = ['/success', '/cancel', '/profile', '/appointments', '/cart', '/wallet'];
 
 const LayoutClient = () => {
   const location = useLocation();

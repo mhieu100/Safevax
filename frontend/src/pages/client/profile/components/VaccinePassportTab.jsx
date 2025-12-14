@@ -10,8 +10,9 @@ import {
   VerifiedOutlined,
 } from '@ant-design/icons';
 import { Button, Card, Divider, QRCode, Space, Tag, Timeline, Typography } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import apiClient from '@/services/apiClient';
 import { useAccountStore } from '@/stores/useAccountStore';
 
 const { Title, Text, Paragraph } = Typography;
@@ -20,46 +21,48 @@ const VaccinePassportTab = () => {
   const { t } = useTranslation(['client']);
   const { user } = useAccountStore();
   const [showQR, setShowQR] = useState(false);
+  const [records, setRecords] = useState([]);
 
-  const vaccineRecords = [
-    {
-      id: '1',
-      vaccine: 'COVID-19 (Pfizer-BioNTech)',
-      date: '2024-03-15',
-      dose: 2,
+  useEffect(() => {
+    const fetchRecords = async () => {
+      try {
+        setLoading(true);
+        const response = await apiClient.post('/api/vaccine-records/my-records');
+        if (response.data) {
+          // Only show verified records on passport or all if we want to show pending
+          const verifiedRecords = response.data.filter((r) => r.transactionHash);
+          setRecords(verifiedRecords);
+        }
+      } catch (error) {
+        console.error('Failed to fetch vaccine records for passport:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      provider: 'SafeVax Medical Center',
-      verificationHash: '0x7f9fade1c0d57a7af66ab4ead79fade1c0d57a7af66ab4ead7c2c2eb7b11a91385',
-      blockNumber: '#2847563',
-    },
-    {
-      id: '2',
-      vaccine: 'Hepatitis B',
-      date: '2024-01-20',
-      dose: 3,
+    if (user?.id) {
+      fetchRecords();
+    }
+  }, [user?.id]);
 
-      provider: 'National Vaccination Center',
-      verificationHash: '0x3b9aca00c0d57a7af66ab4ead79fade1c0d57a7af66ab4ead7c2c2eb7b11a91234',
-      blockNumber: '#2745891',
-    },
-    {
-      id: '3',
-      vaccine: 'Influenza (2024 Season)',
-      date: '2023-12-10',
-      dose: 1,
-
-      provider: 'City General Hospital',
-      verificationHash: '0x9f2fade1c0d57a7af66ab4ead79fade1c0d57a7af66ab4ead7c2c2eb7b11a45678',
-      blockNumber: '#2698234',
-    },
-  ];
+  const vaccineRecords = records.map((record) => ({
+    id: record.id,
+    vaccine: record.vaccineName,
+    date: record.vaccinationDate,
+    dose: record.doseNumber,
+    provider: record.centerName,
+    verificationHash: record.transactionHash,
+    blockNumber: record.blockNumber ? `#${record.blockNumber}` : 'Pending',
+  }));
 
   const passportData = {
-    qrValue: `VACCINE_PASSPORT:${user?.accountId || 'VX123456789'}:${Date.now()}`,
-    issuedDate: '2024-10-04',
-
+    qrValue: `VACCINE_PASSPORT:${user?.identityNumber || user?.id}:${Date.now()}`,
+    issuedDate:
+      records.length > 0
+        ? new Date(records[records.length - 1].createdAt || Date.now()).toISOString().split('T')[0]
+        : new Date().toISOString().split('T')[0],
     blockchainNetwork: 'SafeVax Blockchain Network',
-    consensusProtocol: 'Proof of Health',
+    consensusProtocol: 'Proof of Authority',
   };
 
   const handleDownload = () => {};
@@ -155,7 +158,7 @@ const VaccinePassportTab = () => {
                   {t('client:vaccinePassport.passportId')}
                 </Text>
                 <Text strong className="text-base font-mono">
-                  {user?.accountId || 'N/A'}
+                  {user?.identityNumber || user?.id || 'N/A'}
                 </Text>
               </div>
               <div>

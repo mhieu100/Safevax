@@ -1,268 +1,126 @@
-import { Activity, BadgeCheck, Download, ShieldCheck } from 'lucide-react';
+import {
+  Activity,
+  BadgeCheck,
+  Building2,
+  Calendar,
+  Download,
+  ShieldCheck,
+  Syringe,
+} from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
 
 const VerificationCard = ({ data }) => {
   if (!data) return null;
 
   return (
-    <div className="digital-card">
+    <div className="w-full max-w-[500px] bg-white rounded-3xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5 font-sans relative">
       {/* Top Security Bar */}
-      <div className="security-bar">
-        <div className="bar-pattern"></div>
-        <div className="security-status">
-          <ShieldCheck size={16} color="#4ADE80" />
+      <div className="bg-slate-900 h-9 flex items-center justify-between px-4">
+        <div className="w-16 h-1 bg-[repeating-linear-gradient(90deg,#334155,#334155_4px,transparent_4px,transparent_8px)]" />
+        <div className="flex items-center gap-1.5 text-[0.65rem] font-bold text-emerald-400 tracking-widest">
+          <ShieldCheck size={14} className="text-emerald-400" />
           <span>SECURE VERIFICATION</span>
         </div>
       </div>
 
-      <div className="content-wrapper">
+      <div className="p-6">
         {/* Header */}
-        <div className="card-header">
-          <div className="icon-box">
-            <Activity size={32} color="#3B82F6" />
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 relative">
+          <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center shrink-0">
+            <Activity size={24} className="text-blue-600" />
           </div>
-          <div>
-            <h1 className="title">DIGITAL HEALTH PASS</h1>
-            <div className="subtitle">BLOCKCHAIN VERIFIED</div>
+          <div className="flex-1">
+            <h1 className="text-lg font-extrabold text-slate-900 leading-tight">
+              DIGITAL HEALTH PASS
+            </h1>
+            <div className="text-[0.65rem] text-slate-500 font-semibold tracking-wide">
+              BLOCKCHAIN VERIFIED
+            </div>
           </div>
-          <div className="status-badge">
-            <BadgeCheck size={16} fill="#3B82F6" color="#fff" />
+          <div className="self-start sm:self-center ml-auto border-2 border-blue-500/20 bg-blue-500/5 rounded-full px-3 py-1 flex items-center gap-1.5 text-xs font-bold text-blue-600">
+            <BadgeCheck size={14} className="fill-blue-600 text-white" />
             <span>VALID</span>
           </div>
         </div>
 
         {/* Patient Info Grid */}
-        <div className="info-grid">
-          <div className="info-group main-info">
-            <label>BENEFICIARY</label>
-            <div className="value-lg">{data.patientName}</div>
-            <div className="mono-text">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-8 group">
+          <div className="flex-1 w-full sm:w-auto">
+            <label className="text-[0.6rem] font-bold text-slate-400 block mb-1 tracking-widest uppercase">
+              BENEFICIARY
+            </label>
+            <div className="text-2xl font-bold text-slate-900 mb-2 break-words">
+              {data.patientName}
+            </div>
+            <div className="font-mono text-xs text-slate-500 bg-slate-50 px-2 py-1 rounded inline-block border border-slate-100 break-all">
               ID: {data.patientIdentityHash?.substring(0, 10)}...
               {data.patientIdentityHash?.substring(data.patientIdentityHash.length - 4)}
             </div>
           </div>
 
-          <div className="qr-container">
-            <div className="qr-frame">
-              <QRCodeCanvas
-                value={`${window.location.origin}/verify/${data.ipfsHash}`}
-                size={80}
-                level={'H'}
-              />
-            </div>
+          <div className="p-1.5 border-2 border-dashed border-slate-200 rounded-xl bg-white self-center sm:self-end shrink-0 transition-all group-hover:border-blue-200 group-hover:shadow-lg">
+            <QRCodeCanvas
+              value={`${window.location.origin}/verify/${data.ipfsHash}`}
+              size={80}
+              level={'H'}
+              className="rounded-lg"
+            />
           </div>
         </div>
 
-        <div className="divider-line"></div>
+        <div className="h-px bg-slate-100 w-full mb-6 relative">
+          <div className="absolute top-0 left-0 w-10 h-0.5 bg-blue-500" />
+        </div>
 
-        {/* Vaccine Details - 4 Column Grid */}
-        <div className="details-grid">
-          <div className="detail-box">
-            <label>VACCINE PROPHYLAXIS</label>
-            <div className="value">{data.vaccineName}</div>
+        {/* Vaccine Details - Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 mb-6">
+          <div>
+            <label className="text-[0.6rem] font-bold text-slate-400 block mb-1 tracking-widest uppercase flex items-center gap-1">
+              <Syringe size={10} /> VACCINE PROPHYLAXIS
+            </label>
+            <div className="text-sm font-semibold text-slate-700">{data.vaccineName}</div>
           </div>
-          <div className="detail-box">
-            <label>MANUFACTURER</label>
-            <div className="value">{data.manufacturer}</div>
+          <div>
+            <label className="text-[0.6rem] font-bold text-slate-400 block mb-1 tracking-widest uppercase">
+              MANUFACTURER
+            </label>
+            <div className="text-sm font-semibold text-slate-700">{data.manufacturer}</div>
           </div>
-          <div className="detail-box">
-            <label>DOSE / TOTAL</label>
-            <div className="value highlight">
+          <div>
+            <label className="text-[0.6rem] font-bold text-slate-400 block mb-1 tracking-widest uppercase">
+              DOSE / TOTAL
+            </label>
+            <div className="text-sm font-bold text-blue-600 bg-blue-50 inline-block px-2 py-0.5 rounded-md">
               {data.doseNumber} / {data.dosesRequired || 2}
             </div>
           </div>
-          <div className="detail-box">
-            <label>DATE OF VACCINATION</label>
-            <div className="value">{data.vaccinationDate}</div>
+          <div>
+            <label className="text-[0.6rem] font-bold text-slate-400 block mb-1 tracking-widest uppercase flex items-center gap-1">
+              <Calendar size={10} /> DATE OF VACCINATION
+            </label>
+            <div className="text-sm font-semibold text-slate-700">{data.vaccinationDate}</div>
           </div>
         </div>
 
-        <div className="detail-box full-width">
-          <label>ISSUING CENTER</label>
-          <div className="value">{data.centerName}</div>
-        </div>
-
-        {/* Blockchain Footer */}
-        <div className="blockchain-footer">
-          <div className="chain-link">
-            <div className="link-icon">
-              <Download size={14} />
-            </div>
-            <div className="link-text">IPFS ASSET: {data.ipfsHash?.substring(0, 12)}...</div>
-          </div>
-          <div className="chain-link">
-            <div className="link-icon">
-              <Activity size={14} />
-            </div>
-            <div className="link-text">TX HASH: {data.transactionHash?.substring(0, 12)}...</div>
-          </div>
+        <div className="mb-6 bg-slate-50 p-3 rounded-lg border border-slate-100">
+          <label className="text-[0.6rem] font-bold text-slate-400 block mb-1 tracking-widest uppercase flex items-center gap-1">
+            <Building2 size={10} /> ISSUING CENTER
+          </label>
+          <div className="text-sm font-semibold text-slate-800 break-words">{data.centerName}</div>
         </div>
       </div>
 
-      <style>{`
-                .digital-card {
-                    background: #FFFFFF;
-                    width: 100%;
-                    max-width: 500px;
-                    border-radius: 20px;
-                    overflow: hidden;
-                    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
-                    font-family: 'Inter', sans-serif;
-                    position: relative;
-                }
-                .security-bar {
-                    background: #1E293B;
-                    height: 32px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 0 16px;
-                }
-                .bar-pattern {
-                    width: 60px;
-                    height: 4px;
-                    background: repeating-linear-gradient(90deg, #334155, #334155 4px, transparent 4px, transparent 8px);
-                }
-                .security-status {
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    font-size: 0.65rem;
-                    font-weight: 700;
-                    color: #4ADE80;
-                    letter-spacing: 1px;
-                }
-                .content-wrapper {
-                    padding: 24px;
-                }
-                .card-header {
-                    display: flex;
-                    align-items: center;
-                    gap: 16px;
-                    margin-bottom: 24px;
-                    position: relative;
-                }
-                .icon-box {
-                    width: 48px;
-                    height: 48px;
-                    background: #EFF6FF;
-                    border-radius: 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .title {
-                    font-size: 1.1rem;
-                    font-weight: 800;
-                    color: #0F172A;
-                    margin: 0;
-                    line-height: 1.2;
-                }
-                .subtitle {
-                    font-size: 0.65rem;
-                    color: #64748B;
-                    font-weight: 600;
-                    letter-spacing: 0.5px;
-                }
-                .status-badge {
-                    margin-left: auto;
-                    border: 2px solid #3B82F6;
-                    border-radius: 30px;
-                    padding: 4px 12px;
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                    font-size: 0.75rem;
-                    font-weight: 700;
-                    color: #3B82F6;
-                }
-                .info-grid {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: flex-end;
-                    margin-bottom: 24px;
-                }
-                .main-info label, .detail-box label {
-                    font-size: 0.6rem;
-                    font-weight: 700;
-                    color: #94A3B8;
-                    display: block;
-                    margin-bottom: 4px;
-                    letter-spacing: 0.5px;
-                    text-transform: uppercase;
-                }
-                .value-lg {
-                    font-size: 1.4rem;
-                    font-weight: 700;
-                    color: #1E293B;
-                }
-                .mono-text {
-                    font-family: 'Roboto Mono', monospace;
-                    font-size: 0.75rem;
-                    color: #64748B;
-                    margin-top: 4px;
-                    background: #F1F5F9;
-                    padding: 2px 6px;
-                    border-radius: 4px;
-                    display: inline-block;
-                }
-                .qr-frame {
-                    padding: 6px;
-                    border: 2px dashed #E2E8F0;
-                    border-radius: 8px;
-                }
-                .divider-line {
-                    height: 1px;
-                    background: #E2E8F0;
-                    margin-bottom: 24px;
-                    position: relative;
-                }
-                .divider-line::after {
-                    content: '';
-                    position: absolute;
-                    top: -1px;
-                    left: 0;
-                    width: 40px;
-                    height: 3px;
-                    background: #3B82F6;
-                }
-                .details-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 16px;
-                    margin-bottom: 16px;
-                }
-                .detail-box .value {
-                    font-size: 0.95rem;
-                    font-weight: 600;
-                    color: #334155;
-                }
-                .full-width {
-                    margin-bottom: 24px;
-                }
-                .highlight {
-                    color: #3B82F6 !important;
-                }
-                .blockchain-footer {
-                    background: #0F172A;
-                    margin: 0 -24px -24px;
-                    padding: 16px 24px;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 8px;
-                }
-                .chain-link {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    color: #94A3B8;
-                    font-family: 'Roboto Mono', monospace;
-                    font-size: 0.7rem;
-                }
-                .link-icon {
-                    color: #3B82F6;
-                }
-            `}</style>
+      {/* Blockchain Footer */}
+      <div className="bg-slate-900 p-4 space-y-2">
+        <div className="flex items-center gap-2 text-slate-400 font-mono text-[0.65rem] break-all">
+          <Download size={12} className="text-blue-500 shrink-0" />
+          <span>IPFS: {data.ipfsHash?.substring(0, 20)}...</span>
+        </div>
+        <div className="flex items-center gap-2 text-slate-400 font-mono text-[0.65rem] break-all">
+          <Activity size={12} className="text-emerald-500 shrink-0" />
+          <span>TX: {data.transactionHash?.substring(0, 20)}...</span>
+        </div>
+      </div>
     </div>
   );
 };

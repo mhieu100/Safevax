@@ -116,8 +116,12 @@ const MemberVaccinationProgress = ({ memberId, customData }) => {
   return (
     <div className="space-y-4 p-4 bg-slate-50 rounded-xl">
       <h3 className="font-semibold text-gray-700">{t('client:progress.title')}</h3>
-      {journeyData.map((journey, index) => (
-        <Card key={index} className="shadow-sm rounded-xl border-slate-200" size="small">
+      {journeyData.map((journey) => (
+        <Card
+          key={journey.vaccinationCourseId}
+          className="shadow-sm rounded-xl border-slate-200"
+          size="small"
+        >
           <div className="flex justify-between items-start mb-4">
             <div>
               <h4 className="font-bold text-blue-800 m-0">{journey.vaccineName}</h4>

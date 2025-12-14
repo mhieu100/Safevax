@@ -119,6 +119,7 @@ const HeroSection = () => {
           {/* Right Column - 3D Card */}
           {/* Mouse move effect container */}
           <FadeIn direction="left" delay={500} className="hidden lg:block card-3d-container">
+            {/* biome-ignore lint/a11y/noStaticElementInteractions: 3D effect interactions */}
             <div
               className="card-3d-container"
               onMouseMove={handleMouseMove}

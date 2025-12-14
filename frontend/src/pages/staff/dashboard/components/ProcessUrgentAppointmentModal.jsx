@@ -282,6 +282,7 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
             const isSelected = selectedSlotUiId === slot.uiId;
             return (
               <Col span={8} key={slot.uiId}>
+                {/* biome-ignore lint/a11y/useSemanticElements: interactive slot */}
                 <div
                   role="button"
                   tabIndex={0}

@@ -1,5 +1,6 @@
 import {
   CalendarOutlined,
+  EnvironmentOutlined,
   HomeOutlined,
   InfoCircleOutlined,
   LogoutOutlined,
@@ -7,9 +8,11 @@ import {
   MenuOutlined,
   PhoneOutlined,
   SafetyCertificateOutlined,
+  ScanOutlined,
   ShoppingCartOutlined,
   ShoppingOutlined,
   UserOutlined,
+  WalletOutlined,
 } from '@ant-design/icons';
 import { Avatar, Badge, Button, Drawer, message } from 'antd';
 import { useEffect, useState } from 'react';
@@ -135,13 +138,18 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden sm:flex items-center gap-6">
-            <span className="hover:text-blue-400 cursor-pointer transition-colors">
-              Help Center
-            </span>
-            <span className="hover:text-blue-400 cursor-pointer transition-colors">
-              Partner with us
-            </span>
-            <span className="hover:text-blue-400 cursor-pointer transition-colors">Careers</span>
+            <Link
+              to="/contact"
+              className="hover:text-blue-400 cursor-pointer transition-colors text-white flex items-center gap-2"
+            >
+              <EnvironmentOutlined /> Find nearest center
+            </Link>
+            <Link
+              to="/verify"
+              className="hover:text-blue-400 cursor-pointer transition-colors text-white flex items-center gap-2"
+            >
+              <ScanOutlined /> Verify Vaccine Passport
+            </Link>
           </div>
         </div>
       </div>
@@ -188,6 +196,16 @@ const Navbar = () => {
           {/* Right Section */}
           <div className="flex items-center justify-end gap-3 flex-1">
             <LanguageSelect />
+
+            <Button
+              icon={<WalletOutlined className="text-lg" />}
+              size="large"
+              onClick={() => navigate('/wallet')}
+              type="text"
+              shape="circle"
+              className="flex items-center justify-center text-slate-600 hover:bg-slate-100 hover:text-blue-600"
+              title="Wallet Vaccine"
+            />
 
             <div className="hidden sm:flex items-center gap-2">
               <div className="h-6 w-px bg-slate-200 mx-1"></div>
