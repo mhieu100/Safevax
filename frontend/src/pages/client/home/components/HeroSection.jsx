@@ -36,8 +36,15 @@ const HeroSection = () => {
     setRotate({ x: 0, y: 0 });
   };
 
+  const handleScrollDown = () => {
+    window.scrollTo({
+      top: window.innerHeight - 80,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <section className="hero-container relative min-h-[calc(100vh-80px)] flex items-center py-20 overflow-hidden">
+    <section className="hero-container relative min-h-[calc(100vh-112px)] flex items-center pt-20 pb-32 overflow-hidden">
       {/* Background blobs */}
       <div className="hero-blob hero-blob-1" />
       <div className="hero-blob hero-blob-2" />
@@ -205,10 +212,11 @@ const HeroSection = () => {
 
       {/* Scroll Down Indicator */}
       <FadeIn
+        onClick={handleScrollDown}
         delay={1000}
         direction="up"
         rootMargin="0px"
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 cursor-pointer hover:opacity-80 transition-opacity"
       >
         <div className="flex flex-col items-center gap-1 animate-bounce">
           <span className="text-slate-400 text-xs font-medium tracking-[0.2em] uppercase opacity-80 mb-2">

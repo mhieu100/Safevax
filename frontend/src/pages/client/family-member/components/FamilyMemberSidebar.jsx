@@ -38,7 +38,7 @@ const FamilyMemberSidebar = ({ member, activeTab, onTabChange }) => {
   };
 
   return (
-    <Card className="rounded-3xl shadow-sm border border-slate-100 overflow-hidden sticky top-24 h-[calc(100vh-8rem)] flex flex-col">
+    <Card className="rounded-3xl shadow-sm border border-slate-100 overflow-hidden lg:sticky lg:top-28 lg:h-[calc(100vh-13rem)] h-auto flex flex-col">
       <div className="p-6 flex flex-col items-center border-b border-slate-50">
         <div className="relative group mb-4">
           <div className="p-1 rounded-full bg-gradient-to-br from-purple-500 to-pink-500">

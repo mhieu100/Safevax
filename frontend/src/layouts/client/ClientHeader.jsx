@@ -3,6 +3,7 @@ import {
   HomeOutlined,
   InfoCircleOutlined,
   LogoutOutlined,
+  MailOutlined,
   MenuOutlined,
   PhoneOutlined,
   SafetyCertificateOutlined,
@@ -19,6 +20,15 @@ import DropdownUser from '@/components/dropdown/DropdownUser';
 import { callLogout } from '@/services/auth.service';
 import { useAccountStore } from '@/stores/useAccountStore';
 import useCartStore from '@/stores/useCartStore';
+
+const ALWAYS_VISIBLE_ROUTES = [
+  '/profile',
+  '/cart',
+  '/appointments',
+  '/family-member',
+  '/checkout',
+  '/success',
+];
 
 const Navbar = () => {
   const { t } = useTranslation('common');
@@ -40,6 +50,10 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const isAlwaysVisible = ALWAYS_VISIBLE_ROUTES.some(
+    (route) => location.pathname === route || location.pathname.startsWith(`${route}/`)
+  );
 
   const handleLogout = async () => {
     const res = await callLogout();
@@ -105,11 +119,40 @@ const Navbar = () => {
 
   return (
     <>
+      {/* Top Bar - Hides on Scroll */}
+      <div
+        className={`bg-slate-900 text-white transition-all duration-300 ease-in-out overflow-hidden ${
+          isAlwaysVisible ? 'sticky top-0 z-[1001]' : ''
+        } ${scrolled && !isAlwaysVisible ? 'h-0 py-0 opacity-0' : 'h-10 py-2.5 opacity-100'}`}
+      >
+        <div className="mx-auto flex h-full max-w-[1220px] items-center justify-between px-4 md:px-6 text-xs font-medium tracking-wide">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer">
+              <MailOutlined /> <span>contact@vaxsafe.com</span>
+            </div>
+            <div className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer">
+              <PhoneOutlined /> <span>+84 123 456 789</span>
+            </div>
+          </div>
+          <div className="hidden sm:flex items-center gap-6">
+            <span className="hover:text-blue-400 cursor-pointer transition-colors">
+              Help Center
+            </span>
+            <span className="hover:text-blue-400 cursor-pointer transition-colors">
+              Partner with us
+            </span>
+            <span className="hover:text-blue-400 cursor-pointer transition-colors">Careers</span>
+          </div>
+        </div>
+      </div>
+
       <header
-        className={`sticky top-0 z-[999] transition-all duration-300 ${
-          scrolled
+        className={`sticky ${
+          isAlwaysVisible ? 'top-10' : 'top-0'
+        } z-[999] transition-all duration-300 ${
+          scrolled && !isAlwaysVisible
             ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100/50 py-3'
-            : 'bg-white/50 backdrop-blur-sm border-b border-transparent py-4'
+            : 'bg-white/50 backdrop-blur-sm border-none py-4'
         }`}
       >
         <div className="mx-auto flex h-full max-w-[1220px] items-center justify-between px-4 md:px-6">
@@ -144,9 +187,9 @@ const Navbar = () => {
 
           {/* Right Section */}
           <div className="flex items-center justify-end gap-3 flex-1">
-            <div className="hidden sm:flex items-center gap-2">
-              <LanguageSelect />
+            <LanguageSelect />
 
+            <div className="hidden sm:flex items-center gap-2">
               <div className="h-6 w-px bg-slate-200 mx-1"></div>
 
               {isAuthenticated && (
@@ -274,7 +317,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Navigation */}
-          <div className="flex-1 space-y-1">
+          <div className="flex-1 space-y-1 overflow-y-auto">
             {menuItems.map((item) => (
               <div
                 key={item.key}
@@ -294,6 +337,25 @@ const Navbar = () => {
                 </div>
               </div>
             ))}
+
+            {isAuthenticated && (
+              <div
+                onClick={() => {
+                  navigate('/appointments');
+                  setMobileMenuVisible(false);
+                }}
+                className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-colors ${
+                  isActive('/appointments')
+                    ? 'bg-blue-50 text-blue-600 font-medium'
+                    : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <CalendarOutlined />
+                  <span>Lịch hẹn</span>
+                </div>
+              </div>
+            )}
 
             {isAuthenticated && (
               <>
@@ -339,6 +401,17 @@ const Navbar = () => {
                 {t('header.cart')} ({itemCount})
               </Button>
             </div>
+
+            {/* Contact Info */}
+            <div className="mb-4 space-y-3 px-1">
+              <div className="flex items-center gap-3 text-slate-500 text-sm">
+                <MailOutlined className="text-blue-600" /> <span>contact@vaxsafe.com</span>
+              </div>
+              <div className="flex items-center gap-3 text-slate-500 text-sm">
+                <PhoneOutlined className="text-blue-600" /> <span>+84 123 456 789</span>
+              </div>
+            </div>
+
             <div className="text-center text-xs text-slate-400">
               © 2024 SafeVax. All rights reserved.
             </div>

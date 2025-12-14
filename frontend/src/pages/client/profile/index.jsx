@@ -14,10 +14,10 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-slate-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <Row gutter={[24, 24]}>
-          <Col xs={24} lg={6}>
+    <div className="min-h-[calc(100vh-130px)] lg:h-[calc(100vh-130px)] bg-slate-50 py-8 lg:overflow-hidden flex flex-col">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full lg:h-full">
+        <Row gutter={[24, 24]} className="lg:h-full">
+          <Col xs={24} lg={6} className="lg:h-full">
             <ProfileSidebar
               activeTab={activeTab}
               onTabChange={handleTabChange}
@@ -25,7 +25,7 @@ const ProfilePage = () => {
             />
           </Col>
 
-          <Col xs={24} lg={18}>
+          <Col xs={24} lg={18} className="lg:h-full lg:overflow-y-auto lg:pr-2 hide-scrollbar">
             <ProfileTabs
               activeTab={activeTab}
               onTabChange={handleTabChange}

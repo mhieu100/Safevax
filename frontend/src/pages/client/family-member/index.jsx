@@ -57,7 +57,7 @@ const FamilyMemberPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[calc(100vh-64px)] bg-slate-50 py-8">
+      <div className="min-h-[calc(100vh-130px)] bg-slate-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <Row gutter={[24, 24]}>
             <Col xs={24} lg={6}>
@@ -102,7 +102,7 @@ const FamilyMemberPage = () => {
   if (!member) return <Empty description="Member not found" />;
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-slate-50 py-8">
+    <div className="min-h-[calc(100vh-130px)] bg-slate-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <Row gutter={[24, 24]}>
           <Col xs={24} lg={6}>

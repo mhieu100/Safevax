@@ -6,6 +6,8 @@ import AppTour from '@/components/common/tour/AppTour';
 import Footer from './client/ClientFooter';
 import Navbar from './client/ClientHeader';
 
+const NO_FOOTER_ROUTES = ['/success', '/profile', '/appointments', '/cart'];
+
 const LayoutClient = () => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
@@ -20,11 +22,15 @@ const LayoutClient = () => {
     return <Loading />;
   }
 
+  const showFooter = !NO_FOOTER_ROUTES.some(
+    (route) => location.pathname === route || location.pathname.startsWith(`${route}/`)
+  );
+
   return (
     <>
       <Navbar />
       <Outlet />
-      {location.pathname !== '/success' && location.pathname !== '/profile' && <Footer />}
+      {showFooter && <Footer />}
 
       <ChatBot />
       <AppTour />
