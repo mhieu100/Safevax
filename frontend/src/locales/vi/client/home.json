@@ -76,5 +76,41 @@
     "readArticle": "Đọc bài viết",
     "views": "lượt xem",
     "clickToRead": "Nhấn để đọc thêm về bài viết này..."
+  },
+  "mobileApp": {
+    "title": "Ứng dụng SafeVax",
+    "description": "Ứng dụng di động được xây dựng nhằm mục đích quản lý sổ tiêm chủng, đặt lịch hẹn tiêm, tư vấn dinh dưỡng và chăm sóc sức khỏe cho mẹ và bé.",
+    "features": {
+      "schedule": {
+        "title": "Đặt lịch khám và hẹn tiêm",
+        "desc": "Đặt trước vắc xin, hẹn lịch tiêm ngay tại nhà trên điện thoại, giúp Khách hàng chủ động thời gian."
+      },
+      "growth": {
+        "title": "Theo dõi quá trình tăng trưởng",
+        "desc": "Căn cứ vào chiều cao, cân nặng của bé do người dùng nhập vào, ứng dụng giúp theo dõi quá trình phát triển."
+      },
+      "family": {
+        "title": "Quản lý lịch tiêm gia đình",
+        "desc": "Giúp Khách hàng quản lý hiệu quả lịch tiêm của tất cả các thành viên trong gia đình, nhắc lịch hẹn."
+      },
+      "history": {
+        "title": "Theo dõi lịch sử tiêm chủng",
+        "desc": "Tối ưu hóa trải nghiệm của người dùng bằng cách lưu trữ lịch sử tiêm chủng của tất cả thành viên."
+      }
+    },
+    "cta": {
+      "download": "Tải App liền tay",
+      "book": "Đặt ngay lịch hẹn"
+    },
+    "buttons": {
+      "appStore": {
+        "sub": "Download on the",
+        "main": "App Store"
+      },
+      "googlePlay": {
+        "sub": "Get it on",
+        "main": "Google Play"
+      }
+    }
   }
 }

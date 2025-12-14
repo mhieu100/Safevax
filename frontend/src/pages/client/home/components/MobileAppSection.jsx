@@ -7,18 +7,12 @@ import {
   TeamOutlined,
 } from '@ant-design/icons';
 import { Button } from 'antd';
+import { useTranslation } from 'react-i18next';
 import mobileMockup from '@/assets/images/mobile_mockup.jpg';
 import FadeIn from '@/components/common/animation/FadeIn';
 
 const MobileAppSection = () => {
-  // Placeholder for the Mobile Screen Image
-  // Using the path to the generated image artifact: /home/mhieu/.gemini/antigravity/brain/18673e3a-ab93-4af0-b184-dc3f8ebc1a86/mobile_app_screen_1765714535823.png
-  // I will assume for now I can reference it, or I should put it in public.
-  // Since I can't easily move files to public without `cp`, I will use a placeholder styling or the absolute path if it works for local dev (it won't for production).
-  // Actually, for this environment, I can try to use a representative URL or just a nice CSS placeholder if I can't serve the artifact.
-  // But wait, the previous tools allow me to see the path. I can't "serve" it to the frontend unless it's in `public` or `src/assets`.
-  // I'll stick to a nice placeholder or a reliable external URL for "App Mockup" if I can't use the generated one properly.
-  // Actually, I'll use a CSS-only phone frame with "SafeVax" text inside, mimicking the image I generated. It's safer.
+  const { t } = useTranslation('client');
 
   return (
     <section className="bg-[#1e1b4b] py-16 md:py-24 overflow-hidden relative">
@@ -29,11 +23,10 @@ const MobileAppSection = () => {
         <div className="text-center mb-16">
           <FadeIn>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 uppercase tracking-wide">
-              Ứng dụng SafeVax
+              {t('home.mobileApp.title')}
             </h2>
             <p className="text-slate-300 max-w-2xl mx-auto text-lg leading-relaxed">
-              Ứng dụng di động được xây dựng nhằm mục đích quản lý sổ tiêm chủng, đặt lịch hẹn tiêm,
-              tư vấn dinh dưỡng và chăm sóc sức khỏe cho mẹ và bé.
+              {t('home.mobileApp.description')}
             </p>
           </FadeIn>
         </div>
@@ -42,33 +35,37 @@ const MobileAppSection = () => {
           {/* Left Column */}
           <div className="flex-1 space-y-12">
             <FadeIn direction="right" delay={100}>
-              <div className="flex items-start gap-4 text-right flex-row-reverse lg:flex-row lg:text-right">
-                <div className="flex-shrink-0 w-16 h-16 rounded-full bg-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-400/30">
-                  <CalendarOutlined className="text-3xl text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-white mb-2">Đặt lịch khám và hẹn tiêm</h3>
-                  <p className="text-slate-400">
-                    Đặt trước vắc xin, hẹn lịch tiêm ngay tại nhà trên điện thoại, giúp Khách hàng
-                    chủ động về thời gian, tài chính.
-                  </p>
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 shadow-lg group cursor-pointer hover:-translate-y-1">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center shadow-lg shadow-cyan-400/20 group-hover:scale-110 transition-transform duration-300">
+                    <CalendarOutlined className="text-2xl text-white" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                      {t('home.mobileApp.features.schedule.title')}
+                    </h3>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      {t('home.mobileApp.features.schedule.desc')}
+                    </p>
+                  </div>
                 </div>
               </div>
             </FadeIn>
 
             <FadeIn direction="right" delay={200}>
-              <div className="flex items-start gap-4 text-right flex-row-reverse lg:flex-row lg:text-right">
-                <div className="flex-shrink-0 w-16 h-16 rounded-full bg-lime-500 flex items-center justify-center shadow-lg shadow-lime-500/30">
-                  <LineChartOutlined className="text-3xl text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    Theo dõi quá trình tăng trưởng
-                  </h3>
-                  <p className="text-slate-400">
-                    Căn cứ vào chiều cao, cân nặng của bé do người dùng nhập vào, ứng dụng giúp theo
-                    dõi quá trình phát triển.
-                  </p>
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 shadow-lg group cursor-pointer hover:-translate-y-1">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center shadow-lg shadow-lime-500/20 group-hover:scale-110 transition-transform duration-300">
+                    <LineChartOutlined className="text-2xl text-white" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-lime-300 transition-colors">
+                      {t('home.mobileApp.features.growth.title')}
+                    </h3>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      {t('home.mobileApp.features.growth.desc')}
+                    </p>
+                  </div>
                 </div>
               </div>
             </FadeIn>
@@ -76,10 +73,12 @@ const MobileAppSection = () => {
             <FadeIn direction="right" delay={300}>
               <div className="flex flex-col items-end lg:items-end mt-8">
                 <div className="flex items-center gap-2 text-yellow-400 font-bold text-xl mb-2 animate-pulse">
-                  <span>Tải App liền tay</span>
+                  <span>{t('home.mobileApp.cta.download')}</span>
                   <span>›››</span>
                 </div>
-                <div className="text-yellow-400 font-bold text-xl">Đặt ngay lịch hẹn</div>
+                <div className="text-yellow-400 font-bold text-xl">
+                  {t('home.mobileApp.cta.book')}
+                </div>
               </div>
             </FadeIn>
           </div>
@@ -121,31 +120,37 @@ const MobileAppSection = () => {
           {/* Right Column */}
           <div className="flex-1 space-y-12">
             <FadeIn direction="left" delay={100}>
-              <div className="flex items-start gap-4 text-left">
-                <div className="flex-shrink-0 w-16 h-16 rounded-full bg-pink-500 flex items-center justify-center shadow-lg shadow-pink-500/30">
-                  <TeamOutlined className="text-3xl text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-white mb-2">Quản lý lịch tiêm gia đình</h3>
-                  <p className="text-slate-400">
-                    Giúp Khách hàng quản lý hiệu quả lịch tiêm của tất cả các thành viên trong gia
-                    đình, nhắc Khách hàng khi đến ngày hẹn tiêm.
-                  </p>
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 shadow-lg group cursor-pointer hover:-translate-y-1">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center shadow-lg shadow-pink-500/20 group-hover:scale-110 transition-transform duration-300">
+                    <TeamOutlined className="text-2xl text-white" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-pink-300 transition-colors">
+                      {t('home.mobileApp.features.family.title')}
+                    </h3>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      {t('home.mobileApp.features.family.desc')}
+                    </p>
+                  </div>
                 </div>
               </div>
             </FadeIn>
 
             <FadeIn direction="left" delay={200}>
-              <div className="flex items-start gap-4 text-left">
-                <div className="flex-shrink-0 w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
-                  <HistoryOutlined className="text-3xl text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-white mb-2">Theo dõi lịch sử tiêm chủng</h3>
-                  <p className="text-slate-400">
-                    Tối ưu hóa trải nghiệm của người dùng bằng cách lưu trữ lịch sử tiêm chủng của
-                    tất cả thành viên trong gia đình.
-                  </p>
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 shadow-lg group cursor-pointer hover:-translate-y-1">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300">
+                    <HistoryOutlined className="text-2xl text-white" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+                      {t('home.mobileApp.features.history.title')}
+                    </h3>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      {t('home.mobileApp.features.history.desc')}
+                    </p>
+                  </div>
                 </div>
               </div>
             </FadeIn>
@@ -158,8 +163,12 @@ const MobileAppSection = () => {
                   className="h-14 px-6 rounded-xl bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/40 flex items-center gap-2"
                 >
                   <div className="flex flex-col items-start leading-tight">
-                    <span className="text-[10px] font-medium opacity-80">Download on the</span>
-                    <span className="text-lg font-bold">App Store</span>
+                    <span className="text-[10px] font-medium opacity-80">
+                      {t('home.mobileApp.buttons.appStore.sub')}
+                    </span>
+                    <span className="text-lg font-bold">
+                      {t('home.mobileApp.buttons.appStore.main')}
+                    </span>
                   </div>
                 </Button>
                 <Button
@@ -168,8 +177,12 @@ const MobileAppSection = () => {
                   className="h-14 px-6 rounded-xl bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/40 flex items-center gap-2"
                 >
                   <div className="flex flex-col items-start leading-tight">
-                    <span className="text-[10px] font-medium opacity-80">Get it on</span>
-                    <span className="text-lg font-bold">Google Play</span>
+                    <span className="text-[10px] font-medium opacity-80">
+                      {t('home.mobileApp.buttons.googlePlay.sub')}
+                    </span>
+                    <span className="text-lg font-bold">
+                      {t('home.mobileApp.buttons.googlePlay.main')}
+                    </span>
                   </div>
                 </Button>
               </div>

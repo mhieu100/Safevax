@@ -76,5 +76,41 @@
     "readArticle": "Read Article",
     "views": "views",
     "clickToRead": "Click to read more about this article..."
+  },
+  "mobileApp": {
+    "title": "SafeVax App",
+    "description": "The mobile application is built to manage vaccination records, book vaccination appointments, provide nutritional advice, and healthcare for mothers and babies.",
+    "features": {
+      "schedule": {
+        "title": "Book Examinations & Appointments",
+        "desc": "Pre-order vaccines, book appointments from home via phone, helping customers manage their time proactively."
+      },
+      "growth": {
+        "title": "Track Growth Progress",
+        "desc": "Based on height and weight entered by the user, the app helps track the development process."
+      },
+      "family": {
+        "title": "Manage Family Vaccination Schedule",
+        "desc": "Helps customers effectively manage vaccination schedules for all family members, with appointment reminders."
+      },
+      "history": {
+        "title": "Track Vaccination History",
+        "desc": "Optimize user experience by storing vaccination history of all members."
+      },
+      "cta": {
+        "download": "Download App Now",
+        "book": "Book Appointment Now"
+      },
+      "buttons": {
+        "appStore": {
+          "sub": "Download on the",
+          "main": "App Store"
+        },
+        "googlePlay": {
+          "sub": "Get it on",
+          "main": "Google Play"
+        }
+      }
+    }
   }
 }

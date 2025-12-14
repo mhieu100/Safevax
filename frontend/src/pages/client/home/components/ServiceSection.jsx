@@ -75,11 +75,8 @@ const ServiceSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((f, index) => (
             <FadeIn key={f.title} delay={index * 100} direction="up" className="h-full">
-              <div className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:border-blue-100 relative overflow-hidden h-full">
-                {/* Hover Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                <div className="relative z-10">
+              <div className="group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 relative overflow-hidden h-full flex flex-col justify-between">
+                <div>
                   <div
                     className={`h-16 w-16 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 ${f.iconBg}`}
                   >
@@ -91,10 +88,10 @@ const ServiceSection = () => {
                   </h3>
 
                   <p className="text-slate-600 leading-relaxed mb-6">{f.description}</p>
+                </div>
 
-                  <div className="flex items-center text-blue-600 font-medium opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                    {t('client:home.service.learnMore')} <ArrowRightOutlined className="ml-2" />
-                  </div>
+                <div className="flex items-center text-blue-600 font-medium opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                  {t('client:home.service.learnMore')} <ArrowRightOutlined className="ml-2" />
                 </div>
               </div>
             </FadeIn>
