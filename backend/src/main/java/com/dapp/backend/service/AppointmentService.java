@@ -767,7 +767,7 @@ public class AppointmentService {
 
         switch (bookingRequest.getPaymentMethod().toString()) {
             case "PAYPAL" -> payment.setAmount(bookingRequest.getAmount() * EXCHANGE_RATE_TO_USD);
-            case "METAMASK" -> payment.setAmount((double) Math.round(bookingRequest.getAmount() / 200000.0));
+            case "METAMASK" -> payment.setAmount(bookingRequest.getAmount() / 5000000.0);
             default -> payment.setAmount(bookingRequest.getAmount());
         }
         payment.setCurrency(bookingRequest.getPaymentMethod().getCurrency());
@@ -795,7 +795,7 @@ public class AppointmentService {
                 paymentResponse.setPaymentURL(paypalUrl);
                 break;
             case METAMASK:
-                paymentResponse.setAmount(bookingRequest.getAmount() / 200000.0);
+                paymentResponse.setAmount(bookingRequest.getAmount() / 50000000.0);
                 break;
             case CASH:
                 payment.setStatus(PaymentEnum.PROCESSING);

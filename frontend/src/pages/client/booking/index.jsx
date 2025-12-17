@@ -1,7 +1,9 @@
 import { Form, Modal, message } from 'antd';
+import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { callCreateBooking } from '@/services/booking.service';
+import { updatePaymentMetaMask } from '@/services/payment.service';
 import { callGetBySlug } from '@/services/vaccine.service';
 import AppointmentSection from './components/AppointmentSection';
 import PaymentSection from './components/PaymentSection';
@@ -154,6 +156,8 @@ const BookingPage = () => {
           window.location.href = paymentData.paymentURL;
         } else if (paymentData.method === 'BANK' && paymentData.paymentURL) {
           window.location.href = paymentData.paymentURL;
+        } else if (paymentData.method === 'METAMASK') {
+          await handleMetamaskPayment(paymentData);
         } else {
           navigate('/success');
         }
@@ -169,10 +173,47 @@ const BookingPage = () => {
           onOk: () => navigate('/appointments'),
         });
       }
-    } catch (_error) {
-      message.error('Đặt lịch thất bại. Vui lòng thử lại!');
+    } catch (error) {
+      console.error(error);
+      message.error(error.message || 'Đặt lịch thất bại. Vui lòng thử lại!');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMetamaskPayment = async (paymentData) => {
+    try {
+      if (!window.ethereum) {
+        throw new Error('Vui lòng cài đặt MetaMask!');
+      }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      // Use environment variable or fallback to a test address
+      const receiverAddress =
+        import.meta.env.VITE_RECEIVER_ADDRESS || '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+
+      const tx = await signer.sendTransaction({
+        to: receiverAddress,
+        value: ethers.parseEther(paymentData.amount.toString()),
+      });
+
+      message.loading('Đang xử lý thanh toán...');
+      await tx.wait();
+
+      await updatePaymentMetaMask({
+        paymentId: paymentData.paymentId,
+        referenceId: paymentData.referenceId,
+        type: 'APPOINTMENT',
+      });
+
+      message.success('Thanh toán thành công!');
+      navigate('/success');
+    } catch (error) {
+      console.error(error);
+      message.error(error.message || 'Thanh toán thất bại');
     }
   };
 
