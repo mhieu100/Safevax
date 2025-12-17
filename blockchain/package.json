@@ -10,7 +10,9 @@
 		"check:fix": "biome check --write .",
 		"lint": "biome lint .",
 		"format": "biome format .",
-		"prepare": "husky"
+		"prepare": "husky",
+		"ganache:accounts": "node tools/get_accounts.js",
+		"ganache:keys": "node tools/reveal_keys.js"
 	},
 	"keywords": [
 		"blockchain",
