@@ -13,4 +13,5 @@ public class OrderResponse {
     OrderStatus status;
     int itemCount;
     double total;
+    String customerName;
 }

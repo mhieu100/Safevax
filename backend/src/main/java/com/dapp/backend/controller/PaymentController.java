@@ -109,6 +109,12 @@ public class PaymentController {
         paymentService.updatePaymentMetaMask(request);
     }
 
+    @GetMapping("/my-history")
+    @ApiMessage("Get my payment history")
+    public java.util.List<TransactionResultResponse> getMyPaymentHistory() throws AppException {
+        return paymentService.getMyPaymentHistory();
+    }
+
     @GetMapping("/{paymentId}/result")
     @ApiMessage("Get payment transaction result details")
     public TransactionResultResponse getTransactionResult(@PathVariable Long paymentId)

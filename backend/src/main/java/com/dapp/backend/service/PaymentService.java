@@ -29,10 +29,54 @@ public class PaymentService {
         private final VnpayService vnpayService;
         private final PaypalService paypalService;
         private final EmailService emailService;
+        private final AuthService authService;
+
+        public java.util.List<TransactionResultResponse> getMyPaymentHistory() throws AppException {
+                com.dapp.backend.model.User user = authService.getCurrentUserLogin();
+                java.util.List<Appointment> appointments = appointmentRepository.findByPatient(user);
+
+                if (appointments.isEmpty()) {
+                        return new java.util.ArrayList<>();
+                }
+
+                java.util.List<Long> appointmentIds = appointments.stream().map(Appointment::getId).toList();
+                java.util.List<Payment> payments = paymentRepository.findByReferenceIdInAndReferenceType(appointmentIds,
+                                TypeTransactionEnum.APPOINTMENT);
+
+                java.util.Map<Long, Appointment> appointmentMap = appointments.stream()
+                                .collect(java.util.stream.Collectors.toMap(Appointment::getId, a -> a));
+
+                return payments.stream().map(payment -> {
+                        Appointment appointment = appointmentMap.get(payment.getReferenceId());
+                        return TransactionResultResponse.builder()
+                                        .status(payment.getStatus().name())
+                                        .referenceType(payment.getReferenceType().name())
+                                        .amount(payment.getAmount())
+                                        .transactionId(String.valueOf(payment.getId()))
+                                        .method(payment.getMethod() != null ? payment.getMethod().name() : null)
+                                        .vaccineName(appointment.getVaccine() != null
+                                                        ? appointment.getVaccine().getName()
+                                                        : "N/A")
+                                        .centerName(appointment.getCenter() != null ? appointment.getCenter().getName()
+                                                        : "N/A")
+                                        .scheduledDate(appointment.getScheduledDate())
+                                        .scheduledTime(appointment.getScheduledTimeSlot() != null
+                                                        ? appointment.getScheduledTimeSlot().toString()
+                                                        : "")
+                                        .patientName(appointment.getPatient().getFullName())
+                                        .emailSentTo(appointment.getPatient().getEmail())
+                                        .build();
+                }).toList();
+        }
 
         public String createBankUrl(long amount, Long referenceId, Long paymentId, TypeTransactionEnum type,
                         String ipAddress, String userAgent) throws UnsupportedEncodingException {
                 return vnpayService.createPaymentUrl(amount, referenceId, paymentId, type, ipAddress, userAgent);
+        }
+
+        public String createVnPayUrl(long amount, Long referenceId, Long paymentId, TypeTransactionEnum type)
+                        throws UnsupportedEncodingException {
+                return vnpayService.createPaymentUrl(amount, referenceId, paymentId, type, "127.0.0.1", "web");
         }
 
         public String createPaypalUrl(Double amount, Long referenceId, Long paymentId, TypeTransactionEnum type,
@@ -114,37 +158,51 @@ public class PaymentService {
         }
 
         public void updatePaymentMetaMask(PaymentRequest request) throws AppException {
-
-                Appointment appointment = appointmentRepository.findById(Long.parseLong(request.getReferenceId()))
-                                .orElseThrow(() -> new AppException("Appointment not found!"));
                 Payment payment = paymentRepository.findById(request.getPaymentId())
                                 .orElseThrow(() -> new AppException("Payment not found!"));
 
-                appointment.setStatus(AppointmentStatus.SCHEDULED);
-                payment.setStatus(PaymentEnum.SUCCESS);
-                appointmentRepository.save(appointment);
-                paymentRepository.save(payment);
+                if (request.getType() == TypeTransactionEnum.ORDER) {
+                        Order order = orderRepository.findById(Long.parseLong(request.getReferenceId()))
+                                        .orElseThrow(() -> new AppException("Order not found!"));
 
-                try {
-                        var patient = appointment.getPatient();
-                        if (patient != null && patient.getEmail() != null && !patient.getEmail().isEmpty()
-                                        && appointment.getScheduledDate() != null && appointment.getCenter() != null) {
-                                String timeSlot = appointment.getScheduledTimeSlot() != null
-                                                ? appointment.getScheduledTimeSlot().toString()
-                                                : "Chưa xác định";
-                                emailService.sendAppointmentConfirmation(
-                                                patient.getEmail(),
-                                                patient.getFullName(),
-                                                appointment.getVaccine().getName(),
-                                                appointment.getScheduledDate(),
-                                                timeSlot,
-                                                appointment.getCenter().getName(),
-                                                appointment.getId());
+                        // Update Order Status to PENDING (Paid, waiting for processing/delivery)
+                        // Or PROCESSING depending on your OrderStatus enum flow
+                        order.setStatus(OrderStatus.PROCESSING);
+                        orderRepository.save(order);
+
+                } else if (request.getType() == TypeTransactionEnum.APPOINTMENT) {
+                        Appointment appointment = appointmentRepository
+                                        .findById(Long.parseLong(request.getReferenceId()))
+                                        .orElseThrow(() -> new AppException("Appointment not found!"));
+
+                        appointment.setStatus(AppointmentStatus.SCHEDULED);
+                        appointmentRepository.save(appointment);
+
+                        try {
+                                var patient = appointment.getPatient();
+                                if (patient != null && patient.getEmail() != null && !patient.getEmail().isEmpty()
+                                                && appointment.getScheduledDate() != null
+                                                && appointment.getCenter() != null) {
+                                        String timeSlot = appointment.getScheduledTimeSlot() != null
+                                                        ? appointment.getScheduledTimeSlot().toString()
+                                                        : "Chưa xác định";
+                                        emailService.sendAppointmentConfirmation(
+                                                        patient.getEmail(),
+                                                        patient.getFullName(),
+                                                        appointment.getVaccine().getName(),
+                                                        appointment.getScheduledDate(),
+                                                        timeSlot,
+                                                        appointment.getCenter().getName(),
+                                                        appointment.getId());
+                                }
+                        } catch (Exception e) {
+                                System.err.println("Failed to send confirmation email: " + e.getMessage());
                         }
-                } catch (Exception e) {
-
-                        System.err.println("Failed to send confirmation email: " + e.getMessage());
                 }
+
+                payment.setReferenceType(request.getType());
+                payment.setStatus(PaymentEnum.SUCCESS); // Should be SUCCESS for MetaMask confirmed txs
+                paymentRepository.save(payment);
         }
 
         public TransactionResultResponse getTransactionResult(Long paymentId)
@@ -157,7 +215,8 @@ public class PaymentService {
                                 .status(payment.getStatus().name())
                                 .referenceType(payment.getReferenceType().name())
                                 .amount(payment.getAmount())
-                                .transactionId(String.valueOf(payment.getId()));
+                                .transactionId(String.valueOf(payment.getId()))
+                                .method(payment.getMethod() != null ? payment.getMethod().name() : null);
 
                 if (payment.getReferenceType() == TypeTransactionEnum.APPOINTMENT) {
                         Appointment appointment = appointmentRepository.findById(payment.getReferenceId())

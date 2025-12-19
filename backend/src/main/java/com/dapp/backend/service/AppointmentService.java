@@ -795,7 +795,7 @@ public class AppointmentService {
                 paymentResponse.setPaymentURL(paypalUrl);
                 break;
             case METAMASK:
-                paymentResponse.setAmount(bookingRequest.getAmount() / 50000000.0);
+                paymentResponse.setAmount(bookingRequest.getAmount() / 5000000.0);
                 break;
             case CASH:
                 payment.setStatus(PaymentEnum.PROCESSING);

@@ -13,6 +13,7 @@ import {
   SafetyCertificateFilled,
   SafetyOutlined,
   SearchOutlined,
+  ShoppingOutlined,
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
@@ -91,6 +92,11 @@ const LayoutAdmin = () => {
       key: '/admin/appointments',
       icon: <CalendarOutlined />,
       label: 'Quản lý lịch hẹn',
+    },
+    {
+      key: '/admin/orders',
+      icon: <ShoppingOutlined />,
+      label: 'Quản lý đơn hàng',
     },
     {
       key: 'user-management',

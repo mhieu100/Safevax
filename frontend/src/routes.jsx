@@ -11,13 +11,13 @@ import LayoutClient from '@/layouts/ClientLayout';
 import LayoutStaff from '@/layouts/StaffLayout';
 import AiKnowledgePage from '@/pages/admin/ai-knowledge/AiKnowledgePage';
 import AppointmentListPage from '@/pages/admin/appointment';
-import AppointmentDetailPage from '@/pages/admin/appointment/AppointmentDetail';
 import CashierPage from '@/pages/admin/cashier';
 import CenterPage from '@/pages/admin/center';
 import DashboardPage from '@/pages/admin/dashboard';
 import DoctorPage from '@/pages/admin/doctor';
 import MonitorPage from '@/pages/admin/monitor';
 import NewsPage from '@/pages/admin/news';
+import AdminOrderPage from '@/pages/admin/order/OrderPage';
 import PatientPage from '@/pages/admin/patient';
 import PermissionPage from '@/pages/admin/permission';
 import AdminProfilePage from '@/pages/admin/profile';
@@ -39,8 +39,10 @@ import CheckoutPage from '@/pages/client/checkout';
 import ContactPage from '@/pages/client/contact';
 import FamilyMemberPage from '@/pages/client/family-member';
 import HomePage from '@/pages/client/home';
+import MyOrdersPage from '@/pages/client/my-orders';
 import ClientNewsPage from '@/pages/client/news';
 import ClientNewsDetailPage from '@/pages/client/news/detail';
+import PaymentHistoryPage from '@/pages/client/payment-history';
 import UserProfilePage from '@/pages/client/profile';
 import SuccessPage from '@/pages/client/success';
 import VaccineDetailPage from '@/pages/client/vaccine-detail';
@@ -56,6 +58,7 @@ import MySchedulePage from '@/pages/staff/my-schedule';
 import PendingAppointmentPage from '@/pages/staff/pending-appointment';
 import StaffProfilePage from '@/pages/staff/profile';
 import WalkInBookingPage from '@/pages/staff/walk-in-booking';
+import AppointmentDetailPage from './pages/admin/appointment/AppointmentDetail';
 
 const router = createBrowserRouter([
   {
@@ -148,6 +151,22 @@ const router = createBrowserRouter([
           </ProtectedUserRoute>
         ),
       },
+      {
+        path: 'payment-history',
+        element: (
+          <ProtectedUserRoute>
+            <PaymentHistoryPage />
+          </ProtectedUserRoute>
+        ),
+      },
+      {
+        path: 'my-orders',
+        element: (
+          <ProtectedUserRoute>
+            <MyOrdersPage />
+          </ProtectedUserRoute>
+        ),
+      },
     ],
   },
 
@@ -183,6 +202,10 @@ const router = createBrowserRouter([
       {
         path: 'vaccines',
         element: <VaccinePage />,
+      },
+      {
+        path: 'orders',
+        element: <AdminOrderPage />,
       },
 
       {

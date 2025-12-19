@@ -81,6 +81,7 @@ public class SecurityConfiguration {
                 "/api/auth/complete-profile", "/api/auth/complete-google-profile", "/api/auth/login/google-mobile",
                 "/storage/**", "/email/**",
                 "/api/payments/vnpay/return", "/api/payments/paypal/success", "/api/payments/paypal/cancel",
+                "/api/payments/meta-mask",
                 "/api/health/hello",
                 "/oauth2/**", "/login/oauth2/**", "/api/test/**", "/api/reminders/**",
                 "/api/public/**"

@@ -111,6 +111,24 @@ const BookingPage = () => {
     return () => clearInterval(interval);
   }, [bookingForm, paymentForm]);
 
+  useEffect(() => {
+    if (window.ethereum) {
+      const handleAccountsChanged = (accounts) => {
+        if (accounts.length > 0) {
+          message.info(`Đã chuyển sang tài khoản: ${accounts[0]}`);
+        } else {
+          message.warning('Vui lòng kết nối MetaMask!');
+        }
+      };
+
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+      return () => {
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      };
+    }
+  }, []);
+
   const handleBookingSubmit = async () => {
     try {
       setLoading(true);

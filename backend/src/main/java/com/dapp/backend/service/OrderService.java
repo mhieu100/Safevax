@@ -71,7 +71,8 @@ public class OrderService {
         if (request.getPaymentMethod().toString().equals("PAYPAL")) {
             payment.setAmount(request.getTotalAmount() * EXCHANGE_RATE_TO_USD);
         } else if (request.getPaymentMethod().toString().equals("METAMASK")) {
-            payment.setAmount(request.getTotalAmount() / 200000.0);
+            // Synchronize with AppointmentService: 1 ETH = 5,000,000 VND
+            payment.setAmount(request.getTotalAmount() / 5000000.0);
         } else {
             payment.setAmount(request.getTotalAmount());
         }
@@ -92,7 +93,17 @@ public class OrderService {
                 response.setPaymentURL(paypalUrl);
                 break;
             case METAMASK:
-                response.setAmount(request.getTotalAmount() / 200000.0);
+                response.setAmount(request.getTotalAmount() / 5000000.0);
+                break;
+            case BANK:
+                try {
+                    String vnpayUrl = paymentService.createVnPayUrl((long) request.getTotalAmount(),
+                            response.getReferenceId(),
+                            response.getPaymentId(), TypeTransactionEnum.ORDER);
+                    response.setPaymentURL(vnpayUrl);
+                } catch (java.io.UnsupportedEncodingException e) {
+                    throw new AppException("Error creating VNPAY URL");
+                }
                 break;
             case CASH:
                 payment.setStatus(PaymentEnum.PROCESSING);
@@ -112,6 +123,10 @@ public class OrderService {
         return orderRepository.findAllByUser(user).stream().map(this::toResponse).toList();
     }
 
+    public List<OrderResponse> getAllOrders() {
+        return orderRepository.findAll().stream().map(this::toResponse).toList();
+    }
+
     public OrderResponse toResponse(Order order) {
         OrderResponse response = new OrderResponse();
         response.setOrderId(order.getOrderId());
@@ -119,6 +134,9 @@ public class OrderService {
         response.setItemCount(order.getItemCount());
         response.setTotal(order.getTotalAmount());
         response.setStatus(order.getStatus());
+        if (order.getUser() != null) {
+            response.setCustomerName(order.getUser().getFullName());
+        }
         return response;
     }
 }

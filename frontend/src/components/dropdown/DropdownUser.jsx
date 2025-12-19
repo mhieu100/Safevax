@@ -1,4 +1,12 @@
-import { LogoutOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  CalendarOutlined,
+  HistoryOutlined,
+  LogoutOutlined,
+  ShoppingOutlined,
+  TeamOutlined,
+  UserOutlined,
+  WalletOutlined,
+} from '@ant-design/icons';
 import { Avatar, Dropdown, message } from 'antd';
 import { useEffect, useState } from 'react'; // Added imports
 import { useTranslation } from 'react-i18next';
@@ -45,6 +53,30 @@ const DropdownUser = () => {
       label: t('user.personalInfo'),
       icon: <UserOutlined />,
       onClick: () => navigate('/profile'),
+    },
+    {
+      key: 'appointments',
+      label: 'Lịch hẹn',
+      icon: <CalendarOutlined />,
+      onClick: () => navigate('/appointments'),
+    },
+    {
+      key: 'wallet',
+      label: 'Ví vắc xin',
+      icon: <WalletOutlined />,
+      onClick: () => navigate('/wallet'),
+    },
+    {
+      key: 'my-orders',
+      label: 'Đơn hàng của tôi',
+      icon: <ShoppingOutlined />,
+      onClick: () => navigate('/my-orders'),
+    },
+    {
+      key: 'payment-history',
+      label: 'Lịch sử thanh toán',
+      icon: <HistoryOutlined />,
+      onClick: () => navigate('/payment-history'),
     },
     ...familyMembers.map((member) => ({
       key: `family-${member.id}`,

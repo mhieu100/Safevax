@@ -32,4 +32,10 @@ public class OrderController {
     public ResponseEntity<List<OrderResponse>> getOrder() throws AppException {
         return ResponseEntity.ok(orderService.getOrder());
     }
+
+    @GetMapping("/all")
+    @ApiMessage("Get all orders (Admin)")
+    public ResponseEntity<List<OrderResponse>> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
+    }
 }

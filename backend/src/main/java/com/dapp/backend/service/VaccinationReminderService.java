@@ -27,6 +27,7 @@ public class VaccinationReminderService {
 
     private final VaccinationReminderRepository reminderRepository;
     private final EmailService emailService;
+    private final NotificationLogService notificationLogService;
 
     @Value("${reminder.days.before:1,3,7}")
     private String reminderDaysBeforeConfig;
@@ -34,7 +35,7 @@ public class VaccinationReminderService {
     @Transactional
     public List<VaccinationReminder> createRemindersForAppointment(Appointment appointment) throws AppException {
         log.info("Creating reminders for appointment ID: {}", appointment.getId());
-
+        // ... (rest of createRemindersForAppointment)
         List<VaccinationReminder> reminders = new ArrayList<>();
 
         User user = appointment.getPatient();
@@ -144,6 +145,17 @@ public class VaccinationReminderService {
                     centerName,
                     centerAddress,
                     doseNumber);
+
+            // Log successful notification
+            String content = String.format("Sent confirmation email for %s at %s", vaccineName, centerName);
+            notificationLogService.logSuccess(
+                    reminder.getUser(),
+                    ReminderType.APPOINTMENT_REMINDER,
+                    ReminderChannel.EMAIL,
+                    appointment,
+                    reminder.getRecipientEmail(),
+                    content);
+
         } else {
             throw new Exception("Unsupported reminder channel: " + reminder.getChannel());
         }
@@ -241,6 +253,16 @@ public class VaccinationReminderService {
         reminder.setNextRetryAt(LocalDateTime.now().plusMinutes(retryDelayMinutes));
 
         reminderRepository.save(reminder);
+
+        // Log failure notification
+        notificationLogService.logFailure(
+                reminder.getUser(),
+                ReminderType.APPOINTMENT_REMINDER,
+                reminder.getChannel(),
+                reminder.getAppointment(),
+                reminder.getRecipientEmail(),
+                errorMessage);
+
         log.info("Scheduled retry for reminder ID: {} in {} minutes", reminder.getId(), retryDelayMinutes);
     }
 }
