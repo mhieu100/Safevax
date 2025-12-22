@@ -4,5 +4,9 @@
   "logoutSuccess": "Đăng xuất thành công",
   "adminDashboard": "Trang quản trị",
   "staffDashboard": "Trang nhân viên",
-  "personalInfo": "Thông tin cá nhân"
+  "personalInfo": "Thông tin cá nhân",
+  "appointments": "Lịch hẹn",
+  "vaccineWallet": "Ví vắc xin",
+  "myOrders": "Đơn hàng của tôi",
+  "paymentHistory": "Lịch sử thanh toán"
 }

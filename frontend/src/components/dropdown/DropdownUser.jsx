@@ -56,31 +56,31 @@ const DropdownUser = () => {
     },
     {
       key: 'appointments',
-      label: 'Lịch hẹn',
+      label: t('user.appointments'),
       icon: <CalendarOutlined />,
       onClick: () => navigate('/appointments'),
     },
     {
       key: 'wallet',
-      label: 'Ví vắc xin',
+      label: t('user.vaccineWallet'),
       icon: <WalletOutlined />,
       onClick: () => navigate('/wallet'),
     },
     {
       key: 'my-orders',
-      label: 'Đơn hàng của tôi',
+      label: t('user.myOrders'),
       icon: <ShoppingOutlined />,
       onClick: () => navigate('/my-orders'),
     },
     {
       key: 'payment-history',
-      label: 'Lịch sử thanh toán',
+      label: t('user.paymentHistory'),
       icon: <HistoryOutlined />,
       onClick: () => navigate('/payment-history'),
     },
     ...familyMembers.map((member) => ({
       key: `family-${member.id}`,
-      label: member.fullName, // Or include relationship: `${member.fullName} (${member.relationship})`
+      label: member.fullName,
       icon: <TeamOutlined />,
       onClick: () => navigate('/family-member', { state: { familyMemberId: member.id } }),
     })),

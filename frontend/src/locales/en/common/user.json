@@ -4,5 +4,9 @@
   "logoutSuccess": "Logout success",
   "adminDashboard": "Admin Dashboard",
   "staffDashboard": "Staff Dashboard",
-  "personalInfo": "Personal Information"
+  "personalInfo": "Personal Information",
+  "appointments": "Appointments",
+  "vaccineWallet": "Vaccine Wallet",
+  "myOrders": "My Orders",
+  "paymentHistory": "Payment History"
 }
