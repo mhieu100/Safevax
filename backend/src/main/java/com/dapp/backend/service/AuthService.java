@@ -121,6 +121,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .isDeleted(false)
                 .isActive(false)
+                .newUser(true)
                 .build();
 
         Role role = roleRepository.findByName("PATIENT")
@@ -128,6 +129,12 @@ public class AuthService {
         user.setRole(role);
 
         User savedUser = userRepository.save(user);
+        log.info("User registered. Email: {}, isNewUser: {}", savedUser.getEmail(), savedUser.isNewUser());
+        if (!savedUser.isNewUser()) {
+            savedUser.setNewUser(true);
+            savedUser = userRepository.save(savedUser);
+            log.info("Correction: Forced isNewUser to true. Now: {}", savedUser.isNewUser());
+        }
 
         try {
             notificationLogService.createDefaultSettings(savedUser);
@@ -161,7 +168,9 @@ public class AuthService {
                 .fullName(savedUser.getFullName())
                 .email(savedUser.getEmail())
                 .role(savedUser.getRole().getName())
+                .role(savedUser.getRole().getName())
                 .isActive(savedUser.isActive())
+                .isNewUser(savedUser.isNewUser())
                 .build();
     }
 
@@ -276,7 +285,8 @@ public class AuthService {
 
         user.setPatientProfile(patient);
         user.setActive(true);
-        user.setNewUser(false);
+        user.setActive(true);
+        // user.setNewUser(false); // Keep true to show tour
 
         generateAndSyncBlockchainIdentity(user);
 
@@ -402,10 +412,16 @@ public class AuthService {
                         .role(role)
                         .isActive(false)
                         .isDeleted(false)
+                        .newUser(true)
                         .password(passwordEncoder.encode("GOOGLE_AUTH_" + java.util.UUID.randomUUID()))
                         .build();
 
                 user = userRepository.save(user);
+                log.info("Google User registered. Email: {}, isNewUser: {}", user.getEmail(), user.isNewUser());
+                if (!user.isNewUser()) {
+                    user.setNewUser(true);
+                    user = userRepository.save(user);
+                }
 
                 try {
                     notificationLogService.createDefaultSettings(user);

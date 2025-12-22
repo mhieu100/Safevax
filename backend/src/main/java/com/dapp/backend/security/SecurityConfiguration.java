@@ -84,7 +84,8 @@ public class SecurityConfiguration {
                 "/api/payments/meta-mask",
                 "/api/health/hello",
                 "/oauth2/**", "/login/oauth2/**", "/api/test/**", "/api/reminders/**",
-                "/api/public/**"
+                "/api/public/**",
+                "/api/rag/chat", "/api/rag/search", "/api/rag/summarize"
         };
         http
                 .csrf(AbstractHttpConfigurer::disable)

@@ -94,6 +94,7 @@ public class AuthController {
                 .fullName(registerResponse.getFullName())
                 .email(registerResponse.getEmail())
                 .role(registerResponse.getRole())
+                .isNewUser(registerResponse.isNewUser())
                 .build();
 
         LoginResponse loginResponse = LoginResponse.builder()

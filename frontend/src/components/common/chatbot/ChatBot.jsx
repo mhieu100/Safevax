@@ -73,7 +73,14 @@ const ChatBot = () => {
   }, [messages, isOpen, isSettingsOpen]);
 
   const chatMutation = useMutation({
-    mutationFn: (data) => ragService.consult(data),
+    mutationFn: (data) => {
+      // If data is a string, it's a simple chat query (guest)
+      if (typeof data === 'string') {
+        return ragService.chat(data);
+      }
+      // Otherwise it's an object with profile data (authenticated)
+      return ragService.consult(data);
+    },
     onSuccess: (data) => {
       setMessages((prev) => [...prev, { id: Date.now(), text: data, sender: 'bot' }]);
     },
@@ -114,16 +121,19 @@ const ChatBot = () => {
 
     setMessages((prev) => [...prev, userMessage]);
 
-    const consultData = {
-      query: text,
-      age: profile.age,
-      vaccinationHistory: profile.vaccinationHistory
-        ? profile.vaccinationHistory.split(',').map((s) => s.trim())
-        : [],
-      healthCondition: profile.healthCondition,
-    };
-
-    chatMutation.mutate(consultData);
+    if (isAuthenticated) {
+      chatMutation.mutate({
+        query: text,
+        age: profile.age,
+        vaccinationHistory: profile.vaccinationHistory
+          ? profile.vaccinationHistory.split(',').map((s) => s.trim())
+          : [],
+        healthCondition: profile.healthCondition,
+      });
+    } else {
+      // Guest mode
+      chatMutation.mutate(text);
+    }
     if (text === inputValue) setInputValue('');
   };
 

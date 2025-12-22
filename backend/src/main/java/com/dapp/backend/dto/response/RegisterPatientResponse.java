@@ -19,6 +19,7 @@ public class RegisterPatientResponse {
     String email;
     String role;
     boolean isActive;
+    boolean isNewUser;
 
     @Data
     @NoArgsConstructor
