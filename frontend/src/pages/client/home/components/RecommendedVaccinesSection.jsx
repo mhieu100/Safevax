@@ -7,7 +7,7 @@ import {
   UserOutlined,
   WomanOutlined,
 } from '@ant-design/icons';
-import { Button, Card, Empty, Select, Spin, Tag } from 'antd';
+import { Button, Card, Empty, Select, Spin, Tabs, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
