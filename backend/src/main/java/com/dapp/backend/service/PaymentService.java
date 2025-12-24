@@ -175,7 +175,7 @@ public class PaymentService {
                                         .findById(Long.parseLong(request.getReferenceId()))
                                         .orElseThrow(() -> new AppException("Appointment not found!"));
 
-                        appointment.setStatus(AppointmentStatus.SCHEDULED);
+                        appointment.setStatus(AppointmentStatus.PENDING);
                         appointmentRepository.save(appointment);
 
                         try {
