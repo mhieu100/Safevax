@@ -347,4 +347,79 @@ public class VaccineRecordService {
 
         return mapToResponse(record);
     }
+
+    /**
+     * Verify if a patient has received a specific vaccine dose
+     * @param vaccineSlug The vaccine slug (e.g., "covid-19-pfizer")
+     * @param doseNumber The dose number to check (e.g., 3 for 3rd dose)
+     * @param identityHash The patient's identity hash
+     * @return VaccineRecordResponse if found and verified
+     */
+    public VaccineRecordResponse verifySpecificDose(String vaccineSlug, int doseNumber, String identityHash) throws AppException {
+        log.info("Verifying dose {} of vaccine {} for identity hash {}", doseNumber, vaccineSlug, identityHash);
+
+        VaccineRecord record = vaccineRecordRepository.findVerifiedByVaccineSlugAndDoseAndIdentity(
+                vaccineSlug, doseNumber, identityHash)
+                .orElseThrow(() -> new AppException(
+                        String.format("No verified record found for vaccine '%s' dose %d", vaccineSlug, doseNumber)));
+
+        // Verify on blockchain if available
+        if (blockchainService.isBlockchainServiceAvailable() && record.getBlockchainRecordId() != null) {
+            try {
+                Long chainId = Long.parseLong(record.getBlockchainRecordId());
+                BlockchainVaccineRecordDetails chainDetails = blockchainService.getVaccineRecord(chainId);
+
+                if (chainDetails == null || !chainDetails.isSuccess() || chainDetails.getData() == null) {
+                    throw new AppException("BLOCKCHAIN VERIFICATION FAILED: Record not found on chain");
+                }
+
+                log.info("✅ Blockchain verification successful for vaccine {} dose {}", vaccineSlug, doseNumber);
+            } catch (NumberFormatException e) {
+                log.error("Invalid Blockchain ID format: {}", record.getBlockchainRecordId());
+                throw new AppException("DATA INTEGRITY ERROR: Invalid Blockchain Record ID");
+            }
+        }
+
+        return mapToResponse(record);
+    }
+
+    /**
+     * Get all verified vaccination records for a patient by identity hash
+     * @param identityHash The patient's identity hash
+     * @return List of all verified vaccine records
+     */
+    public List<VaccineRecordResponse> getVerifiedRecordsByIdentity(String identityHash) throws AppException {
+        log.info("Fetching all verified records for identity hash: {}", identityHash);
+
+        List<VaccineRecord> records = vaccineRecordRepository.findVerifiedByIdentityHash(identityHash);
+
+        if (records.isEmpty()) {
+            throw new AppException("No verified vaccination records found for this identity");
+        }
+
+        return records.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get all doses of a specific vaccine for a patient
+     * @param vaccineSlug The vaccine slug
+     * @param identityHash The patient's identity hash
+     * @return List of all doses received for this vaccine
+     */
+    public List<VaccineRecordResponse> getVaccineDosesByIdentity(String vaccineSlug, String identityHash) throws AppException {
+        log.info("Fetching all doses of vaccine {} for identity hash: {}", vaccineSlug, identityHash);
+
+        List<VaccineRecord> records = vaccineRecordRepository.findVerifiedByVaccineSlugAndIdentity(
+                vaccineSlug, identityHash);
+
+        if (records.isEmpty()) {
+            throw new AppException(String.format("No vaccination records found for vaccine '%s'", vaccineSlug));
+        }
+
+        return records.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
 }

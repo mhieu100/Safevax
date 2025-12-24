@@ -33,6 +33,16 @@ public class VaccineMapper {
                 .duration(v.getDuration())
                 .createdAt(v.getCreatedAt())
                 .updatedAt(v.getUpdatedAt())
+                // === Thông tin đối tượng tiêm chủng ===
+                .targetGroup(v.getTargetGroup())
+                .minAgeMonths(v.getMinAgeMonths())
+                .maxAgeMonths(v.getMaxAgeMonths())
+                .genderSpecific(v.getGenderSpecific())
+                .pregnancySafe(v.getPregnancySafe())
+                .prePregnancy(v.getPrePregnancy())
+                .postPregnancy(v.getPostPregnancy())
+                .priorityLevel(v.getPriorityLevel())
+                .category(v.getCategory())
                 .build();
     }
 
@@ -55,6 +65,16 @@ public class VaccineMapper {
                 .dosesRequired(request.getDosesRequired())
                 .daysForNextDose(request.getDaysForNextDose())
                 .duration(request.getDuration())
+                // === Thông tin đối tượng tiêm chủng ===
+                .targetGroup(request.getTargetGroup())
+                .minAgeMonths(request.getMinAgeMonths())
+                .maxAgeMonths(request.getMaxAgeMonths())
+                .genderSpecific(request.getGenderSpecific())
+                .pregnancySafe(request.getPregnancySafe())
+                .prePregnancy(request.getPrePregnancy())
+                .postPregnancy(request.getPostPregnancy())
+                .priorityLevel(request.getPriorityLevel())
+                .category(request.getCategory())
                 .build();
     }
 
@@ -81,6 +101,35 @@ public class VaccineMapper {
         vaccine.setDosesRequired(request.getDosesRequired());
         vaccine.setDaysForNextDose(request.getDaysForNextDose());
         vaccine.setDuration(request.getDuration());
+
+        // === Cập nhật thông tin đối tượng tiêm chủng ===
+        if (request.getTargetGroup() != null) {
+            vaccine.setTargetGroup(request.getTargetGroup());
+        }
+        if (request.getMinAgeMonths() != null) {
+            vaccine.setMinAgeMonths(request.getMinAgeMonths());
+        }
+        if (request.getMaxAgeMonths() != null) {
+            vaccine.setMaxAgeMonths(request.getMaxAgeMonths());
+        }
+        if (request.getGenderSpecific() != null) {
+            vaccine.setGenderSpecific(request.getGenderSpecific());
+        }
+        if (request.getPregnancySafe() != null) {
+            vaccine.setPregnancySafe(request.getPregnancySafe());
+        }
+        if (request.getPrePregnancy() != null) {
+            vaccine.setPrePregnancy(request.getPrePregnancy());
+        }
+        if (request.getPostPregnancy() != null) {
+            vaccine.setPostPregnancy(request.getPostPregnancy());
+        }
+        if (request.getPriorityLevel() != null) {
+            vaccine.setPriorityLevel(request.getPriorityLevel());
+        }
+        if (request.getCategory() != null) {
+            vaccine.setCategory(request.getCategory());
+        }
     }
 
     private static List<String> toList(String str) {

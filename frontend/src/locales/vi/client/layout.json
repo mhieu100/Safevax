@@ -9,6 +9,20 @@
     "menu": "Danh mục",
     "vaccineRecord": "Hồ sơ tiêm chủng"
   },
+  "navbar": {
+    "home": "Trang chủ",
+    "vaccines": "Vắc-xin",
+    "news": "Tin tức",
+    "about": "Về chúng tôi",
+    "contact": "Liên hệ",
+    "appointments": "Lịch hẹn",
+    "cart": "Giỏ hàng",
+    "wallet": "Ví vắc-xin",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "account": "Tài khoản",
+    "welcomeMessage": "Chào mừng đến với SafeVax!"
+  },
   "cardInfo": {
     "patient": "BỆNH NHÂN",
     "identityVerified": "Đã xác minh danh tính",

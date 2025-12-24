@@ -16,5 +16,26 @@
   "close": "Close",
   "confirm": "Confirm",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "security": {
+    "title": "Security Settings",
+    "accountSecure": "Account Secure",
+    "accountSecureDesc": "Your account has strong security settings enabled",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "enterCurrentPassword": "Enter current password",
+    "enterNewPassword": "Enter new password",
+    "confirmPassword": "Confirm new password",
+    "pleaseEnterCurrentPassword": "Please enter current password",
+    "pleaseEnterNewPassword": "Please enter new password",
+    "pleaseConfirmPassword": "Please confirm new password",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "updatePassword": "Update Password",
+    "passwordUpdatedSuccess": "Password updated successfully",
+    "passwordUpdateFailed": "Failed to update password. Please check your current password.",
+    "passwordMismatch": "New password and confirm password do not match",
+    "userEmailNotFound": "User email not found",
+    "unexpectedError": "An error occurred while updating password"
+  }
 }

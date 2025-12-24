@@ -1,9 +1,38 @@
-import { Activity, ArrowRight, Globe, Lock, Search, Shield } from 'lucide-react';
+import {
+  Activity,
+  ArrowRight,
+  ChevronDown,
+  Filter,
+  Globe,
+  Lock,
+  Search,
+  Shield,
+  Syringe,
+  X,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Common vaccine options
+const VACCINE_OPTIONS = [
+  { slug: 'covid-19-pfizer', name: 'COVID-19 (Pfizer-BioNTech)', maxDose: 4 },
+  { slug: 'covid-19-moderna', name: 'COVID-19 (Moderna)', maxDose: 4 },
+  { slug: 'covid-19-astrazeneca', name: 'COVID-19 (AstraZeneca)', maxDose: 3 },
+  { slug: 'hepatitis-b', name: 'Hepatitis B', maxDose: 3 },
+  { slug: 'influenza', name: 'Influenza (Cúm)', maxDose: 1 },
+  { slug: 'measles-mumps-rubella', name: 'MMR (Sởi-Quai bị-Rubella)', maxDose: 2 },
+  { slug: 'tetanus', name: 'Tetanus (Uốn ván)', maxDose: 5 },
+  { slug: 'diphtheria', name: 'Diphtheria (Bạch hầu)', maxDose: 5 },
+];
+
 const VerifyLandingPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [advancedSearch, setAdvancedSearch] = useState({
+    identityHash: '',
+    vaccineSlug: '',
+    doseNumber: '',
+  });
   const navigate = useNavigate();
 
   const handleVerify = (e) => {
@@ -12,6 +41,32 @@ const VerifyLandingPage = () => {
       navigate(`/verify/${searchTerm.trim()}`);
     }
   };
+
+  const handleAdvancedSearch = (e) => {
+    e.preventDefault();
+    const { identityHash, vaccineSlug, doseNumber } = advancedSearch;
+
+    if (!identityHash.trim()) {
+      return;
+    }
+
+    // Build query params for advanced search
+    const params = new URLSearchParams();
+    params.set('identity', identityHash.trim());
+
+    if (vaccineSlug) {
+      params.set('vaccine', vaccineSlug);
+    }
+
+    if (doseNumber) {
+      params.set('dose', doseNumber);
+    }
+
+    navigate(`/verify/search?${params.toString()}`);
+  };
+
+  const selectedVaccine = VACCINE_OPTIONS.find((v) => v.slug === advancedSearch.vaccineSlug);
+  const maxDose = selectedVaccine?.maxDose || 5;
 
   return (
     <div className="min-h-screen w-full flex flex-col overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50 relative selection:bg-blue-100 selection:text-blue-900">
@@ -70,7 +125,7 @@ const VerifyLandingPage = () => {
               />
               <input
                 type="text"
-                placeholder="Paste Transaction Hash or Record ID..."
+                placeholder="Paste IPFS Hash or Transaction Hash..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="flex-1 bg-transparent border-none outline-none text-lg text-slate-800 placeholder:text-slate-400 py-3"
@@ -86,6 +141,122 @@ const VerifyLandingPage = () => {
               Secured by Ethereum & IPFS
             </div>
           </form>
+
+          {/* Advanced Search Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors"
+          >
+            <Filter size={16} />
+            <span>Advanced Search (Filter by Vaccine & Dose)</span>
+            <ChevronDown
+              size={16}
+              className={`transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
+            />
+          </button>
+
+          {/* Advanced Search Panel */}
+          {showAdvanced && (
+            <div className="mt-6 w-full max-w-2xl mx-auto animate-fade-in-up">
+              <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <Syringe size={20} className="text-blue-600" />
+                    Verify Specific Vaccination
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowAdvanced(false)}
+                    className="text-slate-400 hover:text-slate-600"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <form onSubmit={handleAdvancedSearch} className="space-y-4">
+                  {/* Identity Hash Input */}
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Patient Identity Hash <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter patient identity hash (SHA-256)"
+                      value={advancedSearch.identityHash}
+                      onChange={(e) =>
+                        setAdvancedSearch((prev) => ({ ...prev, identityHash: e.target.value }))
+                      }
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-slate-800"
+                      required
+                    />
+                  </div>
+
+                  {/* Vaccine Selection */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">
+                        Vaccine Type (Optional)
+                      </label>
+                      <select
+                        value={advancedSearch.vaccineSlug}
+                        onChange={(e) =>
+                          setAdvancedSearch((prev) => ({
+                            ...prev,
+                            vaccineSlug: e.target.value,
+                            doseNumber: '', // Reset dose when vaccine changes
+                          }))
+                        }
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-slate-800 bg-white"
+                      >
+                        <option value="">All Vaccines</option>
+                        {VACCINE_OPTIONS.map((vaccine) => (
+                          <option key={vaccine.slug} value={vaccine.slug}>
+                            {vaccine.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">
+                        Dose Number (Optional)
+                      </label>
+                      <select
+                        value={advancedSearch.doseNumber}
+                        onChange={(e) =>
+                          setAdvancedSearch((prev) => ({ ...prev, doseNumber: e.target.value }))
+                        }
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-slate-800 bg-white"
+                        disabled={!advancedSearch.vaccineSlug}
+                      >
+                        <option value="">All Doses</option>
+                        {Array.from({ length: maxDose }, (_, i) => i + 1).map((dose) => (
+                          <option key={dose} value={dose}>
+                            Dose {dose}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Search Button */}
+                  <button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-blue-600 to-emerald-500 hover:from-blue-700 hover:to-emerald-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
+                  >
+                    <Search size={20} />
+                    Verify Vaccination Record
+                  </button>
+
+                  <p className="text-xs text-slate-400 text-center">
+                    Search by patient identity hash to verify specific vaccine doses from the
+                    blockchain
+                  </p>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       </main>
 

@@ -106,7 +106,7 @@ const VaccineDetailPage = () => {
                     title: <Link to="/">Home</Link>,
                   },
                   {
-                    title: <Link to="/vaccine">Vaccines</Link>,
+                    title: <Link to="/vaccines">Vaccines</Link>,
                   },
                   { title: vaccine?.name },
                 ]}

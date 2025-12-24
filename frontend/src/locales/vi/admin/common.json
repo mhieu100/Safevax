@@ -17,5 +17,26 @@
   "close": "Đóng",
   "confirm": "Xác nhận",
   "yes": "Có",
-  "no": "Không"
+  "no": "Không",
+  "security": {
+    "title": "Cài đặt bảo mật",
+    "accountSecure": "Tài khoản an toàn",
+    "accountSecureDesc": "Tài khoản của bạn đã bật cài đặt bảo mật mạnh",
+    "currentPassword": "Mật khẩu hiện tại",
+    "newPassword": "Mật khẩu mới",
+    "confirmNewPassword": "Xác nhận mật khẩu mới",
+    "enterCurrentPassword": "Nhập mật khẩu hiện tại",
+    "enterNewPassword": "Nhập mật khẩu mới",
+    "confirmPassword": "Xác nhận mật khẩu mới",
+    "pleaseEnterCurrentPassword": "Vui lòng nhập mật khẩu hiện tại",
+    "pleaseEnterNewPassword": "Vui lòng nhập mật khẩu mới",
+    "pleaseConfirmPassword": "Vui lòng xác nhận mật khẩu mới",
+    "passwordMinLength": "Mật khẩu phải có ít nhất 6 ký tự",
+    "updatePassword": "Cập nhật mật khẩu",
+    "passwordUpdatedSuccess": "Cập nhật mật khẩu thành công",
+    "passwordUpdateFailed": "Không thể cập nhật mật khẩu. Vui lòng kiểm tra mật khẩu hiện tại.",
+    "passwordMismatch": "Mật khẩu mới và xác nhận mật khẩu không khớp",
+    "userEmailNotFound": "Không tìm thấy email người dùng",
+    "unexpectedError": "Đã xảy ra lỗi khi cập nhật mật khẩu"
+  }
 }

@@ -54,4 +54,39 @@ public interface VaccineRecordRepository extends JpaRepository<VaccineRecord, Lo
     List<VaccineRecord> findByCenter_CenterIdOrderByVaccinationDateDesc(Long centerId);
 
     Optional<VaccineRecord> findByIpfsHash(String ipfsHash);
+
+    // Filter by vaccine slug and dose number
+    @Query("""
+            SELECT vr FROM VaccineRecord vr
+            WHERE vr.vaccine.slug = :vaccineSlug
+            AND vr.doseNumber = :doseNumber
+            AND vr.patientIdentityHash = :identityHash
+            AND vr.isVerified = true
+            ORDER BY vr.vaccinationDate DESC
+            """)
+    Optional<VaccineRecord> findVerifiedByVaccineSlugAndDoseAndIdentity(
+            @Param("vaccineSlug") String vaccineSlug,
+            @Param("doseNumber") int doseNumber,
+            @Param("identityHash") String identityHash);
+
+    // Find all verified records by identity hash
+    @Query("""
+            SELECT vr FROM VaccineRecord vr
+            WHERE vr.patientIdentityHash = :identityHash
+            AND vr.isVerified = true
+            ORDER BY vr.vaccinationDate DESC
+            """)
+    List<VaccineRecord> findVerifiedByIdentityHash(@Param("identityHash") String identityHash);
+
+    // Find records by vaccine slug and identity hash (all doses)
+    @Query("""
+            SELECT vr FROM VaccineRecord vr
+            WHERE vr.vaccine.slug = :vaccineSlug
+            AND vr.patientIdentityHash = :identityHash
+            AND vr.isVerified = true
+            ORDER BY vr.doseNumber ASC
+            """)
+    List<VaccineRecord> findVerifiedByVaccineSlugAndIdentity(
+            @Param("vaccineSlug") String vaccineSlug,
+            @Param("identityHash") String identityHash);
 }

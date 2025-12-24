@@ -1,0 +1,22 @@
+{
+  "success": {
+    "title": "Thanh toán thành công!",
+    "loading": "Đang tải thông tin...",
+    "thankYou": "Cảm ơn",
+    "bookingSuccess": "Bạn đã đặt lịch tiêm",
+    "vaccinationAppointment": "thành công.",
+    "time": "Thời gian",
+    "location": "Địa điểm",
+    "emailNotice": "Email xác nhận lịch hẹn và hóa đơn đã được gửi đến",
+    "checkEmail": "Vui lòng kiểm tra email để xem chi tiết. Bạn sẽ được chuyển hướng sau giây lát...",
+    "viewProfile": "Xem hồ sơ"
+  },
+  "cancel": {
+    "title": "Thanh toán bị hủy",
+    "description": "Giao dịch đã bị hủy hoặc không thành công.",
+    "bookingNotComplete": "Lịch đặt tiêm",
+    "tryAgain": "của bạn chưa được hoàn tất. Vui lòng thử lại hoặc chọn phương thức thanh toán khác.",
+    "backToCart": "Quay lại giỏ hàng",
+    "retryPayment": "Thử lại thanh toán"
+  }
+}

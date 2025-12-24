@@ -152,4 +152,82 @@ public class VaccineService {
     public List<Vaccine> getVaccinesByName(String name) {
         return vaccineRepository.findAllByName(name);
     }
+    
+    // === Methods mới cho việc gợi ý vaccine theo đối tượng ===
+    
+    /**
+     * Lấy vaccine gợi ý theo độ tuổi và giới tính
+     * @param ageInMonths Tuổi tính theo tháng
+     * @param gender Giới tính (MALE/FEMALE)
+     * @return Danh sách vaccine phù hợp
+     */
+    public List<VaccineResponse> getRecommendedVaccines(Integer ageInMonths, String gender) {
+        String genderValue = (gender != null) ? gender.toUpperCase() : "ALL";
+        List<Vaccine> vaccines = vaccineRepository.findRecommendedVaccines(ageInMonths, genderValue);
+        return vaccines.stream().map(VaccineMapper::toResponse).toList();
+    }
+    
+    /**
+     * Lấy vaccine an toàn cho phụ nữ mang thai
+     */
+    public List<VaccineResponse> getPregnancySafeVaccines() {
+        List<Vaccine> vaccines = vaccineRepository.findPregnancySafeVaccines();
+        return vaccines.stream().map(VaccineMapper::toResponse).toList();
+    }
+    
+    /**
+     * Lấy vaccine cần tiêm trước khi mang thai
+     */
+    public List<VaccineResponse> getPrePregnancyVaccines() {
+        List<Vaccine> vaccines = vaccineRepository.findPrePregnancyVaccines();
+        return vaccines.stream().map(VaccineMapper::toResponse).toList();
+    }
+    
+    /**
+     * Lấy vaccine cần tiêm sau sinh
+     */
+    public List<VaccineResponse> getPostPregnancyVaccines() {
+        List<Vaccine> vaccines = vaccineRepository.findPostPregnancyVaccines();
+        return vaccines.stream().map(VaccineMapper::toResponse).toList();
+    }
+    
+    /**
+     * Lấy vaccine theo nhóm đối tượng
+     * @param targetGroup NEWBORN, INFANT, TODDLER, CHILD, TEEN, ADULT, ELDERLY
+     */
+    public List<VaccineResponse> getVaccinesByTargetGroup(String targetGroup) {
+        List<Vaccine> vaccines = vaccineRepository.findByTargetGroup(targetGroup.toUpperCase());
+        return vaccines.stream().map(VaccineMapper::toResponse).toList();
+    }
+    
+    /**
+     * Lấy vaccine theo danh mục
+     * @param category BASIC_CHILDHOOD, SCHOOL_AGE, ADULT_ROUTINE, PREGNANCY, ELDERLY_CARE, TRAVEL, COVID19
+     */
+    public List<VaccineResponse> getVaccinesByCategory(String category) {
+        List<Vaccine> vaccines = vaccineRepository.findByCategory(category.toUpperCase());
+        return vaccines.stream().map(VaccineMapper::toResponse).toList();
+    }
+    
+    /**
+     * Lấy vaccine thiết yếu theo độ tuổi
+     */
+    public List<VaccineResponse> getEssentialVaccinesByAge(Integer ageInMonths) {
+        List<Vaccine> vaccines = vaccineRepository.findEssentialVaccinesByAge(ageInMonths);
+        return vaccines.stream().map(VaccineMapper::toResponse).toList();
+    }
+    
+    /**
+     * Lấy danh sách categories
+     */
+    public List<String> getAllCategories() {
+        return vaccineRepository.findDistinctCategories();
+    }
+    
+    /**
+     * Lấy danh sách target groups
+     */
+    public List<String> getAllTargetGroups() {
+        return vaccineRepository.findDistinctTargetGroups();
+    }
 }

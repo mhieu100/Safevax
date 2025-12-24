@@ -1,0 +1,28 @@
+{
+  "title": "Đơn hàng của tôi",
+  "subtitle": "Quản lý và theo dõi trạng thái các đơn hàng vắc xin",
+  "loadError": "Không thể tải lịch sử đơn hàng",
+  "noOrders": "Bạn chưa có đơn hàng nào",
+  "summary": {
+    "totalOrders": "Tổng đơn hàng",
+    "successOrders": "Đơn thành công",
+    "processingOrders": "Đang xử lý"
+  },
+  "columns": {
+    "orderId": "Mã Đơn",
+    "orderDate": "Ngày đặt",
+    "itemCount": "Sản phẩm",
+    "total": "Tổng tiền",
+    "status": "Trạng thái"
+  },
+  "status": {
+    "pending": "Đang xử lý",
+    "processing": "Đang giao hàng",
+    "shipped": "Đang giao hàng",
+    "delivered": "Đã giao hàng",
+    "completed": "Hoàn thành",
+    "failed": "Thất bại",
+    "cancelled": "Đã hủy"
+  },
+  "itemUnit": "sản phẩm"
+}

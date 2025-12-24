@@ -230,7 +230,7 @@ const AboutPage = () => {
                 type="text"
                 size="large"
                 className="text-white hover:text-blue-100 font-semibold"
-                onClick={() => navigate('/vaccine')}
+                onClick={() => navigate('/vaccines')}
               >
                 View Vaccines <span aria-hidden="true">→</span>
               </Button>

@@ -16,4 +16,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             @Param("referenceType") TypeTransactionEnum referenceType);
 
     List<Payment> findByReferenceIdInAndReferenceType(List<Long> referenceIds, TypeTransactionEnum referenceType);
+
+    Optional<Payment> findByReferenceIdAndReferenceType(Long referenceId, TypeTransactionEnum referenceType);
 }

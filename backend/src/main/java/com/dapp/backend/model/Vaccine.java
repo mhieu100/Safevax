@@ -45,4 +45,33 @@ public class Vaccine extends BaseEntity {
     int duration;
     
     Integer daysForNextDose;
+    
+    // === Thông tin đối tượng tiêm chủng ===
+    
+    @Column(name = "target_group")
+    String targetGroup; // NEWBORN, INFANT, TODDLER, CHILD, TEEN, ADULT, ELDERLY, PREGNANT, ALL
+    
+    @Column(name = "min_age_months")
+    Integer minAgeMonths; // Tuổi tối thiểu (tháng)
+    
+    @Column(name = "max_age_months")
+    Integer maxAgeMonths; // Tuổi tối đa (tháng), NULL = không giới hạn
+    
+    @Column(name = "gender_specific")
+    String genderSpecific; // MALE, FEMALE, ALL
+    
+    @Column(name = "pregnancy_safe")
+    Boolean pregnancySafe; // An toàn cho bà bầu
+    
+    @Column(name = "pre_pregnancy")
+    Boolean prePregnancy; // Cần tiêm trước mang thai
+    
+    @Column(name = "post_pregnancy")
+    Boolean postPregnancy; // Cần tiêm sau sinh
+    
+    @Column(name = "priority_level")
+    String priorityLevel; // ESSENTIAL, RECOMMENDED, OPTIONAL, TRAVEL
+    
+    @Column(name = "category")
+    String category; // BASIC_CHILDHOOD, SCHOOL_AGE, ADULT_ROUTINE, PREGNANCY, ELDERLY_CARE, TRAVEL, COVID19
 }

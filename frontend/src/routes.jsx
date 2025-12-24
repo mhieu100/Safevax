@@ -50,6 +50,7 @@ import VaccineListPage from '@/pages/client/vaccine-list';
 import WalletVaccinePassport from '@/pages/client/wallet/WalletVaccinePassport';
 import VerifyLandingPage from '@/pages/public/verify/VerifyLandingPage';
 import VerifyResultPage from '@/pages/public/verify/VerifyResultPage';
+import VerifySearchResultPage from '@/pages/public/verify/VerifySearchResultPage';
 import CalendarView from '@/pages/staff/calendar-view';
 import StaffDashboard from '@/pages/staff/dashboard';
 import DoctorDashboard from '@/pages/staff/doctor-dashboard';
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
     element: <VerifyLandingPage />,
   },
   {
+    path: '/verify/search',
+    element: <VerifySearchResultPage />,
+  },
+  {
     path: '/verify/:id',
     element: <VerifyResultPage />,
   },
@@ -79,8 +84,8 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'vaccine', element: <VaccineListPage /> },
-      { path: 'vaccine/:id', element: <VaccineDetailPage /> },
+      { path: 'vaccines', element: <VaccineListPage /> },
+      { path: 'vaccines/:id', element: <VaccineDetailPage /> },
       { path: 'cart', element: <CartPage /> },
       { path: 'news', element: <ClientNewsPage /> },
       { path: 'news/:slug', element: <ClientNewsDetailPage /> },

@@ -9,6 +9,20 @@
     "menu": "Menu",
     "vaccineRecord": "Vaccine Record"
   },
+  "navbar": {
+    "home": "Home",
+    "vaccines": "Vaccines",
+    "news": "News",
+    "about": "About Us",
+    "contact": "Contact",
+    "appointments": "Appointments",
+    "cart": "Cart",
+    "wallet": "Wallet Vaccine",
+    "login": "Login",
+    "register": "Register",
+    "account": "Account",
+    "welcomeMessage": "Welcome to SafeVax!"
+  },
   "cardInfo": {
     "patient": "PATIENT",
     "identityVerified": "Identity Verified",

@@ -37,10 +37,10 @@ const VaccineModeCard = ({ vaccine }) => {
         <button
           type="button"
           className="relative group cursor-pointer border-none bg-transparent p-0"
-          onClick={() => navigate(`/vaccine/${vaccine.slug}`)}
+          onClick={() => navigate(`/vaccines/${vaccine.slug}`)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-              navigate(`/vaccine/${vaccine.slug}`);
+              navigate(`/vaccines/${vaccine.slug}`);
             }
           }}
         >
@@ -57,7 +57,7 @@ const VaccineModeCard = ({ vaccine }) => {
             <Title
               level={4}
               className="mb-1 cursor-pointer hover:text-blue-600 transition-colors"
-              onClick={() => navigate(`/vaccine/${vaccine.slug}`)}
+              onClick={() => navigate(`/vaccines/${vaccine.slug}`)}
               ellipsis={{ rows: 1 }}
             >
               {vaccine.name}
@@ -90,7 +90,7 @@ const VaccineModeCard = ({ vaccine }) => {
               />
             </div>
             <Space>
-              <Button icon={<EyeOutlined />} onClick={() => navigate(`/vaccine/${vaccine.slug}`)}>
+              <Button icon={<EyeOutlined />} onClick={() => navigate(`/vaccines/${vaccine.slug}`)}>
                 {t('vaccine.card.view')}
               </Button>
               <Button

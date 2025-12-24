@@ -112,5 +112,52 @@
         "main": "Google Play"
       }
     }
+  },
+  "recommendedVaccines": {
+    "subtitle": "Gợi ý vaccine",
+    "title": "Vaccine",
+    "titleHighlight": "phù hợp cho bạn",
+    "description": "Chúng tôi gợi ý các vaccine phù hợp dựa trên độ tuổi, giới tính và nhu cầu của bạn và gia đình",
+    "tabs": {
+      "personal": "Cho bạn",
+      "family": "Người thân",
+      "prePregnancy": "Trước mang thai",
+      "pregnancySafe": "Khi mang thai",
+      "postPregnancy": "Sau sinh"
+    },
+    "selectFamilyMember": "Chọn người thân",
+    "chooseFamilyMember": "Chọn thành viên gia đình",
+    "viewingVaccinesFor": "Đang xem vaccine cho",
+    "loginPrompt": "Đăng nhập để xem vaccine phù hợp với hồ sơ của bạn",
+    "loginNow": "Đăng nhập ngay",
+    "noVaccinesFound": "Không tìm thấy vaccine phù hợp",
+    "pleaseLogin": "Vui lòng đăng nhập để xem vaccine phù hợp",
+    "pleaseSelectMember": "Vui lòng chọn thành viên gia đình",
+    "viewAllVaccines": "Xem tất cả vaccine",
+    "doses": "mũi",
+    "monthsOld": "tháng tuổi",
+    "yearsOld": "tuổi",
+    "yearsMonths": "tuổi {{months}} tháng",
+    "you": "Bạn",
+    "male": "Nam",
+    "female": "Nữ",
+    "relative": "Người thân",
+    "priority": {
+      "essential": "Thiết yếu",
+      "recommended": "Khuyến nghị",
+      "optional": "Tùy chọn",
+      "travel": "Du lịch"
+    },
+    "targetGroup": {
+      "newborn": "Sơ sinh",
+      "infant": "Trẻ sơ sinh (2-12 tháng)",
+      "toddler": "Trẻ nhỏ (1-3 tuổi)",
+      "child": "Trẻ em (4-11 tuổi)",
+      "teen": "Thanh thiếu niên (12-17 tuổi)",
+      "adult": "Người lớn (18-64 tuổi)",
+      "elderly": "Người cao tuổi (65+)",
+      "pregnant": "Phụ nữ mang thai",
+      "all": "Tất cả"
+    }
   }
 }

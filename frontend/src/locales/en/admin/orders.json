@@ -1,0 +1,43 @@
+{
+  "title": "Order Management",
+  "subtitle": "View and manage all vaccine orders",
+  "searchPlaceholder": "Search by order ID or customer name...",
+  "loadError": "Failed to load order list",
+  "loadDetailError": "Failed to load order detail",
+  "statusUpdateSuccess": "Order status updated successfully",
+  "statusUpdateError": "Failed to update order status",
+  "viewDetail": "View detail",
+  "columns": {
+    "orderId": "Order ID",
+    "customer": "Customer",
+    "orderDate": "Order Date",
+    "itemCount": "Items",
+    "total": "Total",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "status": {
+    "pending": "Pending",
+    "processing": "Processing",
+    "shipped": "Shipping",
+    "delivered": "Delivered",
+    "completed": "Completed",
+    "failed": "Failed",
+    "cancelled": "Cancelled"
+  },
+  "detailModal": {
+    "title": "Order Detail",
+    "customerInfo": "Customer Information",
+    "customerName": "Customer Name",
+    "phone": "Phone",
+    "orderInfo": "Order Information",
+    "orderDate": "Order Date",
+    "paymentMethod": "Payment Method",
+    "paymentStatus": "Payment Status",
+    "status": "Order Status",
+    "orderItems": "Order Items",
+    "quantity": "Quantity",
+    "price": "Unit Price",
+    "total": "Total"
+  }
+}

@@ -64,5 +64,104 @@ public class VaccineController {
         vaccineService.deleteVaccine(id);
         return ResponseEntity.noContent().build();
     }
+    
+    // === API MỚI: Gợi ý vaccine theo đối tượng ===
+    
+    /**
+     * Lấy vaccine gợi ý theo độ tuổi (tháng) và giới tính
+     * GET /api/vaccines/recommended?ageInMonths=24&gender=FEMALE
+     */
+    @GetMapping("/recommended")
+    @ApiMessage("Get recommended vaccines by age and gender")
+    public ResponseEntity<List<VaccineResponse>> getRecommendedVaccines(
+            @RequestParam Integer ageInMonths,
+            @RequestParam(required = false, defaultValue = "ALL") String gender) {
+        return ResponseEntity.ok(vaccineService.getRecommendedVaccines(ageInMonths, gender));
+    }
+    
+    /**
+     * Lấy vaccine thiết yếu theo độ tuổi
+     * GET /api/vaccines/essential?ageInMonths=24
+     */
+    @GetMapping("/essential")
+    @ApiMessage("Get essential vaccines by age")
+    public ResponseEntity<List<VaccineResponse>> getEssentialVaccines(
+            @RequestParam Integer ageInMonths) {
+        return ResponseEntity.ok(vaccineService.getEssentialVaccinesByAge(ageInMonths));
+    }
+    
+    /**
+     * Lấy vaccine theo nhóm đối tượng
+     * GET /api/vaccines/target-group/INFANT
+     */
+    @GetMapping("/target-group/{targetGroup}")
+    @ApiMessage("Get vaccines by target group")
+    public ResponseEntity<List<VaccineResponse>> getVaccinesByTargetGroup(
+            @PathVariable String targetGroup) {
+        return ResponseEntity.ok(vaccineService.getVaccinesByTargetGroup(targetGroup));
+    }
+    
+    /**
+     * Lấy vaccine theo danh mục
+     * GET /api/vaccines/category/BASIC_CHILDHOOD
+     */
+    @GetMapping("/category/{category}")
+    @ApiMessage("Get vaccines by category")
+    public ResponseEntity<List<VaccineResponse>> getVaccinesByCategory(
+            @PathVariable String category) {
+        return ResponseEntity.ok(vaccineService.getVaccinesByCategory(category));
+    }
+    
+    /**
+     * Lấy danh sách tất cả categories
+     * GET /api/vaccines/categories
+     */
+    @GetMapping("/categories")
+    @ApiMessage("Get all vaccine categories")
+    public ResponseEntity<List<String>> getAllCategories() {
+        return ResponseEntity.ok().body(vaccineService.getAllCategories());
+    }
+    
+    /**
+     * Lấy danh sách tất cả target groups
+     * GET /api/vaccines/target-groups
+     */
+    @GetMapping("/target-groups")
+    @ApiMessage("Get all target groups")
+    public ResponseEntity<List<String>> getAllTargetGroups() {
+        return ResponseEntity.ok().body(vaccineService.getAllTargetGroups());
+    }
+    
+    // === API CHO PHỤ NỮ MANG THAI ===
+    
+    /**
+     * Lấy vaccine an toàn cho bà bầu
+     * GET /api/vaccines/pregnancy/safe
+     */
+    @GetMapping("/pregnancy/safe")
+    @ApiMessage("Get pregnancy-safe vaccines")
+    public ResponseEntity<List<VaccineResponse>> getPregnancySafeVaccines() {
+        return ResponseEntity.ok(vaccineService.getPregnancySafeVaccines());
+    }
+    
+    /**
+     * Lấy vaccine cần tiêm TRƯỚC khi mang thai
+     * GET /api/vaccines/pregnancy/pre
+     */
+    @GetMapping("/pregnancy/pre")
+    @ApiMessage("Get pre-pregnancy vaccines")
+    public ResponseEntity<List<VaccineResponse>> getPrePregnancyVaccines() {
+        return ResponseEntity.ok(vaccineService.getPrePregnancyVaccines());
+    }
+    
+    /**
+     * Lấy vaccine cần tiêm SAU sinh
+     * GET /api/vaccines/pregnancy/post
+     */
+    @GetMapping("/pregnancy/post")
+    @ApiMessage("Get post-pregnancy vaccines")
+    public ResponseEntity<List<VaccineResponse>> getPostPregnancyVaccines() {
+        return ResponseEntity.ok(vaccineService.getPostPregnancyVaccines());
+    }
 
 }

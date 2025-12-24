@@ -1,0 +1,43 @@
+{
+  "title": "Quản lý đơn hàng",
+  "subtitle": "Xem và quản lý tất cả đơn hàng vắc xin",
+  "searchPlaceholder": "Tìm theo mã đơn hoặc tên khách...",
+  "loadError": "Không thể tải danh sách đơn hàng",
+  "loadDetailError": "Không thể tải chi tiết đơn hàng",
+  "statusUpdateSuccess": "Cập nhật trạng thái đơn hàng thành công",
+  "statusUpdateError": "Không thể cập nhật trạng thái đơn hàng",
+  "viewDetail": "Xem chi tiết",
+  "columns": {
+    "orderId": "Mã Đơn",
+    "customer": "Khách hàng",
+    "orderDate": "Ngày đặt",
+    "itemCount": "SL",
+    "total": "Tổng tiền",
+    "status": "Trạng thái",
+    "actions": "Hành động"
+  },
+  "status": {
+    "pending": "Chờ xử lý",
+    "processing": "Đang xử lý",
+    "shipped": "Đang giao",
+    "delivered": "Đã giao",
+    "completed": "Hoàn thành",
+    "failed": "Thất bại",
+    "cancelled": "Đã hủy"
+  },
+  "detailModal": {
+    "title": "Chi tiết đơn hàng",
+    "customerInfo": "Thông tin khách hàng",
+    "customerName": "Tên khách hàng",
+    "phone": "Số điện thoại",
+    "orderInfo": "Thông tin đơn hàng",
+    "orderDate": "Ngày đặt",
+    "paymentMethod": "Phương thức thanh toán",
+    "paymentStatus": "Trạng thái thanh toán",
+    "status": "Trạng thái đơn",
+    "orderItems": "Sản phẩm trong đơn",
+    "quantity": "Số lượng",
+    "price": "Đơn giá",
+    "total": "Tổng cộng"
+  }
+}

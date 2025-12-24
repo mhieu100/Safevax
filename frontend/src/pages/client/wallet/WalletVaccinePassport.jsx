@@ -219,7 +219,7 @@ const WalletVaccinePassport = () => {
   ];
 
   return (
-    <div className="min-h-[calc(100vh-130px)] lg:h-[calc(100vh-130px)] bg-slate-50 py-8 lg:overflow-hidden flex flex-col animate-fade-in">
+    <div className="min-h-[calc(100vh-90px)] lg:h-[calc(100vh-90px)] bg-slate-50 py-8 lg:overflow-hidden flex flex-col animate-fade-in">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full lg:h-full lg:overflow-y-auto hide-scrollbar">
         <div className="mb-6 flex items-center gap-3">
           <div className="p-3 bg-blue-600 rounded-xl text-white shadow-lg shadow-blue-500/30">

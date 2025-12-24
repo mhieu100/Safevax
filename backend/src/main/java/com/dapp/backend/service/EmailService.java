@@ -236,4 +236,73 @@ public class EmailService {
 
                 log.info("Sent password reset email to: {}", toEmail);
         }
+
+        @Async
+        public void sendOrderConfirmation(
+                        String toEmail,
+                        String customerName,
+                        Long orderId,
+                        double totalAmount,
+                        int itemCount,
+                        String paymentMethod) throws MessagingException, UnsupportedEncodingException {
+
+                Context context = new Context();
+                context.setVariable("customerName", customerName);
+                context.setVariable("orderId", orderId);
+                context.setVariable("totalAmount", String.format("%,.0f", totalAmount));
+                context.setVariable("itemCount", itemCount);
+                context.setVariable("paymentMethod", paymentMethod);
+                context.setVariable("year", LocalDate.now().getYear());
+
+                String htmlContent = templateEngine.process("order-confirmation", context);
+
+                sendHtmlEmail(
+                                toEmail,
+                                "Đơn hàng #" + orderId + " đã được đặt thành công - VaxSafe",
+                                htmlContent);
+
+                log.info("Sent order confirmation email to: {}", toEmail);
+        }
+
+        @Async
+        public void sendOrderStatusUpdate(
+                        String toEmail,
+                        String customerName,
+                        Long orderId,
+                        String status) throws MessagingException, UnsupportedEncodingException {
+
+                Context context = new Context();
+                context.setVariable("customerName", customerName);
+                context.setVariable("orderId", orderId);
+                context.setVariable("status", status);
+                context.setVariable("year", LocalDate.now().getYear());
+
+                String statusText;
+                switch (status) {
+                        case "PROCESSING":
+                                statusText = "Đang xử lý";
+                                break;
+                        case "SHIPPED":
+                                statusText = "Đang giao hàng";
+                                break;
+                        case "DELIVERED":
+                                statusText = "Đã giao hàng";
+                                break;
+                        case "CANCELLED":
+                                statusText = "Đã hủy";
+                                break;
+                        default:
+                                statusText = status;
+                }
+                context.setVariable("statusText", statusText);
+
+                String htmlContent = templateEngine.process("order-status-update", context);
+
+                sendHtmlEmail(
+                                toEmail,
+                                "Cập nhật đơn hàng #" + orderId + " - VaxSafe",
+                                htmlContent);
+
+                log.info("Sent order status update email to: {}", toEmail);
+        }
 }

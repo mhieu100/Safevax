@@ -1,0 +1,22 @@
+{
+  "success": {
+    "title": "Payment Successful!",
+    "loading": "Loading information...",
+    "thankYou": "Thank you",
+    "bookingSuccess": "You have successfully booked",
+    "vaccinationAppointment": "vaccination appointment.",
+    "time": "Time",
+    "location": "Location",
+    "emailNotice": "Confirmation email and invoice has been sent to",
+    "checkEmail": "Please check your email for details. You will be redirected shortly...",
+    "viewProfile": "View Profile"
+  },
+  "cancel": {
+    "title": "Payment Cancelled",
+    "description": "The transaction has been cancelled or failed.",
+    "bookingNotComplete": "Your vaccination booking for",
+    "tryAgain": "has not been completed. Please try again or choose another payment method.",
+    "backToCart": "Back to Cart",
+    "retryPayment": "Retry Payment"
+  }
+}

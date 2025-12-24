@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/constants';
 import { useCenter } from '@/hooks/useCenter';
 import { useFamilyMember } from '@/hooks/useFamilyMember';
@@ -31,6 +32,7 @@ const AppointmentSection = ({
   setBookingData,
   bookingData,
 }) => {
+  const { t } = useTranslation('client');
   const [appointmentDate, setAppointmentDate] = useState(null);
   const [_appointmentTime, setAppointmentTime] = useState(null);
   const [appointmentCenterId, setAppointmentCenterId] = useState(null);
@@ -110,7 +112,7 @@ const AppointmentSection = ({
 
       setCurrentStep(1);
     } catch (_error) {
-      message.error('Please fill in all required fields');
+      message.error(t('booking.pleaseFillRequired'));
     }
   };
 
@@ -126,7 +128,9 @@ const AppointmentSection = ({
           <div className="flex justify-between items-center w-full">
             <span>{slot.time}</span>
             <span className={`text-xs ${slot.available > 0 ? 'text-green-600' : 'text-red-500'}`}>
-              {slot.available > 0 ? `${slot.available} spots left` : 'Full'}
+              {slot.available > 0
+                ? t('booking.spotsLeft', { count: slot.available })
+                : t('booking.full')}
             </span>
           </div>
         ),
@@ -152,7 +156,7 @@ const AppointmentSection = ({
                     <UserOutlined className="text-xl" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-800 m-0">
-                    Who is getting vaccinated?
+                    {t('booking.whoGettingVaccinated')}
                   </h3>
                 </div>
                 {bookingData?.doseNumber && (
@@ -160,7 +164,7 @@ const AppointmentSection = ({
                     color="cyan"
                     className="text-sm px-3 py-1 font-semibold rounded-full m-0 border-0 bg-cyan-50 text-cyan-700"
                   >
-                    Booking for Dose {bookingData.doseNumber}
+                    {t('booking.bookingForDose', { dose: bookingData.doseNumber })}
                   </Tag>
                 )}
               </div>
@@ -193,8 +197,8 @@ const AppointmentSection = ({
                         )}
                       </div>
                       <div>
-                        <div className="font-bold text-slate-800">Myself</div>
-                        <div className="text-xs text-slate-500">Book for your own record</div>
+                        <div className="font-bold text-slate-800">{t('booking.myself')}</div>
+                        <div className="text-xs text-slate-500">{t('booking.myselfDesc')}</div>
                       </div>
                     </label>
 
@@ -210,8 +214,10 @@ const AppointmentSection = ({
                         )}
                       </div>
                       <div>
-                        <div className="font-bold text-slate-800">Family Member</div>
-                        <div className="text-xs text-slate-500">Child, parent, or dependent</div>
+                        <div className="font-bold text-slate-800">{t('booking.familyMember')}</div>
+                        <div className="text-xs text-slate-500">
+                          {t('booking.familyMemberDesc')}
+                        </div>
                       </div>
                     </label>
                   </div>
@@ -222,14 +228,16 @@ const AppointmentSection = ({
                 <div className="mt-6 p-4 bg-slate-50 rounded-xl animate-fade-in">
                   <Form.Item
                     label={
-                      <span className="font-semibold text-slate-700">Select Family Member</span>
+                      <span className="font-semibold text-slate-700">
+                        {t('booking.selectMember')}
+                      </span>
                     }
                     name="familyMemberId"
-                    rules={[{ required: true, message: 'Please select a family member' }]}
+                    rules={[{ required: true, message: t('booking.pleaseSelectFamilyMember') }]}
                     className="mb-0"
                   >
                     <Select
-                      placeholder="Select a family member"
+                      placeholder={t('booking.selectMemberPlaceholder')}
                       size="large"
                       className="w-full"
                       options={families?.result?.map((member) => ({
@@ -253,17 +261,23 @@ const AppointmentSection = ({
                 <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
                   <EnvironmentOutlined className="text-xl" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 m-0">Location & Time</h3>
+                <h3 className="text-xl font-bold text-slate-800 m-0">
+                  {t('booking.locationAndTime')}
+                </h3>
               </div>
 
               <Form.Item
-                label={<span className="font-semibold text-slate-700">Vaccination Center</span>}
+                label={
+                  <span className="font-semibold text-slate-700">
+                    {t('booking.vaccinationCenter')}
+                  </span>
+                }
                 name="appointmentCenter"
-                rules={[{ required: true, message: 'Please select a center' }]}
+                rules={[{ required: true, message: t('booking.pleaseSelectCenter') }]}
               >
                 <Select
                   size="large"
-                  placeholder="Select a vaccination center near you"
+                  placeholder={t('booking.selectCenterPlaceholder')}
                   showSearch
                   optionFilterProp="children"
                   className="w-full"
@@ -283,9 +297,11 @@ const AppointmentSection = ({
               <Row gutter={24}>
                 <Col xs={24} md={12}>
                   <Form.Item
-                    label={<span className="font-semibold text-slate-700">Date</span>}
+                    label={
+                      <span className="font-semibold text-slate-700">{t('booking.date')}</span>
+                    }
                     name="appointmentDate"
-                    rules={[{ required: true, message: 'Please select a date' }]}
+                    rules={[{ required: true, message: t('booking.pleaseSelectDate') }]}
                   >
                     <DatePicker
                       className="w-full"
@@ -298,19 +314,25 @@ const AppointmentSection = ({
                         bookingForm.setFieldValue('appointmentTime', null);
                         setAppointmentTime(null);
                       }}
-                      placeholder="Select date"
+                      placeholder={t('booking.selectDatePlaceholder')}
                     />
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={12}>
                   <Form.Item
-                    label={<span className="font-semibold text-slate-700">Time Slot</span>}
+                    label={
+                      <span className="font-semibold text-slate-700">
+                        {t('booking.selectTimeSlot')}
+                      </span>
+                    }
                     name="appointmentTime"
-                    rules={[{ required: true, message: 'Please select a time slot' }]}
+                    rules={[{ required: true, message: t('booking.pleaseSelectTimeSlot') }]}
                   >
                     <Select
                       size="large"
-                      placeholder={loadingSlots ? 'Checking availability...' : 'Select time'}
+                      placeholder={
+                        loadingSlots ? t('booking.checkingAvailability') : t('booking.selectTime')
+                      }
                       options={timeSlotOptions}
                       onChange={(value) => setAppointmentTime(value)}
                       disabled={!appointmentCenterId || !appointmentDate || loadingSlots}
@@ -328,7 +350,7 @@ const AppointmentSection = ({
                 onClick={handleBookingNext}
                 className="h-12 px-8 rounded-xl font-bold text-lg shadow-lg shadow-blue-500/30"
               >
-                Continue to Payment
+                {t('booking.continueToPayment')}
               </Button>
             </div>
           </Col>
@@ -358,14 +380,16 @@ const AppointmentSection = ({
 
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
-                      <span className="text-slate-500 text-sm">Doses Required</span>
+                      <span className="text-slate-500 text-sm">{t('booking.dosesRequired')}</span>
                       <span className="font-bold text-slate-800">
-                        {vaccine.dosesRequired} doses
+                        {vaccine.dosesRequired} {t('booking.doses')}
                       </span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
-                      <span className="text-slate-500 text-sm">Interval</span>
-                      <span className="font-bold text-slate-800">{vaccine.duration} days</span>
+                      <span className="text-slate-500 text-sm">{t('booking.interval')}</span>
+                      <span className="font-bold text-slate-800">
+                        {vaccine.duration} {t('booking.days')}
+                      </span>
                     </div>
                   </div>
 
@@ -374,11 +398,11 @@ const AppointmentSection = ({
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-slate-600 text-sm">
                       <InfoCircleOutlined className="text-blue-500" />
-                      <span>Bring ID/Passport for verification</span>
+                      <span>{t('booking.bringIdNote')}</span>
                     </div>
                     <div className="flex items-center gap-2 text-slate-600 text-sm">
                       <ClockCircleOutlined className="text-blue-500" />
-                      <span>Arrive 15 mins before appointment</span>
+                      <span>{t('booking.arriveEarly')}</span>
                     </div>
                   </div>
                 </div>

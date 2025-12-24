@@ -2,6 +2,8 @@ package com.dapp.backend.controller;
 
 import com.dapp.backend.annotation.ApiMessage;
 import com.dapp.backend.dto.request.OrderRequest;
+import com.dapp.backend.dto.request.UpdateOrderStatusRequest;
+import com.dapp.backend.dto.response.OrderDetailResponse;
 import com.dapp.backend.dto.response.OrderResponse;
 import com.dapp.backend.dto.response.PaymentResponse;
 import com.dapp.backend.exception.AppException;
@@ -37,5 +39,25 @@ public class OrderController {
     @ApiMessage("Get all orders (Admin)")
     public ResponseEntity<List<OrderResponse>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
+    }
+
+    @GetMapping("/{orderId}")
+    @ApiMessage("Get order detail for user")
+    public ResponseEntity<OrderDetailResponse> getOrderDetail(@PathVariable Long orderId) throws AppException {
+        return ResponseEntity.ok(orderService.getOrderByIdForUser(orderId));
+    }
+
+    @GetMapping("/admin/{orderId}")
+    @ApiMessage("Get order detail (Admin)")
+    public ResponseEntity<OrderDetailResponse> getOrderDetailAdmin(@PathVariable Long orderId) throws AppException {
+        return ResponseEntity.ok(orderService.getOrderById(orderId));
+    }
+
+    @PutMapping("/admin/{orderId}/status")
+    @ApiMessage("Update order status (Admin)")
+    public ResponseEntity<OrderResponse> updateOrderStatus(
+            @PathVariable Long orderId,
+            @RequestBody UpdateOrderStatusRequest request) throws AppException {
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, request));
     }
 }

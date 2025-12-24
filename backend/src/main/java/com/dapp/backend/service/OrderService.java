@@ -1,6 +1,8 @@
 package com.dapp.backend.service;
 
 import com.dapp.backend.dto.request.OrderRequest;
+import com.dapp.backend.dto.request.UpdateOrderStatusRequest;
+import com.dapp.backend.dto.response.OrderDetailResponse;
 import com.dapp.backend.dto.response.OrderResponse;
 import com.dapp.backend.dto.response.PaymentResponse;
 import com.dapp.backend.enums.OrderStatus;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.dapp.backend.service.PaypalService.EXCHANGE_RATE_TO_USD;
 
@@ -31,6 +34,7 @@ public class OrderService {
     private final VaccineRepository vaccineRepository;
     private final PaymentRepository paymentRepository;
     private final PaymentService paymentService;
+    private final EmailService emailService;
 
     @org.springframework.transaction.annotation.Transactional(rollbackFor = Exception.class)
     public PaymentResponse createOrder(OrderRequest request, String userAgent)
@@ -138,5 +142,80 @@ public class OrderService {
             response.setCustomerName(order.getUser().getFullName());
         }
         return response;
+    }
+
+    public OrderDetailResponse getOrderById(Long orderId) throws AppException {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new AppException("Order not found with ID: " + orderId));
+        return toDetailResponse(order);
+    }
+
+    public OrderDetailResponse getOrderByIdForUser(Long orderId) throws AppException {
+        User user = authService.getCurrentUserLogin();
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new AppException("Order not found with ID: " + orderId));
+        
+        if (!order.getUser().getId().equals(user.getId())) {
+            throw new AppException("You don't have permission to view this order");
+        }
+        return toDetailResponse(order);
+    }
+
+    public OrderResponse updateOrderStatus(Long orderId, UpdateOrderStatusRequest request) throws AppException {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new AppException("Order not found with ID: " + orderId));
+        
+        OrderStatus oldStatus = order.getStatus();
+        order.setStatus(request.getStatus());
+        orderRepository.save(order);
+
+        // Send email notification when status changes to DELIVERED
+        if (request.getStatus() == OrderStatus.DELIVERED && oldStatus != OrderStatus.DELIVERED) {
+            try {
+                User customer = order.getUser();
+                if (customer != null && customer.getEmail() != null) {
+                    emailService.sendOrderStatusUpdate(
+                            customer.getEmail(),
+                            customer.getFullName(),
+                            order.getOrderId(),
+                            request.getStatus().name()
+                    );
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to send order status email: " + e.getMessage());
+            }
+        }
+
+        return toResponse(order);
+    }
+
+    private OrderDetailResponse toDetailResponse(Order order) {
+        Payment payment = paymentRepository.findByReferenceIdAndReferenceType(
+                order.getOrderId(), TypeTransactionEnum.ORDER).orElse(null);
+
+        List<OrderDetailResponse.OrderItemResponse> itemResponses = order.getOrderItems().stream()
+                .map(item -> OrderDetailResponse.OrderItemResponse.builder()
+                        .vaccineId(item.getVaccine().getId())
+                        .vaccineName(item.getVaccine().getName())
+                        .vaccineImage(item.getVaccine().getImage())
+                        .quantity(item.getQuantity())
+                        .price(item.getVaccine().getPrice())
+                        .subtotal(item.getQuantity() * item.getVaccine().getPrice())
+                        .build())
+                .collect(Collectors.toList());
+
+        return OrderDetailResponse.builder()
+                .orderId(order.getOrderId())
+                .orderDate(DateTimeUtil.format(order.getOrderDate(), DateTimeUtil.DATE_FORMAT))
+                .status(order.getStatus())
+                .itemCount(order.getItemCount())
+                .total(order.getTotalAmount())
+                .customerName(order.getUser() != null ? order.getUser().getFullName() : null)
+                .customerEmail(order.getUser() != null ? order.getUser().getEmail() : null)
+                .customerPhone(order.getUser() != null ? order.getUser().getPhone() : null)
+                .paymentMethod(payment != null ? payment.getMethod() : null)
+                .paymentStatus(payment != null ? payment.getStatus().name() : null)
+                .items(itemResponses)
+                .build();
     }
 }

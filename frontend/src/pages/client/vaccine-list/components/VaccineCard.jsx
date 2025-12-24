@@ -34,8 +34,8 @@ const VaccineCard = ({ vaccine }) => {
       role="button"
       tabIndex={0}
       className="group relative bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-blue-900/10 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full cursor-pointer w-full text-left"
-      onClick={() => navigate(`/vaccine/${vaccine.slug}`)}
-      onKeyDown={(e) => e.key === 'Enter' && navigate(`/vaccine/${vaccine.slug}`)}
+      onClick={() => navigate(`/vaccines/${vaccine.slug}`)}
+      onKeyDown={(e) => e.key === 'Enter' && navigate(`/vaccines/${vaccine.slug}`)}
     >
       {}
       <div className="relative h-48 overflow-hidden bg-slate-100">
@@ -81,7 +81,7 @@ const VaccineCard = ({ vaccine }) => {
               className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-600 hover:text-blue-500 hover:bg-white shadow-lg transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/vaccine/${vaccine.slug}`);
+                navigate(`/vaccines/${vaccine.slug}`);
               }}
             >
               <EyeOutlined />

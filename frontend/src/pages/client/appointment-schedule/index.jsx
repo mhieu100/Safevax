@@ -185,7 +185,7 @@ const AppointmentSchedulePage = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6 animate-fade-in min-h-[calc(100vh-130px)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6 animate-fade-in min-h-[calc(100vh-90px)]">
         <div className="flex justify-between items-end mb-4">
           <div>
             <Skeleton.Input active size="small" className="!w-48 mb-2" />
@@ -213,7 +213,7 @@ const AppointmentSchedulePage = () => {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 min-h-[calc(100vh-130px)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 min-h-[calc(100vh-90px)]">
         <Alert
           type="error"
           title={t('client:appointments.errorLoading')}
@@ -227,7 +227,7 @@ const AppointmentSchedulePage = () => {
 
   if (upcomingAppointments.length === 0) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center min-h-[calc(100vh-130px)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center min-h-[calc(100vh-90px)]">
         <div className="mb-6">
           <Title level={3} className="!mb-1 text-slate-800">
             {t('client:sidebar.appointments')}
@@ -243,7 +243,7 @@ const AppointmentSchedulePage = () => {
         <Button
           type="primary"
           className="mt-4 rounded-xl shadow-lg shadow-blue-500/20"
-          href="/vaccine"
+          href="/vaccines"
         >
           {t('client:appointments.bookNew')}
         </Button>
@@ -370,7 +370,7 @@ const AppointmentSchedulePage = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-130px)] bg-slate-50 py-8">
+    <div className="min-h-[calc(100vh-90px)] bg-slate-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 animate-fade-in">
         <div className="mb-6">
           <Title level={3} className="!mb-1 text-slate-800">

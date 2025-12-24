@@ -1,6 +1,5 @@
 import {
   CalendarOutlined,
-  EnvironmentOutlined,
   HomeOutlined,
   InfoCircleOutlined,
   LogoutOutlined,
@@ -8,7 +7,6 @@ import {
   MenuOutlined,
   PhoneOutlined,
   SafetyCertificateOutlined,
-  ScanOutlined,
   ShoppingCartOutlined,
   ShoppingOutlined,
   UserOutlined,
@@ -24,17 +22,8 @@ import { callLogout } from '@/services/auth.service';
 import { useAccountStore } from '@/stores/useAccountStore';
 import useCartStore from '@/stores/useCartStore';
 
-const ALWAYS_VISIBLE_ROUTES = [
-  '/profile',
-  '/cart',
-  '/appointments',
-  '/family-member',
-  '/checkout',
-  '/success',
-];
-
 const Navbar = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('client');
   const itemCount = useCartStore((state) => state.totalQuantity());
 
   const isAuthenticated = useAccountStore((state) => state.isAuthenticated);
@@ -54,10 +43,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isAlwaysVisible = ALWAYS_VISIBLE_ROUTES.some(
-    (route) => location.pathname === route || location.pathname.startsWith(`${route}/`)
-  );
-
   const handleLogout = async () => {
     const res = await callLogout();
     if (res && res && +res.statusCode === 200) {
@@ -72,27 +57,27 @@ const Navbar = () => {
     {
       key: '/',
       icon: <HomeOutlined />,
-      label: 'Home',
+      label: t('layout.navbar.home'),
     },
     {
-      key: '/vaccine',
+      key: '/vaccines',
       icon: <ShoppingOutlined />,
-      label: 'Vaccines',
+      label: t('layout.navbar.vaccines'),
     },
     {
       key: '/news',
       icon: <InfoCircleOutlined />,
-      label: 'News',
+      label: t('layout.navbar.news'),
     },
     {
       key: '/about',
       icon: <InfoCircleOutlined />,
-      label: 'About Us',
+      label: t('layout.navbar.about'),
     },
     {
       key: '/contact',
       icon: <PhoneOutlined />,
-      label: 'Contact',
+      label: t('layout.navbar.contact'),
     },
   ];
 
@@ -122,43 +107,9 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Top Bar - Hides on Scroll */}
-      <div
-        className={`bg-slate-900 text-white transition-all duration-300 ease-in-out overflow-hidden ${
-          isAlwaysVisible ? 'sticky top-0 z-[1001]' : ''
-        } ${scrolled && !isAlwaysVisible ? 'h-0 py-0 opacity-0' : 'h-10 py-2.5 opacity-100'}`}
-      >
-        <div className="mx-auto flex h-full max-w-[1220px] items-center justify-between px-4 md:px-6 text-xs font-medium tracking-wide">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer">
-              <MailOutlined /> <span>contact@vaxsafe.com</span>
-            </div>
-            <div className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer">
-              <PhoneOutlined /> <span>+84 123 456 789</span>
-            </div>
-          </div>
-          <div className="hidden sm:flex items-center gap-6">
-            <Link
-              to="/contact"
-              className="hover:text-blue-400 cursor-pointer transition-colors text-white flex items-center gap-2"
-            >
-              <EnvironmentOutlined /> Find nearest center
-            </Link>
-            <Link
-              to="/verify"
-              className="hover:text-blue-400 cursor-pointer transition-colors text-white flex items-center gap-2"
-            >
-              <ScanOutlined /> Verify Vaccine Passport
-            </Link>
-          </div>
-        </div>
-      </div>
-
       <header
-        className={`sticky ${
-          isAlwaysVisible ? 'top-10' : 'top-0'
-        } z-[999] transition-all duration-300 ${
-          scrolled && !isAlwaysVisible
+        className={`sticky top-0 z-[999] transition-all duration-300 ${
+          scrolled
             ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100/50 py-3'
             : 'bg-white/50 backdrop-blur-sm border-none py-4'
         }`}
@@ -204,7 +155,7 @@ const Navbar = () => {
               type="text"
               shape="circle"
               className="flex items-center justify-center text-slate-600 hover:bg-slate-100 hover:text-blue-600"
-              title="Wallet Vaccine"
+              title={t('layout.navbar.wallet')}
             />
 
             <div className="hidden sm:flex items-center gap-2">
@@ -218,7 +169,7 @@ const Navbar = () => {
                   type="text"
                   shape="circle"
                   className="flex items-center justify-center text-slate-600 hover:bg-slate-100 hover:text-blue-600"
-                  title="Lịch hẹn"
+                  title={t('layout.navbar.appointments')}
                 />
               )}
 
@@ -231,7 +182,7 @@ const Navbar = () => {
                   type="text"
                   shape="circle"
                   className="flex items-center justify-center text-slate-600 hover:bg-slate-100 hover:text-blue-600"
-                  title={t('header.cart')}
+                  title={t('layout.navbar.cart')}
                 />
               </Badge>
             </div>
@@ -244,14 +195,14 @@ const Navbar = () => {
                     type="text"
                     className="text-slate-600 font-medium hover:text-blue-600 hover:bg-slate-50"
                   >
-                    {t('header.login')}
+                    {t('layout.navbar.login')}
                   </Button>
                   <Button
                     type="primary"
                     onClick={() => navigate('/register')}
                     className="h-10 px-6 rounded-full font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 border-none shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105 transition-all"
                   >
-                    {t('header.register')}
+                    {t('layout.navbar.register')}
                   </Button>
                 </>
               ) : (
@@ -308,7 +259,7 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                <p className="text-sm text-slate-500 mb-2">Welcome to SafeVax!</p>
+                <p className="text-sm text-slate-500 mb-2">{t('layout.navbar.welcomeMessage')}</p>
                 <Button
                   block
                   type="primary"
@@ -318,7 +269,7 @@ const Navbar = () => {
                   }}
                   className="bg-blue-600 h-10 rounded-xl font-medium shadow-blue-200 mb-2"
                 >
-                  {t('header.login')}
+                  {t('layout.navbar.login')}
                 </Button>
                 <Button
                   block
@@ -328,7 +279,7 @@ const Navbar = () => {
                   }}
                   className="h-10 rounded-xl font-medium"
                 >
-                  {t('header.register')}
+                  {t('layout.navbar.register')}
                 </Button>
               </div>
             )}
@@ -370,7 +321,7 @@ const Navbar = () => {
               >
                 <div className="flex items-center gap-3">
                   <CalendarOutlined />
-                  <span>Lịch hẹn</span>
+                  <span>{t('layout.navbar.appointments')}</span>
                 </div>
               </div>
             )}
@@ -379,7 +330,7 @@ const Navbar = () => {
               <>
                 <div className="my-4 h-px bg-slate-100" />
                 <div className="px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Account
+                  {t('layout.navbar.account')}
                 </div>
                 {userMenuItems
                   .filter((item) => item.type !== 'divider')
@@ -416,7 +367,7 @@ const Navbar = () => {
                 }}
                 icon={<ShoppingCartOutlined />}
               >
-                {t('header.cart')} ({itemCount})
+                {t('layout.navbar.cart')} ({itemCount})
               </Button>
             </div>
 

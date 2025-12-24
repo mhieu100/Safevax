@@ -7,7 +7,7 @@ import { getTransactionResult } from '@/services/payment.service';
 
 const SuccessPage = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['client', 'common']);
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
@@ -30,50 +30,50 @@ const SuccessPage = () => {
   }, [paymentId]);
 
   return (
-    <div className="min-h-[calc(100vh-130px)] bg-gradient-to-br from-green-50 to-blue-50 py-8 flex items-center justify-center">
+    <div className="min-h-[calc(100vh-90px)] bg-gradient-to-br from-green-50 to-blue-50 py-8 flex items-center justify-center">
       <div className="max-w-2xl mx-auto px-4">
         <Card className="rounded-2xl shadow-xl">
           <Result
             status="success"
             icon={<CheckCircleOutlined className="text-green-600" />}
-            title="Thanh toán thành công!"
+            title={t('client:payment.success.title')}
             subTitle={
               loading ? (
-                'Đang tải thông tin...'
+                t('client:payment.success.loading')
               ) : (
                 <div className="space-y-2 text-slate-600">
                   <p className="text-lg">
-                    Cảm ơn{' '}
+                    {t('client:payment.success.thankYou')}{' '}
                     <span className="font-semibold text-slate-800">{result?.patientName}</span>!
                   </p>
                   {result && (
                     <>
                       <p>
-                        Bạn đã đặt lịch tiêm{' '}
+                        {t('client:payment.success.bookingSuccess')}{' '}
                         <span className="font-semibold text-blue-600">{result.vaccineName}</span>{' '}
-                        thành công.
+                        {t('client:payment.success.vaccinationAppointment')}
                       </p>
                       <p>
-                        Thời gian:{' '}
+                        {t('client:payment.success.time')}:{' '}
                         <span className="font-semibold">
                           {result.scheduledTime} - {result.scheduledDate}
                         </span>
                       </p>
                       <p>
-                        Địa điểm: <span className="font-semibold">{result.centerName}</span>
+                        {t('client:payment.success.location')}:{' '}
+                        <span className="font-semibold">{result.centerName}</span>
                       </p>
                       <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
                         <MailOutlined className="mr-2 text-green-600" />
                         <span>
-                          Email xác nhận lịch hẹn và hóa đơn đã được gửi đến:{' '}
+                          {t('client:payment.success.emailNotice')}:{' '}
                           <span className="font-semibold text-green-700">{result.emailSentTo}</span>
                         </span>
                       </div>
                     </>
                   )}
                   <p className="mt-4 text-sm text-slate-500">
-                    Vui lòng kiểm tra email để xem chi tiết. Bạn sẽ được chuyển hướng sau giây
-                    lát...
+                    {t('client:payment.success.checkEmail')}
                   </p>
                 </div>
               )
@@ -85,10 +85,10 @@ const SuccessPage = () => {
                 onClick={() => navigate('/profile')}
                 size="large"
               >
-                Xem hồ sơ
+                {t('client:payment.success.viewProfile')}
               </Button>,
               <Button key="home" onClick={() => navigate('/')} size="large">
-                {t('header.home')}
+                {t('common:header.home')}
               </Button>,
             ]}
           />

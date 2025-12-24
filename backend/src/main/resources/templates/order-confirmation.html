@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác nhận đơn hàng</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .success-icon {
+            text-align: center;
+            font-size: 60px;
+            margin: 20px 0;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .info-item {
+            display: flex;
+            margin: 10px 0;
+            align-items: center;
+        }
+        .info-label {
+            font-weight: bold;
+            min-width: 150px;
+            color: #555;
+        }
+        .info-value {
+            color: #333;
+        }
+        .highlight {
+            color: #667eea;
+            font-weight: bold;
+        }
+        .total-amount {
+            font-size: 24px;
+            color: #10b981;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .note {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛒 Đơn hàng đã đặt thành công!</h1>
+        </div>
+        <div class="content">
+            <div class="success-icon">✅</div>
+            <p class="greeting">Xin chào <span th:text="${customerName}"></span>,</p>
+            <p>Cảm ơn bạn đã đặt hàng tại <strong>VaxSafe</strong>. Đơn hàng của bạn đã được tiếp nhận và đang chờ xử lý.</p>
+            
+            <div class="info-box">
+                <div class="info-item">
+                    <span class="info-label">Mã đơn hàng:</span>
+                    <span class="info-value highlight">#<span th:text="${orderId}"></span></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Số lượng sản phẩm:</span>
+                    <span class="info-value"><span th:text="${itemCount}"></span> sản phẩm</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Phương thức thanh toán:</span>
+                    <span class="info-value" th:text="${paymentMethod}"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Tổng tiền:</span>
+                    <span class="info-value total-amount"><span th:text="${totalAmount}"></span> VNĐ</span>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>📌 Lưu ý:</strong>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+                    <li>Đơn hàng sẽ được xử lý trong vòng 24h làm việc</li>
+                    <li>Bạn có thể theo dõi trạng thái đơn hàng trong mục "Đơn hàng của tôi"</li>
+                    <li>Nếu có thắc mắc, vui lòng liên hệ hotline: <strong>1900-xxxx</strong></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Email này được gửi tự động từ hệ thống VaxSafe.</p>
+            <p>© <span th:text="${year}"></span> VaxSafe. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

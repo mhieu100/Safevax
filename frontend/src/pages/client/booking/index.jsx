@@ -1,6 +1,7 @@
 import { Form, Modal, message } from 'antd';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { callCreateBooking } from '@/services/booking.service';
 import { updatePaymentMetaMask } from '@/services/payment.service';
@@ -11,6 +12,7 @@ import ReviewSection from './components/ReviewSection';
 import TopCheckoutSection from './components/TopCheckoutSection';
 
 const BookingPage = () => {
+  const { t } = useTranslation('client');
   const [bookingForm] = Form.useForm();
   const [paymentForm] = Form.useForm();
   const [searchParams] = useSearchParams();
@@ -58,10 +60,10 @@ const BookingPage = () => {
           vaccineId: vaccineData.id,
         }));
       } else {
-        message.error('Không tìm thấy thông tin vắc xin');
+        message.error(t('booking.bookingFailed'));
       }
     } catch (_error) {
-      message.error('Không thể tải thông tin vắc xin');
+      message.error(t('booking.bookingFailed'));
     }
   };
 
@@ -115,9 +117,9 @@ const BookingPage = () => {
     if (window.ethereum) {
       const handleAccountsChanged = (accounts) => {
         if (accounts.length > 0) {
-          message.info(`Đã chuyển sang tài khoản: ${accounts[0]}`);
+          message.info(t('booking.paymentSuccess'));
         } else {
-          message.warning('Vui lòng kết nối MetaMask!');
+          message.warning(t('booking.paymentFailed'));
         }
       };
 
@@ -182,10 +184,10 @@ const BookingPage = () => {
       }
       if (error) {
         modal.warning({
-          title: 'Đặt lịch hẹn thất bại',
+          title: t('booking.bookingFailed'),
           content: error,
-          okText: 'Xem lịch hẹn',
-          cancelText: 'Đóng',
+          okText: t('client:appointments.viewDetails'),
+          cancelText: t('payment.cancelled'),
           closable: true,
           maskClosable: true,
           onOk: () => navigate('/appointments'),
@@ -193,7 +195,7 @@ const BookingPage = () => {
       }
     } catch (error) {
       console.error(error);
-      message.error(error.message || 'Đặt lịch thất bại. Vui lòng thử lại!');
+      message.error(error.message || t('booking.bookingFailed'));
     } finally {
       setLoading(false);
     }
@@ -202,7 +204,7 @@ const BookingPage = () => {
   const handleMetamaskPayment = async (paymentData) => {
     try {
       if (!window.ethereum) {
-        throw new Error('Vui lòng cài đặt MetaMask!');
+        throw new Error(t('booking.paymentFailed'));
       }
 
       await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -218,7 +220,7 @@ const BookingPage = () => {
         value: ethers.parseEther(paymentData.amount.toString()),
       });
 
-      message.loading('Đang xử lý thanh toán...');
+      message.loading(t('booking.processing'));
       await tx.wait();
 
       await updatePaymentMetaMask({
@@ -227,11 +229,11 @@ const BookingPage = () => {
         type: 'APPOINTMENT',
       });
 
-      message.success('Thanh toán thành công!');
+      message.success(t('booking.paymentSuccess'));
       navigate('/success');
     } catch (error) {
       console.error(error);
-      message.error(error.message || 'Thanh toán thất bại');
+      message.error(error.message || t('booking.paymentFailed'));
     }
   };
 

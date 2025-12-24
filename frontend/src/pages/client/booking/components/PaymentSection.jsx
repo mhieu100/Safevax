@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Form, Radio } from 'antd';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const METHOD_THEMES = {
   CASH: {
@@ -48,35 +49,36 @@ const METHOD_THEMES = {
 };
 
 const PaymentSection = ({ paymentForm, setCurrentStep, setBookingData }) => {
+  const { t } = useTranslation('client');
   const [selectedMethod, setSelectedMethod] = useState('CASH');
 
   const paymentMethods = [
     {
       value: 'CASH',
-      label: 'Cash Payment',
+      label: t('checkout.cash'),
       icon: <WalletOutlined />,
-      description: 'Pay directly at the center',
+      description: t('checkout.cashDesc'),
       color: 'blue',
     },
     {
       value: 'PAYPAL',
-      label: 'PayPal',
+      label: t('checkout.paypal'),
       icon: <CreditCardOutlined />,
-      description: 'Secure international payment',
+      description: t('checkout.paypalDesc'),
       color: 'indigo',
     },
     {
       value: 'BANK',
-      label: 'Bank Transfer',
+      label: t('checkout.vnpay'),
       icon: <BankOutlined />,
-      description: 'Direct bank transfer',
+      description: t('checkout.vnpayDesc'),
       color: 'emerald',
     },
     {
       value: 'METAMASK',
-      label: 'MetaMask',
+      label: t('checkout.metamask'),
       icon: <SafetyCertificateOutlined />,
-      description: 'Pay with Cryptocurrency',
+      description: t('checkout.metamaskDesc'),
       color: 'orange',
     },
   ];
@@ -95,16 +97,14 @@ const PaymentSection = ({ paymentForm, setCurrentStep, setBookingData }) => {
   return (
     <div className="max-w-4xl mx-auto animate-fade-in">
       <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold text-slate-900 mb-3">Choose Payment Method</h2>
-        <p className="text-slate-500 text-lg">
-          Select how you would like to pay for your vaccination
-        </p>
+        <h2 className="text-3xl font-bold text-slate-900 mb-3">{t('payment.chooseMethod')}</h2>
+        <p className="text-slate-500 text-lg">{t('payment.chooseMethodDesc')}</p>
       </div>
 
       <Form form={paymentForm} layout="vertical">
         <Form.Item
           name="paymentMethod"
-          rules={[{ required: true, message: 'Please select a payment method' }]}
+          rules={[{ required: true, message: t('payment.chooseMethod') }]}
           initialValue="CASH"
         >
           <Radio.Group
@@ -177,7 +177,7 @@ const PaymentSection = ({ paymentForm, setCurrentStep, setBookingData }) => {
           size="large"
           className="h-12 px-8 rounded-xl border-slate-200 hover:border-slate-300 hover:text-slate-600 font-medium"
         >
-          Back
+          {t('payment.back')}
         </Button>
         <Button
           type="primary"
@@ -185,7 +185,7 @@ const PaymentSection = ({ paymentForm, setCurrentStep, setBookingData }) => {
           size="large"
           className="h-12 px-10 rounded-xl font-bold text-lg shadow-lg shadow-blue-500/30"
         >
-          Review Booking
+          {t('payment.reviewBooking')}
         </Button>
       </div>
     </div>

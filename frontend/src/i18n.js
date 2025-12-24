@@ -5,6 +5,7 @@ import enAdminCenters from './locales/en/admin/centers.json';
 import enAdminCommon from './locales/en/admin/common.json';
 import enAdminDashboard from './locales/en/admin/dashboard.json';
 import enAdminNews from './locales/en/admin/news.json';
+import enAdminOrders from './locales/en/admin/orders.json';
 import enAdminPermissions from './locales/en/admin/permissions.json';
 import enAdminRoles from './locales/en/admin/roles.json';
 import enAdminUsers from './locales/en/admin/users.json';
@@ -15,6 +16,8 @@ import enClientDashboard from './locales/en/client/dashboard.json';
 import enClientFamily from './locales/en/client/family.json';
 import enClientHome from './locales/en/client/home.json';
 import enClientLayout from './locales/en/client/layout.json';
+import enClientOrders from './locales/en/client/orders.json';
+import enClientPayment from './locales/en/client/payment.json';
 import enClientProfile from './locales/en/client/profile.json';
 import enClientRecords from './locales/en/client/records.json';
 import enClientSettings from './locales/en/client/settings.json';
@@ -40,6 +43,7 @@ import viAdminCenters from './locales/vi/admin/centers.json';
 import viAdminCommon from './locales/vi/admin/common.json';
 import viAdminDashboard from './locales/vi/admin/dashboard.json';
 import viAdminNews from './locales/vi/admin/news.json';
+import viAdminOrders from './locales/vi/admin/orders.json';
 import viAdminPermissions from './locales/vi/admin/permissions.json';
 import viAdminRoles from './locales/vi/admin/roles.json';
 import viAdminUsers from './locales/vi/admin/users.json';
@@ -50,6 +54,8 @@ import viClientDashboard from './locales/vi/client/dashboard.json';
 import viClientFamily from './locales/vi/client/family.json';
 import viClientHome from './locales/vi/client/home.json';
 import viClientLayout from './locales/vi/client/layout.json';
+import viClientOrders from './locales/vi/client/orders.json';
+import viClientPayment from './locales/vi/client/payment.json';
 import viClientProfile from './locales/vi/client/profile.json';
 import viClientRecords from './locales/vi/client/records.json';
 import viClientSettings from './locales/vi/client/settings.json';
@@ -95,6 +101,7 @@ i18n.use(initReactI18next).init({
         common: enAdminCommon,
         dashboard: enAdminDashboard,
         news: enAdminNews,
+        orders: enAdminOrders,
         permissions: enAdminPermissions,
         roles: enAdminRoles,
         users: enAdminUsers,
@@ -108,16 +115,17 @@ i18n.use(initReactI18next).init({
         doctorSchedule: enStaffDoctorSchedule,
       },
       client: {
-        ...enClientLayout,
-        ...enClientBooking,
-        ...enClientRecords,
-
+        layout: enClientLayout,
+        booking: enClientBooking,
+        records: enClientRecords,
         profile: enClientProfile,
         dashboard: enClientDashboard,
         family: enClientFamily,
         appointments: enClientAppointments,
         settings: enClientSettings,
         home: enClientHome,
+        orders: enClientOrders,
+        payment: enClientPayment,
       },
     },
     vi: {
@@ -140,6 +148,7 @@ i18n.use(initReactI18next).init({
         common: viAdminCommon,
         dashboard: viAdminDashboard,
         news: viAdminNews,
+        orders: viAdminOrders,
         permissions: viAdminPermissions,
         roles: viAdminRoles,
         users: viAdminUsers,
@@ -153,16 +162,17 @@ i18n.use(initReactI18next).init({
         doctorSchedule: viStaffDoctorSchedule,
       },
       client: {
-        ...viClientLayout,
-        ...viClientBooking,
-        ...viClientRecords,
-
+        layout: viClientLayout,
+        booking: viClientBooking,
+        records: viClientRecords,
         profile: viClientProfile,
         dashboard: viClientDashboard,
         family: viClientFamily,
         appointments: viClientAppointments,
         settings: viClientSettings,
         home: viClientHome,
+        orders: viClientOrders,
+        payment: viClientPayment,
       },
     },
   },

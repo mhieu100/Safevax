@@ -8,6 +8,7 @@ import {
 import { Button, Card, Col, Divider, message, Radio, Row, Typography } from 'antd';
 import { ethers } from 'ethers';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { callCreateOrder } from '@/services/order.service';
 import { updatePaymentMetaMask } from '@/services/payment.service';
@@ -16,6 +17,7 @@ import useCartStore from '@/stores/useCartStore';
 const { Title, Text } = Typography;
 
 const CheckoutPage = () => {
+  const { t } = useTranslation('client');
   const navigate = useNavigate();
   const { items, totalPrice, clearCart } = useCartStore();
   const [paymentMethod, setPaymentMethod] = useState('BANK');
@@ -23,7 +25,7 @@ const CheckoutPage = () => {
 
   const handleCheckout = async () => {
     if (items.length === 0) {
-      message.error('Giỏ hàng trống');
+      message.error(t('checkout.emptyCart'));
       return;
     }
 
@@ -101,7 +103,7 @@ const CheckoutPage = () => {
         value: ethers.parseEther(paymentData.amount.toString()),
       });
 
-      message.loading('Đang xử lý thanh toán...');
+      message.loading(t('booking.processing'));
       await tx.wait();
 
       await updatePaymentMetaMask({
@@ -110,12 +112,12 @@ const CheckoutPage = () => {
         type: 'ORDER',
       });
 
-      message.success('Thanh toán thành công!');
+      message.success(t('checkout.paymentSuccess'));
       clearCart();
       navigate('/success');
     } catch (error) {
       console.error('MetaMask Error:', error);
-      message.error('Thanh toán thất bại hoặc bị hủy');
+      message.error(t('checkout.paymentCancelled'));
     } finally {
       setLoading(false);
     }
@@ -126,13 +128,13 @@ const CheckoutPage = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Title level={2} className="mb-8 flex items-center gap-3">
           <SafetyCertificateOutlined className="text-blue-600" />
-          Xác nhận đơn hàng
+          {t('checkout.confirmOrder')}
         </Title>
 
         <Row gutter={24}>
           <Col xs={24} lg={16}>
             <Card className="rounded-2xl shadow-sm border border-slate-100 mb-6">
-              <Title level={4}>Danh sách sản phẩm</Title>
+              <Title level={4}>{t('checkout.productList')}</Title>
               <Divider />
               {items.map((item) => (
                 <div
@@ -149,7 +151,9 @@ const CheckoutPage = () => {
                       <Text strong className="text-lg block">
                         {item.vaccine.name}
                       </Text>
-                      <Text type="secondary">Số lượng: {item.quantity}</Text>
+                      <Text type="secondary">
+                        {t('checkout.quantity')}: {item.quantity}
+                      </Text>
                     </div>
                   </div>
                   <Text strong>
@@ -162,7 +166,7 @@ const CheckoutPage = () => {
             </Card>
 
             <Card className="rounded-2xl shadow-sm border border-slate-100 mb-6">
-              <Title level={4}>Phương thức thanh toán</Title>
+              <Title level={4}>{t('checkout.paymentMethod')}</Title>
               <Divider />
               <Radio.Group
                 onChange={(e) => setPaymentMethod(e.target.value)}
@@ -176,10 +180,8 @@ const CheckoutPage = () => {
                   <div className="flex items-center gap-3 w-full">
                     <BankOutlined className="text-2xl text-green-600" />
                     <div>
-                      <div className="font-medium">Chuyển khoản VNPAY</div>
-                      <div className="text-xs text-slate-500">
-                        Thanh toán qua thẻ ATM/Internet Banking
-                      </div>
+                      <div className="font-medium">{t('checkout.vnpay')}</div>
+                      <div className="text-xs text-slate-500">{t('checkout.vnpayDesc')}</div>
                     </div>
                   </div>
                 </Radio>
@@ -191,8 +193,8 @@ const CheckoutPage = () => {
                   <div className="flex items-center gap-3">
                     <CreditCardOutlined className="text-2xl text-blue-600" />
                     <div>
-                      <div className="font-medium">PayPal</div>
-                      <div className="text-xs text-slate-500">Thanh toán quốc tế an toàn</div>
+                      <div className="font-medium">{t('checkout.paypal')}</div>
+                      <div className="text-xs text-slate-500">{t('checkout.paypalDesc')}</div>
                     </div>
                   </div>
                 </Radio>
@@ -204,10 +206,8 @@ const CheckoutPage = () => {
                   <div className="flex items-center gap-3">
                     <WalletOutlined className="text-2xl text-orange-500" />
                     <div>
-                      <div className="font-medium">Ví MetaMask</div>
-                      <div className="text-xs text-slate-500">
-                        Thanh toán bằng tiền điện tử (ETH)
-                      </div>
+                      <div className="font-medium">{t('checkout.metamask')}</div>
+                      <div className="text-xs text-slate-500">{t('checkout.metamaskDesc')}</div>
                     </div>
                   </div>
                 </Radio>
@@ -219,8 +219,8 @@ const CheckoutPage = () => {
                   <div className="flex items-center gap-3">
                     <DollarOutlined className="text-2xl text-slate-600" />
                     <div>
-                      <div className="font-medium">Tiền mặt</div>
-                      <div className="text-xs text-slate-500">Thanh toán tại trung tâm</div>
+                      <div className="font-medium">{t('checkout.cash')}</div>
+                      <div className="text-xs text-slate-500">{t('checkout.cashDesc')}</div>
                     </div>
                   </div>
                 </Radio>
@@ -230,10 +230,10 @@ const CheckoutPage = () => {
 
           <Col xs={24} lg={8}>
             <Card className="rounded-2xl shadow-sm border border-slate-100 sticky top-24">
-              <Title level={4}>Tổng quan đơn hàng</Title>
+              <Title level={4}>{t('checkout.orderSummary')}</Title>
               <Divider className="my-4" />
               <div className="flex justify-between mb-2">
-                <Text>Tạm tính:</Text>
+                <Text>{t('checkout.subtotal')}:</Text>
                 <Text>
                   {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
                     totalPrice()
@@ -241,13 +241,13 @@ const CheckoutPage = () => {
                 </Text>
               </div>
               <div className="flex justify-between mb-4">
-                <Text>Giảm giá:</Text>
+                <Text>{t('checkout.discount')}:</Text>
                 <Text type="success">-0 ₫</Text>
               </div>
               <Divider className="my-4" />
               <div className="flex justify-between items-center mb-6">
                 <Text strong className="text-lg">
-                  Tổng cộng:
+                  {t('checkout.total')}:
                 </Text>
                 <Text strong className="text-xl text-blue-600">
                   {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
@@ -264,11 +264,11 @@ const CheckoutPage = () => {
                 onClick={handleCheckout}
                 loading={loading}
               >
-                {loading ? 'Đang xử lý...' : 'Thanh toán ngay'}
+                {loading ? t('checkout.processingPayment') : t('checkout.payNow')}
               </Button>
 
               <div className="mt-4 flex items-center justify-center gap-2 text-slate-400 text-xs">
-                <SafetyCertificateOutlined /> Bảo mật thanh toán an toàn 100%
+                <SafetyCertificateOutlined /> {t('checkout.securePayment')}
               </div>
             </Card>
           </Col>

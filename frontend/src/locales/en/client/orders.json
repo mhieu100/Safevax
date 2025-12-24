@@ -1,0 +1,28 @@
+{
+  "title": "My Orders",
+  "subtitle": "Manage and track your vaccine order status",
+  "loadError": "Failed to load order history",
+  "noOrders": "You don't have any orders yet",
+  "summary": {
+    "totalOrders": "Total Orders",
+    "successOrders": "Successful",
+    "processingOrders": "Processing"
+  },
+  "columns": {
+    "orderId": "Order ID",
+    "orderDate": "Order Date",
+    "itemCount": "Items",
+    "total": "Total",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Processing",
+    "processing": "Shipping",
+    "shipped": "Shipping",
+    "delivered": "Delivered",
+    "completed": "Completed",
+    "failed": "Failed",
+    "cancelled": "Cancelled"
+  },
+  "itemUnit": "items"
+}

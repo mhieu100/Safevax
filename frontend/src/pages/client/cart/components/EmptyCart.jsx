@@ -8,7 +8,7 @@ const EmptyCart = () => {
   const { t } = useTranslation('common');
 
   return (
-    <div className="min-h-[calc(100vh-130px)] bg-gray-50">
+    <div className="min-h-[calc(100vh-90px)] bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
         <div className="text-center py-16">
           <Empty

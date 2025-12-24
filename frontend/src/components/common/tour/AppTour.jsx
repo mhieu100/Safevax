@@ -76,10 +76,10 @@ const AppTour = () => {
         break;
       case 2:
       case 3:
-        navigate('/vaccine');
+        navigate('/vaccines');
         break;
       case 4:
-        if (location.pathname !== '/vaccine') navigate('/vaccine');
+        if (location.pathname !== '/vaccines') navigate('/vaccines');
         break;
       case 5:
         navigate('/cart');

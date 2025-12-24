@@ -44,7 +44,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="hero-container relative min-h-[calc(100vh-112px)] flex items-center pt-20 pb-32 overflow-hidden">
+    <section className="hero-container relative min-h-[calc(100vh-72px)] flex items-center pt-20 pb-32 overflow-hidden">
       {/* Background blobs */}
       <div className="hero-blob hero-blob-1" />
       <div className="hero-blob hero-blob-2" />
@@ -76,7 +76,7 @@ const HeroSection = () => {
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4">
-                <Link to="/vaccine">
+                <Link to="/vaccines">
                   <Button
                     type="primary"
                     size="large"

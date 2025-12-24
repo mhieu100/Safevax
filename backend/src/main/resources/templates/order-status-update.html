@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cập nhật đơn hàng</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .status-icon {
+            text-align: center;
+            font-size: 60px;
+            margin: 20px 0;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #3b82f6;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .info-item {
+            display: flex;
+            margin: 10px 0;
+            align-items: center;
+        }
+        .info-label {
+            font-weight: bold;
+            min-width: 150px;
+            color: #555;
+        }
+        .info-value {
+            color: #333;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .status-processing {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+        .status-shipped {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+        .status-delivered {
+            background-color: #d1fae5;
+            color: #059669;
+        }
+        .status-cancelled {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 Cập nhật trạng thái đơn hàng</h1>
+        </div>
+        <div class="content">
+            <div class="status-icon">
+                <span th:if="${status == 'PROCESSING'}">⏳</span>
+                <span th:if="${status == 'SHIPPED'}">🚚</span>
+                <span th:if="${status == 'DELIVERED'}">✅</span>
+                <span th:if="${status == 'CANCELLED'}">❌</span>
+            </div>
+            <p class="greeting">Xin chào <span th:text="${customerName}"></span>,</p>
+            <p>Đơn hàng <strong>#<span th:text="${orderId}"></span></strong> của bạn đã được cập nhật trạng thái.</p>
+            
+            <div class="info-box">
+                <div class="info-item">
+                    <span class="info-label">Mã đơn hàng:</span>
+                    <span class="info-value"><strong>#<span th:text="${orderId}"></span></strong></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Trạng thái mới:</span>
+                    <span class="info-value">
+                        <span class="status-badge" 
+                              th:classappend="${status == 'PROCESSING'} ? 'status-processing' : 
+                                              (${status == 'SHIPPED'} ? 'status-shipped' : 
+                                              (${status == 'DELIVERED'} ? 'status-delivered' : 'status-cancelled'))"
+                              th:text="${statusText}"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div th:if="${status == 'DELIVERED'}" style="background-color: #d1fae5; padding: 15px; border-radius: 5px; margin-top: 20px;">
+                <strong>🎉 Đơn hàng đã giao thành công!</strong>
+                <p style="margin: 10px 0 0 0;">Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của VaxSafe. Chúc bạn sức khỏe!</p>
+            </div>
+
+            <div th:if="${status == 'CANCELLED'}" style="background-color: #fee2e2; padding: 15px; border-radius: 5px; margin-top: 20px;">
+                <strong>Đơn hàng đã bị hủy</strong>
+                <p style="margin: 10px 0 0 0;">Nếu bạn có thắc mắc về việc hủy đơn, vui lòng liên hệ hotline: <strong>1900-xxxx</strong></p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Email này được gửi tự động từ hệ thống VaxSafe.</p>
+            <p>© <span th:text="${year}"></span> VaxSafe. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

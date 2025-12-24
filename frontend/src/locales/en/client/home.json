@@ -112,5 +112,52 @@
         "main": "Google Play"
       }
     }
+  },
+  "recommendedVaccines": {
+    "subtitle": "Vaccine Suggestions",
+    "title": "Suitable vaccines",
+    "titleHighlight": "for you",
+    "description": "We suggest vaccines based on your age, gender, and the needs of you and your family",
+    "tabs": {
+      "personal": "For You",
+      "family": "Family Members",
+      "prePregnancy": "Pre-pregnancy",
+      "pregnancySafe": "During Pregnancy",
+      "postPregnancy": "Postpartum"
+    },
+    "selectFamilyMember": "Select family member",
+    "chooseFamilyMember": "Choose family member",
+    "viewingVaccinesFor": "Viewing vaccines for",
+    "loginPrompt": "Log in to see vaccines that match your profile",
+    "loginNow": "Log in now",
+    "noVaccinesFound": "No suitable vaccines found",
+    "pleaseLogin": "Please log in to see suitable vaccines",
+    "pleaseSelectMember": "Please select a family member",
+    "viewAllVaccines": "View all vaccines",
+    "doses": "doses",
+    "monthsOld": "months old",
+    "yearsOld": "years old",
+    "yearsMonths": "years {{months}} months",
+    "you": "You",
+    "male": "Male",
+    "female": "Female",
+    "relative": "Relative",
+    "priority": {
+      "essential": "Essential",
+      "recommended": "Recommended",
+      "optional": "Optional",
+      "travel": "Travel"
+    },
+    "targetGroup": {
+      "newborn": "Newborn",
+      "infant": "Infant (2-12 months)",
+      "toddler": "Toddler (1-3 years)",
+      "child": "Child (4-11 years)",
+      "teen": "Teen (12-17 years)",
+      "adult": "Adult (18-64 years)",
+      "elderly": "Elderly (65+)",
+      "pregnant": "Pregnant Women",
+      "all": "All"
+    }
   }
 }

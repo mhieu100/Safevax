@@ -10,12 +10,14 @@ import {
 import { Button, Checkbox, Divider, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/constants';
 import { useCenter } from '@/hooks/useCenter';
 import { useFamilyMember } from '@/hooks/useFamilyMember';
 import { formatPrice } from '@/utils/formatPrice';
 
 const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubmit, loading }) => {
+  const { t } = useTranslation('client');
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [acceptPolicy, setAcceptPolicy] = useState(false);
 
@@ -53,10 +55,8 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
   return (
     <div className="animate-fade-in max-w-6xl mx-auto">
       <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold text-slate-900 mb-3">Review & Confirm</h2>
-        <p className="text-slate-500 text-lg">
-          Please review your booking details before confirming
-        </p>
+        <h2 className="text-3xl font-bold text-slate-900 mb-3">{t('review.title')}</h2>
+        <p className="text-slate-500 text-lg">{t('review.subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -68,7 +68,9 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
               <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
                 <MedicineBoxOutlined className="text-xl" />
               </div>
-              <h3 className="text-lg font-bold text-slate-800 m-0">Vaccine Information</h3>
+              <h3 className="text-lg font-bold text-slate-800 m-0">
+                {t('review.vaccineInformation')}
+              </h3>
             </div>
 
             <div className="flex gap-4">
@@ -83,9 +85,13 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
                 <h4 className="text-xl font-bold text-slate-900 mb-1">{vaccineInfo?.name}</h4>
                 <div className="flex flex-wrap gap-2 mb-2">
                   <Tag color="blue">{vaccineInfo?.country}</Tag>
-                  <Tag color="cyan">{vaccineInfo?.dosesRequired} Doses</Tag>
+                  <Tag color="cyan">
+                    {vaccineInfo?.dosesRequired} {t('booking.doses')}
+                  </Tag>
                 </div>
-                <p className="text-slate-500 text-sm">Interval: {vaccineInfo?.duration} days</p>
+                <p className="text-slate-500 text-sm">
+                  {t('booking.interval')}: {vaccineInfo?.duration} {t('booking.days')}
+                </p>
               </div>
             </div>
           </div>
@@ -96,13 +102,15 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
               <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
                 <CalendarOutlined className="text-xl" />
               </div>
-              <h3 className="text-lg font-bold text-slate-800 m-0">Appointment Details</h3>
+              <h3 className="text-lg font-bold text-slate-800 m-0">
+                {t('review.appointmentDetails')}
+              </h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-slate-50 p-4 rounded-2xl">
                 <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">
-                  Date & Time
+                  {t('review.dateTime')}
                 </div>
                 <div className="flex items-center gap-2 text-slate-800 font-bold text-lg">
                   <CalendarOutlined className="text-blue-500" />
@@ -118,28 +126,32 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
 
               <div className="bg-slate-50 p-4 rounded-2xl">
                 <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">
-                  Location
+                  {t('review.location')}
                 </div>
                 <div className="flex items-start gap-2 text-slate-800 font-bold">
                   <EnvironmentOutlined className="text-red-500 mt-1" />
                   <span>
-                    {getCenterById(bookingData.appointmentCenter)?.name || 'Unknown Center'}
+                    {getCenterById(bookingData.appointmentCenter)?.name ||
+                      t('review.unknownCenter')}
                   </span>
                 </div>
               </div>
 
               <div className="bg-slate-50 p-4 rounded-2xl md:col-span-2">
                 <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">
-                  Patient
+                  {t('review.patient')}
                 </div>
                 <div className="flex items-center gap-2 text-slate-800 font-bold text-lg">
                   <UserOutlined className="text-green-500" />
                   {bookingData.bookingFor === 'self'
-                    ? 'Myself'
-                    : getFamilyMemberById(bookingData.familyMemberId)?.fullName || 'Family Member'}
+                    ? t('booking.myself')
+                    : getFamilyMemberById(bookingData.familyMemberId)?.fullName ||
+                      t('booking.familyMember')}
                 </div>
                 <Tag color={bookingData.bookingFor === 'self' ? 'blue' : 'green'} className="mt-2">
-                  {bookingData.bookingFor === 'self' ? 'Self Booking' : 'Family Booking'}
+                  {bookingData.bookingFor === 'self'
+                    ? t('review.selfBooking')
+                    : t('review.familyBooking')}
                 </Tag>
               </div>
             </div>
@@ -150,17 +162,17 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
             <div className="space-y-3">
               <Checkbox checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)}>
                 <span className="text-slate-600">
-                  I agree to the{' '}
+                  {t('review.iAgreeTo')}{' '}
                   <a href="/terms" className="text-blue-600 font-medium hover:underline">
-                    Terms of Service
+                    {t('review.termsOfService')}
                   </a>
                 </span>
               </Checkbox>
               <Checkbox checked={acceptPolicy} onChange={(e) => setAcceptPolicy(e.target.checked)}>
                 <span className="text-slate-600">
-                  I agree to the{' '}
+                  {t('review.iAgreeTo')}{' '}
                   <a href="/privacy" className="text-blue-600 font-medium hover:underline">
-                    Privacy Policy
+                    {t('review.privacyPolicy')}
                   </a>
                 </span>
               </Checkbox>
@@ -178,7 +190,7 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
                 <div className="relative z-10 flex justify-between items-start">
                   <div>
                     <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
-                      Total Amount
+                      {t('review.totalAmount')}
                     </div>
                     <div className="text-3xl font-bold text-white">{formatPrice(totalPrice)}</div>
                   </div>
@@ -199,24 +211,24 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
 
                 <div className="space-y-4 mt-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-500">Payment Method</span>
+                    <span className="text-slate-500">{t('checkout.paymentMethod')}</span>
                     <span className="font-bold text-slate-900">{paymentMethod}</span>
                   </div>
                   <Divider className="my-2" />
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-500">Vaccine Price</span>
+                    <span className="text-slate-500">{t('checkout.vaccinePrice')}</span>
                     <span className="font-medium text-slate-900">
                       {formatPrice(vaccineInfo?.price)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-500">Doses</span>
-                    <span className="font-medium text-slate-900">x 1 (First Dose)</span>
+                    <span className="text-slate-500">{t('booking.doses')}</span>
+                    <span className="font-medium text-slate-900">{t('review.firstDose')}</span>
                   </div>
                   <Divider className="my-2" />
                   <div className="bg-emerald-50 p-3 rounded-xl flex items-center gap-2 text-emerald-700 text-sm font-medium">
                     <SafetyCertificateFilled />
-                    Blockchain Verified Transaction
+                    {t('review.blockchainVerified')}
                   </div>
                 </div>
 
@@ -228,7 +240,7 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
                   loading={loading}
                   className="w-full mt-6 h-12 rounded-xl font-bold text-lg shadow-lg shadow-blue-500/30 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 border-none"
                 >
-                  Confirm Booking
+                  {t('booking.confirmBooking')}
                 </Button>
               </div>
             </div>

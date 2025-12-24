@@ -9,11 +9,13 @@ import {
 } from '@ant-design/icons';
 import { Card, Empty, message, Skeleton, Table, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getMyOrders } from '@/services/order.service';
 
 const { Title, Text } = Typography;
 
 const MyOrdersPage = () => {
+  const { t } = useTranslation('client');
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
 
@@ -34,15 +36,42 @@ const MyOrdersPage = () => {
       }
     } catch (error) {
       console.error(error);
-      message.error('Không thể tải lịch sử đơn hàng');
+      message.error(t('orders.loadError'));
     } finally {
       setLoading(false);
     }
   };
 
+  const getStatusConfig = (status) => {
+    const configs = {
+      SUCCESS: { color: 'success', text: t('orders.status.completed'), icon: CheckCircleOutlined },
+      COMPLETED: {
+        color: 'success',
+        text: t('orders.status.completed'),
+        icon: CheckCircleOutlined,
+      },
+      PENDING: { color: 'processing', text: t('orders.status.pending'), icon: SyncOutlined },
+      INITIATED: { color: 'processing', text: t('orders.status.pending'), icon: SyncOutlined },
+      PROCESSING: { color: 'geekblue', text: t('orders.status.processing'), icon: SyncOutlined },
+      SHIPPED: { color: 'orange', text: t('orders.status.shipped'), icon: SyncOutlined },
+      DELIVERED: {
+        color: 'success',
+        text: t('orders.status.delivered'),
+        icon: CheckCircleOutlined,
+      },
+      FAILED: { color: 'error', text: t('orders.status.failed'), icon: CloseCircleOutlined },
+      CANCELLED: {
+        color: 'default',
+        text: t('orders.status.cancelled'),
+        icon: CloseCircleOutlined,
+      },
+    };
+    return configs[status] || { color: 'default', text: status, icon: ClockCircleOutlined };
+  };
+
   const columns = [
     {
-      title: 'Mã Đơn',
+      title: t('orders.columns.orderId'),
       dataIndex: 'orderId',
       key: 'orderId',
       render: (text) => (
@@ -52,7 +81,7 @@ const MyOrdersPage = () => {
       ),
     },
     {
-      title: 'Ngày đặt',
+      title: t('orders.columns.orderDate'),
       dataIndex: 'orderDate',
       key: 'orderDate',
       render: (date) => (
@@ -63,18 +92,18 @@ const MyOrdersPage = () => {
       ),
     },
     {
-      title: 'Sản phẩm',
+      title: t('orders.columns.itemCount'),
       dataIndex: 'itemCount',
       key: 'itemCount',
       align: 'center',
       render: (count) => (
         <Tag color="cyan" className="rounded-full px-3">
-          {count} sản phẩm
+          {count} {t('orders.itemUnit')}
         </Tag>
       ),
     },
     {
-      title: 'Tổng tiền',
+      title: t('orders.columns.total'),
       dataIndex: 'total',
       key: 'total',
       align: 'right',
@@ -85,52 +114,20 @@ const MyOrdersPage = () => {
       ),
     },
     {
-      title: 'Trạng thái',
+      title: t('orders.columns.status'),
       dataIndex: 'status',
       key: 'status',
       align: 'center',
       render: (status) => {
-        let color = 'default';
-        let text = status;
-        let Icon = ClockCircleOutlined;
-
-        switch (status) {
-          case 'SUCCESS':
-          case 'COMPLETED':
-            color = 'success';
-            text = 'Hoàn thành';
-            Icon = CheckCircleOutlined;
-            break;
-          case 'PENDING':
-          case 'INITIATED':
-            color = 'processing';
-            text = 'Đang xử lý';
-            Icon = SyncOutlined;
-            break;
-          case 'PROCESSING':
-            color = 'geekblue';
-            text = 'Đang giao hàng'; // Or processing payment
-            Icon = SyncOutlined;
-            break;
-          case 'FAILED':
-            color = 'error';
-            text = 'Thất bại';
-            Icon = CloseCircleOutlined;
-            break;
-          case 'CANCELLED':
-            color = 'default';
-            text = 'Đã hủy';
-            Icon = CloseCircleOutlined;
-            break;
-        }
-
+        const config = getStatusConfig(status);
+        const Icon = config.icon;
         return (
           <Tag
             icon={<Icon spin={status === 'PENDING' || status === 'PROCESSING'} />}
-            color={color}
+            color={config.color}
             className="rounded-full px-3 py-0.5 border-0 font-medium"
           >
-            {text}
+            {config.text}
           </Tag>
         );
       },
@@ -147,9 +144,9 @@ const MyOrdersPage = () => {
           </div>
           <div>
             <Title level={2} className="!mb-0">
-              Đơn hàng của tôi
+              {t('orders.title')}
             </Title>
-            <Text type="secondary">Quản lý và theo dõi trạng thái các đơn hàng vắc xin</Text>
+            <Text type="secondary">{t('orders.subtitle')}</Text>
           </div>
         </div>
 
@@ -177,7 +174,7 @@ const MyOrdersPage = () => {
                 <div className="flex items-center justify-between p-2">
                   <div>
                     <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                      Tổng đơn hàng
+                      {t('orders.summary.totalOrders')}
                     </Text>
                     <div className="text-3xl font-bold text-indigo-600 mt-1">{orders.length}</div>
                   </div>
@@ -194,12 +191,16 @@ const MyOrdersPage = () => {
                 <div className="flex items-center justify-between p-2">
                   <div>
                     <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                      Đơn thành công
+                      {t('orders.summary.successOrders')}
                     </Text>
                     <div className="text-3xl font-bold text-emerald-600 mt-1">
                       {
-                        orders.filter((o) => o.status === 'SUCCESS' || o.status === 'COMPLETED')
-                          .length
+                        orders.filter(
+                          (o) =>
+                            o.status === 'SUCCESS' ||
+                            o.status === 'COMPLETED' ||
+                            o.status === 'DELIVERED'
+                        ).length
                       }
                     </div>
                   </div>
@@ -216,12 +217,12 @@ const MyOrdersPage = () => {
                 <div className="flex items-center justify-between p-2">
                   <div>
                     <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                      Đang xử lý
+                      {t('orders.summary.processingOrders')}
                     </Text>
                     <div className="text-3xl font-bold text-amber-600 mt-1">
                       {
                         orders.filter((o) =>
-                          ['PENDING', 'PROCESSING', 'INITIATED'].includes(o.status)
+                          ['PENDING', 'PROCESSING', 'INITIATED', 'SHIPPED'].includes(o.status)
                         ).length
                       }
                     </div>
@@ -249,7 +250,7 @@ const MyOrdersPage = () => {
                 />
               ) : (
                 <div className="p-12 text-center">
-                  <Empty description="Bạn chưa có đơn hàng nào" />
+                  <Empty description={t('orders.noOrders')} />
                 </div>
               )}
             </Card>

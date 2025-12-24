@@ -51,4 +51,15 @@ public class VaccineRequest {
 
     @Min(value = 0, message = "Days for next dose must be non-negative")
     Integer daysForNextDose;
+
+    // === Thông tin đối tượng tiêm chủng ===
+    String targetGroup;        // NEWBORN, INFANT, TODDLER, CHILD, TEEN, ADULT, ELDERLY, PREGNANT, ALL
+    Integer minAgeMonths;      // Tuổi tối thiểu (tháng)
+    Integer maxAgeMonths;      // Tuổi tối đa (tháng)
+    String genderSpecific;     // MALE, FEMALE, ALL
+    Boolean pregnancySafe;     // An toàn cho phụ nữ mang thai
+    Boolean prePregnancy;      // Vaccine trước khi mang thai
+    Boolean postPregnancy;     // Vaccine sau sinh
+    String priorityLevel;      // ESSENTIAL, RECOMMENDED, OPTIONAL, TRAVEL
+    String category;           // BASIC_CHILDHOOD, SCHOOL_AGE, ADULT_ROUTINE, PREGNANCY, ELDERLY_CARE, TRAVEL, COVID19
 }
