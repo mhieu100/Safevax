@@ -81,15 +81,15 @@ const AppointmentSchedulePage = () => {
       case 'CONFIRMED':
         return t('client:appointments.confirmed');
       case 'COMPLETED':
-        return t('client:vaccinationHistory.completed');
+        return t('client:records.vaccinationHistory.completed');
       case 'SCHEDULED':
         return t('client:appointments.scheduled');
       case 'PENDING':
-        return t('client:blockchain.pending');
+        return t('client:records.blockchain.pending');
       case 'RESCHEDULE':
         return t('client:appointments.rescheduling');
       case 'PROGRESS':
-        return t('client:vaccinationHistory.inProgress');
+        return t('client:records.vaccinationHistory.inProgress');
       case 'CANCELLED':
         return t('client:appointments.cancelled');
       default:
@@ -114,19 +114,23 @@ const AppointmentSchedulePage = () => {
           <p>{t('client:appointments.confirmCancel')}</p>
           <div className="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-100 text-sm">
             <p className="mb-1">
-              <span className="font-semibold">{t('client:vaccinationHistory.vaccine')}:</span>{' '}
+              <span className="font-semibold">
+                {t('client:records.vaccinationHistory.vaccine')}:
+              </span>{' '}
               {appointment.vaccineName}
             </p>
             <p className="mb-1">
-              <span className="font-semibold">{t('client:vaccinationHistory.dose')}:</span>{' '}
+              <span className="font-semibold">{t('client:records.vaccinationHistory.dose')}:</span>{' '}
               {appointment.doseNumber}
             </p>
             <p className="mb-1">
-              <span className="font-semibold">{t('client:vaccinationHistory.date')}:</span>{' '}
+              <span className="font-semibold">{t('client:records.vaccinationHistory.date')}:</span>{' '}
               {dayjs(appointment.scheduledDate).format('DD/MM/YYYY')}
             </p>
             <p className="mb-0">
-              <span className="font-semibold">{t('client:vaccinationHistory.center')}:</span>{' '}
+              <span className="font-semibold">
+                {t('client:records.vaccinationHistory.center')}:
+              </span>{' '}
               {appointment.centerName}
             </p>
           </div>
@@ -230,7 +234,7 @@ const AppointmentSchedulePage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center min-h-[calc(100vh-90px)]">
         <div className="mb-6">
           <Title level={3} className="!mb-1 text-slate-800">
-            {t('client:sidebar.appointments')}
+            {t('client:layout.sidebar.appointments')}
           </Title>
           <Text className="text-slate-500 text-lg">{t('client:appointments.manageSchedules')}</Text>
         </div>
@@ -270,9 +274,9 @@ const AppointmentSchedulePage = () => {
                 {firstApt.vaccineName}
               </Title>
               <Text className="text-slate-500 text-sm">
-                {t('client:vaccinationHistory.patient')}:{' '}
+                {t('client:records.vaccinationHistory.patient')}:{' '}
                 <span className="font-medium text-slate-700">{firstApt.patientName}</span> •{' '}
-                {firstApt.totalDoses} {t('client:vaccinationHistory.doses')}
+                {firstApt.totalDoses} {t('client:records.vaccinationHistory.doses')}
               </Text>
             </div>
           </div>
@@ -293,7 +297,7 @@ const AppointmentSchedulePage = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <Text strong className="text-slate-700 text-lg">
-                        {t('client:vaccinationHistory.dose')} {apt.doseNumber}
+                        {t('client:records.vaccinationHistory.dose')} {apt.doseNumber}
                       </Text>
                       <Tag
                         color={getStatusColor(apt.appointmentStatus)}
@@ -318,7 +322,7 @@ const AppointmentSchedulePage = () => {
                       {apt.doctorName && (
                         <div className="flex items-center gap-2 text-slate-600 md:col-span-2">
                           <span className="font-medium">
-                            {t('client:vaccinationHistory.doctor')}:
+                            {t('client:records.vaccinationHistory.doctor')}:
                           </span>{' '}
                           {apt.doctorName}
                         </div>
@@ -374,7 +378,7 @@ const AppointmentSchedulePage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 animate-fade-in">
         <div className="mb-6">
           <Title level={3} className="!mb-1 text-slate-800">
-            {t('client:sidebar.appointments')}
+            {t('client:layout.sidebar.appointments')}
           </Title>
           <Text className="text-slate-500 text-lg">{t('client:appointments.manageSchedules')}</Text>
         </div>

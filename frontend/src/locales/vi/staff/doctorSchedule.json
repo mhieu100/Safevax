@@ -1,14 +1,54 @@
 {
-  "title": "Lịch làm việc Bác sĩ",
-  "mySchedule": "Lịch của tôi",
-  "availableSlots": "Khung giờ trống",
-  "bookedSlots": "Khung giờ đã đặt",
-  "selectDoctor": "Chọn bác sĩ",
-  "selectDate": "Chọn ngày",
-  "updateSchedule": "Cập nhật lịch",
-  "addSchedule": "Thêm lịch",
-  "deleteSchedule": "Xóa lịch",
-  "updateSuccess": "Cập nhật lịch thành công",
-  "addSuccess": "Thêm lịch thành công",
-  "deleteSuccess": "Xóa lịch thành công"
+  "title": "Lịch Bác Sĩ",
+  "mySchedule": "Lịch Của Tôi",
+  "subtitle": "Quản lý lịch làm việc của bác sĩ",
+  "loading": "Đang tải danh sách bác sĩ...",
+  "viewMode": {
+    "today": "Hôm nay",
+    "tomorrow": "Ngày mai",
+    "week": "Tuần này"
+  },
+  "viewingDate": "Đang xem lịch ngày: {{date}} ({{day}})",
+  "error": "Không thể tải danh sách bác sĩ. Vui lòng thử lại!",
+  "noDoctors": {
+    "title": "Không có bác sĩ nào",
+    "desc": "Không tìm thấy bác sĩ nào làm việc tại trung tâm của bạn vào ngày này"
+  },
+  "doctorCard": {
+    "specialty": "Chuyên khoa: {{specialty}}",
+    "shift": "Ca làm việc: {{shift}}",
+    "phone": "SĐT: {{phone}}",
+    "statusToday": "Trạng thái hôm nay:",
+    "available": "trống",
+    "booked": "đã đặt",
+    "availableSchedule": "Lịch khả dụng:",
+    "viewDetail": "Xem chi tiết lịch",
+    "bookedLabel": "Đã đặt",
+    "emptyLabel": "Trống"
+  },
+  "summary": {
+    "title": "Tổng Quan Lịch Hôm Nay",
+    "totalDoctors": "Tổng bác sĩ",
+    "availableSlots": "Slot trống",
+    "bookedSlots": "Slot đã đặt",
+    "availabilityRate": "Tỷ lệ trống"
+  },
+  "modal": {
+    "slotInfoTitle": "Thông Tin Slot Thời Gian",
+    "doctorDetailTitle": "Chi Tiết Lịch Bác Sĩ",
+    "close": "Đóng",
+    "assign": "Phân công lịch hẹn",
+    "developing": "Chức năng phân công lịch hẹn đang phát triển",
+    "doctor": "Bác sĩ",
+    "specialty": "Chuyên khoa",
+    "phone": "Số điện thoại",
+    "shift": "Ca làm việc",
+    "selectedSlotInfo": "Thông tin slot được chọn",
+    "time": "Thời gian",
+    "status": "Trạng thái",
+    "statusAvailable": "Slot trống - Có thể phân công",
+    "statusBooked": "Đã có lịch hẹn",
+    "canAssign": "Bạn có thể phân công lịch hẹn cho slot thời gian này",
+    "detailSchedule": "Lịch làm việc chi tiết"
+  }
 }

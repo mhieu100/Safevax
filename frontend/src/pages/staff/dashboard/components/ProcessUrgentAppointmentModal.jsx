@@ -31,6 +31,7 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { callUpdateAppointment } from '@/services/appointment.service';
 import {
   callGetAvailableDoctorsByCenter,
@@ -42,6 +43,7 @@ const { Text } = Typography;
 const { TextArea } = Input;
 
 const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }) => {
+  const { t } = useTranslation(['staff']);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [loadingSlots, setLoadingSlots] = useState(false);
@@ -87,8 +89,8 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
       }
     } catch (_error) {
       notification.error({
-        message: 'Lỗi',
-        description: 'Không thể tải lịch trống của bác sĩ',
+        message: t('staff:dashboard.processModal.errorTitle'),
+        description: t('staff:dashboard.processModal.errorLoadSlots'),
       });
       setAvailableSlots([]);
     } finally {
@@ -144,12 +146,12 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
       const values = await form.validateFields(['doctorId']);
 
       if (!selectedSlotUiId) {
-        message.error('Vui lòng chọn khung giờ!');
+        message.error(t('staff:dashboard.processModal.selectSlot'));
         return;
       }
 
       const selectedDoctor = doctors.find((d) => d.doctorId === values.doctorId);
-      if (!selectedDoctor) throw new Error('Không tìm thấy thông tin bác sĩ');
+      if (!selectedDoctor) throw new Error(t('staff:dashboard.processModal.doctorNotFound'));
 
       const slot = availableSlots.find((s) => s.uiId === selectedSlotUiId);
       if (!slot) throw new Error('Slot invalid');
@@ -162,14 +164,14 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
       );
 
       if (res?.data) {
-        message.success('Cập nhật lịch hẹn thành công!');
+        message.success(t('staff:dashboard.processModal.updateSuccess'));
         onSuccess?.();
         handleClose();
       }
     } catch (error) {
       notification.error({
-        message: 'Có lỗi xảy ra',
-        description: error.message || 'Không thể cập nhật lịch hẹn',
+        message: t('staff:dashboard.processModal.generalError'),
+        description: error.message || t('staff:dashboard.processModal.updateError'),
       });
     } finally {
       setLoading(false);
@@ -180,7 +182,7 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
     <Card
       title={
         <Space>
-          <UserOutlined /> Thông Tin Bệnh Nhân
+          <UserOutlined /> {t('staff:dashboard.processModal.patientInfo')}
         </Space>
       }
       bordered={false}
@@ -221,7 +223,7 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
           size="small"
           style={{ marginBottom: 16, borderColor: '#d9f7be', background: '#f6ffed' }}
         >
-          <Text type="secondary">Ngày hẹn:</Text>
+          <Text type="secondary">{t('staff:dashboard.processModal.appointmentDate')}</Text>
           <div style={{ fontSize: 18, fontWeight: 'bold', color: '#389e0d' }}>
             {dayjs(targetDate).format('dddd, DD/MM/YYYY')}
           </div>
@@ -240,7 +242,7 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
         <Row align="middle" justify="space-between">
           <Col span={10} style={{ textAlign: 'center' }}>
             <Text type="secondary" delete>
-              Lịch Cũ
+              {t('staff:dashboard.processModal.oldSchedule')}
             </Text>
             <div style={{ fontWeight: 500, color: '#bfbfbf' }}>
               {dayjs(appointment.scheduledDate).format('DD/MM')}
@@ -250,7 +252,7 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
             <RightOutlined style={{ color: '#ff4d4f' }} />
           </Col>
           <Col span={10} style={{ textAlign: 'center' }}>
-            <Text type="danger">Lịch Mới</Text>
+            <Text type="danger">{t('staff:dashboard.processModal.newSchedule')}</Text>
             <div style={{ fontSize: 16, fontWeight: 'bold', color: '#cf1322' }}>
               {dayjs(targetDate).format('DD/MM')}
             </div>
@@ -269,10 +271,20 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
       );
     }
     if (!selectedDoctorId) {
-      return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Chọn bác sĩ để xem lịch" />;
+      return (
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description={t('staff:dashboard.processModal.selectDoctorFirst')}
+        />
+      );
     }
     if (availableSlots.length === 0) {
-      return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Bác sĩ bận cả ngày" />;
+      return (
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description={t('staff:dashboard.processModal.doctorBusy')}
+        />
+      );
     }
 
     return (
@@ -331,14 +343,16 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
             <CalendarOutlined style={{ color: '#1890ff' }} />
           )}
           <span style={{ fontSize: 18 }}>
-            {isRescheduleRequest ? 'Duyệt Đổi Lịch Hẹn' : 'Phân Công Bác Sĩ'}
+            {isRescheduleRequest
+              ? t('staff:dashboard.processModal.titleReschedule')
+              : t('staff:dashboard.processModal.titleAssign')}
           </span>
         </Space>
       }
       width={900}
       footer={[
         <Button key="cancel" onClick={handleClose}>
-          Đóng
+          {t('staff:dashboard.processModal.close')}
         </Button>,
         <Button
           key="submit"
@@ -348,7 +362,9 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
           disabled={!selectedSlotUiId}
           onClick={handleProcess}
         >
-          {isRescheduleRequest ? 'Phê duyệt & Lưu' : 'Xác nhận Phân công'}
+          {isRescheduleRequest
+            ? t('staff:dashboard.processModal.approveSave')
+            : t('staff:dashboard.processModal.confirmAssign')}
         </Button>,
       ]}
     >
@@ -359,12 +375,12 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
           {renderDateComparison()}
 
           <Divider orientation="left" style={{ fontSize: 12 }}>
-            Ghi chú nội bộ
+            {t('staff:dashboard.processModal.internalNote')}
           </Divider>
           <Form form={form} layout="vertical">
             <Form.Item name="notes">
               <TextArea
-                placeholder="Ghi chú thêm cho bác sĩ/ticket..."
+                placeholder={t('staff:dashboard.processModal.notePlaceholder')}
                 rows={3}
                 style={{ resize: 'none' }}
               />
@@ -378,18 +394,20 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
             type="info"
             banner
             icon={<InfoCircleOutlined />}
-            message={`Chọn bác sĩ cho ngày ${targetDate ? dayjs(targetDate).format('DD/MM/YYYY') : '...'}`}
+            message={t('staff:dashboard.processModal.selectDoctorDate', {
+              date: targetDate ? dayjs(targetDate).format('DD/MM/YYYY') : '...',
+            })}
             style={{ marginBottom: 16, borderRadius: 4 }}
           />
 
           <Form form={form} layout="vertical">
             <Form.Item
               name="doctorId"
-              label={<Text strong>Chọn Bác Sĩ Phụ Trách</Text>}
+              label={<Text strong>{t('staff:dashboard.processModal.selectDoctorLabel')}</Text>}
               rules={[{ required: true }]}
             >
               <Select
-                placeholder="-- Chọn bác sĩ --"
+                placeholder={t('staff:dashboard.processModal.selectDoctorPlaceholder')}
                 loading={loadingDoctors}
                 onChange={handleDoctorChange}
                 size="large"
@@ -412,9 +430,13 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
               required
               label={
                 <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                  <Text strong>Khung Giờ Trống</Text>
+                  <Text strong>{t('staff:dashboard.processModal.emptySlots')}</Text>
                   {availableSlots.length > 0 && (
-                    <Tag color="blue">{availableSlots.length} slots</Tag>
+                    <Tag color="blue">
+                      {t('staff:dashboard.processModal.slotsCount', {
+                        count: availableSlots.length,
+                      })}
+                    </Tag>
                   )}
                 </Space>
               }

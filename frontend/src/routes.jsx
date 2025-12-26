@@ -42,12 +42,12 @@ import HomePage from '@/pages/client/home';
 import MyOrdersPage from '@/pages/client/my-orders';
 import ClientNewsPage from '@/pages/client/news';
 import ClientNewsDetailPage from '@/pages/client/news/detail';
+import WalletVaccinePassport from '@/pages/client/passport/WalletVaccinePassport';
 import PaymentHistoryPage from '@/pages/client/payment-history';
 import UserProfilePage from '@/pages/client/profile';
 import SuccessPage from '@/pages/client/success';
 import VaccineDetailPage from '@/pages/client/vaccine-detail';
 import VaccineListPage from '@/pages/client/vaccine-list';
-import WalletVaccinePassport from '@/pages/client/wallet/WalletVaccinePassport';
 import VerifyLandingPage from '@/pages/public/verify/VerifyLandingPage';
 import VerifyResultPage from '@/pages/public/verify/VerifyResultPage';
 import VerifySearchResultPage from '@/pages/public/verify/VerifySearchResultPage';
@@ -149,7 +149,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'wallet',
+        path: 'vaccine-passport',
         element: (
           <ProtectedUserRoute>
             <WalletVaccinePassport />

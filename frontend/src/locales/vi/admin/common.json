@@ -18,6 +18,27 @@
   "confirm": "Xác nhận",
   "yes": "Có",
   "no": "Không",
+  "menu": {
+    "dashboard": "Bảng điều khiển",
+    "appointments": "Quản lý lịch hẹn",
+    "orders": "Quản lý đơn hàng",
+    "userManagement": "Quản lý người dùng",
+    "patients": "Bệnh nhân",
+    "cashiers": "Thu ngân",
+    "doctors": "Bác sĩ",
+    "vaccines": "Quản lý Vaccine",
+    "centers": "Quản lý Trung tâm",
+    "permissions": "Phân quyền",
+    "news": "Tin tức",
+    "roles": "Vai trò",
+    "aiKnowledge": "Kiến thức AI",
+    "monitor": "Giám sát Blockchain"
+  },
+  "header": {
+    "subtitle": "Cổng quản trị",
+    "searchPlaceholder": "Tìm kiếm...",
+    "notifications": "Thông báo"
+  },
   "security": {
     "title": "Cài đặt bảo mật",
     "accountSecure": "Tài khoản an toàn",

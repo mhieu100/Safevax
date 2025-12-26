@@ -10,6 +10,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import { callFetchCenter } from '@/services/center.service';
 
@@ -52,6 +53,7 @@ const MapUpdater = ({ center }) => {
 };
 
 const ContactPage = () => {
+  const { t } = useTranslation('client');
   const [centers, setCenters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCenter, setSelectedCenter] = useState(null);
@@ -94,11 +96,9 @@ const ContactPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <Title level={2} className="text-blue-700 uppercase mb-2">
-              Hệ thống trung tâm tiêm chủng
+              {t('contact.title')}
             </Title>
-            <Text className="text-gray-500 text-lg">
-              Tra cứu địa điểm, số điện thoại và giờ làm việc của các trung tâm gần bạn
-            </Text>
+            <Text className="text-gray-500 text-lg">{t('contact.subtitle')}</Text>
           </div>
         </div>
       </section>
@@ -115,7 +115,7 @@ const ContactPage = () => {
             >
               <div className="p-4 border-b border-gray-100 bg-white z-10">
                 <Input
-                  placeholder="Tìm kiếm theo tên hoặc địa chỉ..."
+                  placeholder={t('contact.searchPlaceholder')}
                   prefix={<SearchOutlined className="text-gray-400" />}
                   size="large"
                   className="rounded-lg"
@@ -123,7 +123,7 @@ const ContactPage = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <div className="mt-2 text-xs text-gray-400">
-                  Tìm thấy {filteredCenters.length} trung tâm
+                  {t('contact.foundCenters', { count: filteredCenters.length })}
                 </div>
               </div>
 
@@ -191,7 +191,7 @@ const ContactPage = () => {
                   </div>
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center text-gray-400 p-8">
-                    <Empty description="Không tìm thấy trung tâm nào phù hợp" />
+                    <Empty description={t('contact.notFound')} />
                   </div>
                 )}
               </div>
@@ -257,7 +257,7 @@ const ContactPage = () => {
                     )}
                     <div className="absolute top-2 right-2">
                       <Tag color="blue" className="m-0 shadow-sm border-0 font-semibold">
-                        Đang hoạt động
+                        {t('contact.status.active')}
                       </Tag>
                     </div>
                   </div>
@@ -299,7 +299,7 @@ const ContactPage = () => {
                         icon={<GlobalOutlined />}
                         block
                       >
-                        Chỉ đường
+                        {t('contact.actions.directions')}
                       </Button>
                       <Button
                         block
@@ -307,7 +307,7 @@ const ContactPage = () => {
                           window.open(`tel:${selectedCenter.phoneNumber?.replace(/\s/g, '')}`)
                         }
                       >
-                        Gọi điện
+                        {t('contact.actions.call')}
                       </Button>
                     </div>
                   </div>

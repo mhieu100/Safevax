@@ -1,0 +1,18 @@
+{
+  "title": "Xem lại & Xác nhận",
+  "subtitle": "Vui lòng xem lại thông tin đặt lịch trước khi xác nhận",
+  "vaccineInformation": "Thông tin vắc-xin",
+  "appointmentDetails": "Chi tiết lịch hẹn",
+  "dateTime": "Ngày & Giờ",
+  "location": "Địa điểm",
+  "patient": "Bệnh nhân",
+  "unknownCenter": "Trung tâm không xác định",
+  "selfBooking": "Đặt cho bản thân",
+  "familyBooking": "Đặt cho người thân",
+  "termsOfService": "Điều khoản dịch vụ",
+  "privacyPolicy": "Chính sách bảo mật",
+  "iAgreeTo": "Tôi đồng ý với",
+  "totalAmount": "Tổng tiền",
+  "firstDose": "x 1 (Mũi đầu tiên)",
+  "blockchainVerified": "Giao dịch xác thực Blockchain"
+}

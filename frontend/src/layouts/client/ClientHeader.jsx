@@ -108,7 +108,7 @@ const Navbar = () => {
   return (
     <>
       <header
-        className={`sticky top-0 z-[999] transition-all duration-300 ${
+        className={`sticky top-0 z-[9999] transition-all duration-300 ${
           scrolled
             ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100/50 py-3'
             : 'bg-white/50 backdrop-blur-sm border-none py-4'
@@ -151,7 +151,7 @@ const Navbar = () => {
             <Button
               icon={<WalletOutlined className="text-lg" />}
               size="large"
-              onClick={() => navigate('/wallet')}
+              onClick={() => navigate('/vaccine-passport')}
               type="text"
               shape="circle"
               className="flex items-center justify-center text-slate-600 hover:bg-slate-100 hover:text-blue-600"

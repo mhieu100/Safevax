@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from 'react';
 import { Doughnut, Line } from 'react-chartjs-2';
 import CountUp from 'react-countup';
+import { useTranslation } from 'react-i18next';
 import dashboardService from '@/services/dashboard.service';
 
 ChartJS.register(
@@ -39,6 +40,7 @@ ChartJS.register(
 const { Text } = Typography;
 
 const DashboardPage = () => {
+  const { t } = useTranslation(['admin']);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
 
@@ -68,7 +70,7 @@ const DashboardPage = () => {
   }
 
   if (!stats) {
-    return <div>Failed to load data</div>;
+    return <div>{t('admin:dashboard.error.load')}</div>;
   }
 
   const dailyLabels = stats.dailyAppointments?.map((d) => d.date) || [];
@@ -78,7 +80,7 @@ const DashboardPage = () => {
     labels: dailyLabels,
     datasets: [
       {
-        label: 'Lượt tiêm hàng ngày',
+        label: t('admin:dashboard.charts.dailyLabel'),
         data: dailyData,
         backgroundColor: 'rgba(59, 130, 246, 0.05)',
         borderColor: 'rgba(59, 130, 246, 1)',
@@ -113,10 +115,8 @@ const DashboardPage = () => {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Tổng quan hệ thống</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Thống kê thời gian thực về hoạt động tiêm chủng và người dùng
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900">{t('admin:dashboard.pageTitle')}</h1>
+        <p className="mt-1 text-sm text-gray-500">{t('admin:dashboard.pageSubtitle')}</p>
       </div>
 
       {}
@@ -124,7 +124,7 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card bordered={false} className="shadow-sm">
             <Statistic
-              title="Tổng bệnh nhân"
+              title={t('admin:dashboard.stats.patients')}
               value={stats.totalPatients}
               formatter={formatter}
               prefix={<UserOutlined style={{ color: '#3B82F6' }} />}
@@ -134,7 +134,7 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card bordered={false} className="shadow-sm">
             <Statistic
-              title="Tổng bác sĩ"
+              title={t('admin:dashboard.stats.doctors')}
               value={stats.totalDoctors}
               formatter={formatter}
               prefix={<TeamOutlined style={{ color: '#10B981' }} />}
@@ -144,7 +144,7 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card bordered={false} className="shadow-sm">
             <Statistic
-              title="Tổng trung tâm"
+              title={t('admin:dashboard.stats.centers')}
               value={stats.totalCenters}
               formatter={formatter}
               prefix={<MedicineBoxOutlined style={{ color: '#F59E0B' }} />}
@@ -154,7 +154,7 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card bordered={false} className="shadow-sm">
             <Statistic
-              title="Loại Vaccine"
+              title={t('admin:dashboard.stats.vaccines')}
               value={stats.totalVaccines}
               formatter={formatter}
               prefix={<MedicineBoxOutlined style={{ color: '#8B5CF6' }} />}
@@ -168,21 +168,21 @@ const DashboardPage = () => {
         <Col xs={24} sm={8}>
           <Card bordered={false} className="shadow-sm bg-yellow-50">
             <Statistic
-              title="Lịch hẹn chờ xử lý"
+              title={t('admin:dashboard.appointments.pending')}
               value={stats.pendingAppointments}
               formatter={formatter}
               prefix={<ClockCircleOutlined style={{ color: '#F59E0B' }} />}
               valueStyle={{ color: '#F59E0B' }}
             />
             <Text type="secondary" className="text-xs">
-              Cần phân công bác sĩ
+              {t('admin:dashboard.appointments.pendingDesc')}
             </Text>
           </Card>
         </Col>
         <Col xs={24} sm={8}>
           <Card bordered={false} className="shadow-sm bg-green-50">
             <Statistic
-              title="Lịch hẹn đã hoàn thành"
+              title={t('admin:dashboard.appointments.completed')}
               value={stats.completedAppointments}
               formatter={formatter}
               prefix={<CheckCircleOutlined style={{ color: '#10B981' }} />}
@@ -193,7 +193,7 @@ const DashboardPage = () => {
         <Col xs={24} sm={8}>
           <Card bordered={false} className="shadow-sm bg-red-50">
             <Statistic
-              title="Lịch hẹn đã hủy"
+              title={t('admin:dashboard.appointments.cancelled')}
               value={stats.cancelledAppointments}
               formatter={formatter}
               prefix={<CloseCircleOutlined style={{ color: '#EF4444' }} />}
@@ -206,7 +206,11 @@ const DashboardPage = () => {
       {}
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
-          <Card title="Xu hướng đặt lịch (30 ngày qua)" bordered={false} className="shadow-sm">
+          <Card
+            title={t('admin:dashboard.charts.bookingTrend')}
+            bordered={false}
+            className="shadow-sm"
+          >
             <div style={{ height: 350 }}>
               <Line
                 data={vaccinationRateData}
@@ -232,7 +236,11 @@ const DashboardPage = () => {
           </Card>
         </Col>
         <Col xs={24} lg={8}>
-          <Card title="Phân bố Vaccine (Theo quốc gia)" bordered={false} className="shadow-sm">
+          <Card
+            title={t('admin:dashboard.charts.vaccineDistribution')}
+            bordered={false}
+            className="shadow-sm"
+          >
             <div style={{ height: 350, display: 'flex', justifyContent: 'center' }}>
               <Doughnut
                 data={vaccineDistributionData}

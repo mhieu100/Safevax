@@ -40,6 +40,8 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { formatTimeSlot } from '@/constants';
 import { callGetTodayAppointments } from '@/services/appointment.service';
 import dashboardService from '@/services/dashboard.service';
 import { useAccountStore } from '@/stores/useAccountStore';
@@ -47,8 +49,10 @@ import { formatAppointmentTime } from '@/utils/appointment';
 import CompletionModal from '../dashboard/components/CompletionModal';
 
 const { Title, Text } = Typography;
+// Force HMR
 
 const DoctorDashboard = () => {
+  const { t } = useTranslation(['staff']);
   const user = useAccountStore((state) => state.user);
   const [viewMode, setViewMode] = useState('timeline');
   const [detailModalOpen, setDetailModalOpen] = useState(false);
@@ -78,7 +82,7 @@ const DoctorDashboard = () => {
         setStats(statsRes);
       }
     } catch (_err) {
-      message.error('Không thể tải dữ liệu dashboard');
+      message.error(t('staff:dashboard.error.load'));
     } finally {
       setLoading(false);
     }
@@ -122,26 +126,31 @@ const DoctorDashboard = () => {
     const configs = {
       COMPLETED: {
         color: 'success',
-        text: 'Hoàn thành',
+        text: t('staff:dashboard.doctor.status.completed'),
         icon: <CheckCircleOutlined />,
         tagColor: 'green',
       },
       IN_PROGRESS: {
         color: 'processing',
-        text: 'Đang tiêm',
+        text: t('staff:dashboard.doctor.status.inProgress'),
         icon: <PlayCircleOutlined />,
         tagColor: 'blue',
       },
       SCHEDULED: {
         color: 'default',
-        text: 'Chờ tiêm',
+        text: t('staff:dashboard.doctor.status.scheduled'),
         icon: <ClockCircleOutlined />,
         tagColor: 'default',
       },
-      CANCELLED: { color: 'error', text: 'Đã hủy', icon: <CloseCircleOutlined />, tagColor: 'red' },
+      CANCELLED: {
+        color: 'error',
+        text: t('staff:dashboard.doctor.status.cancelled'),
+        icon: <CloseCircleOutlined />,
+        tagColor: 'red',
+      },
       RESCHEDULE: {
         color: 'warning',
-        text: 'Chờ duyệt',
+        text: t('staff:dashboard.doctor.status.pendingApproval'),
         icon: <ClockCircleOutlined />,
         tagColor: 'orange',
       },
@@ -156,7 +165,7 @@ const DoctorDashboard = () => {
     phone: apt.patientPhone || 'N/A',
     vaccine: apt.vaccineName,
     vaccineColor: 'blue',
-    notes: apt.notes || 'Không có ghi chú',
+    notes: apt.notes || t('staff:dashboard.doctor.modal.notesDefault'),
     status: apt.appointmentStatus,
     urgent: apt.appointmentStatus === 'RESCHEDULE' || false,
     doseNumber: apt.doseNumber,
@@ -170,11 +179,12 @@ const DoctorDashboard = () => {
 
   const handleStartAppointment = (appointment) => {
     Modal.confirm({
-      title: 'Bắt đầu tiêm chủng',
-      content: `Xác nhận bắt đầu tiêm cho bệnh nhân ${appointment.patient}?`,
-      okText: 'Bắt đầu',
-      cancelText: 'Hủy',
-      onOk: () => message.success(`Đã bắt đầu lịch hẹn ${appointment.id}`),
+      title: t('staff:dashboard.doctor.modal.startVaccination'),
+      content: t('staff:dashboard.doctor.modal.confirmStart', { name: appointment.patient }),
+      okText: t('staff:dashboard.doctor.modal.okStart'),
+      cancelText: t('staff:dashboard.doctor.modal.cancel'),
+      onOk: () =>
+        message.success(t('staff:dashboard.doctor.modal.startedSuccess', { id: appointment.id })),
     });
   };
 
@@ -262,10 +272,10 @@ const DoctorDashboard = () => {
         <Row justify="space-between" align="middle">
           <Col>
             <Title level={2} style={{ margin: 0 }}>
-              Xin chào, BS. {user?.fullName} 👋
+              {t('staff:dashboard.doctor.greeting', { name: user?.fullName })}
             </Title>
             <Text type="secondary">
-              Chúc bạn một ngày làm việc hiệu quả. Hôm nay có {todayAppointments.length} lịch hẹn.
+              {t('staff:dashboard.doctor.greetingSub', { count: todayAppointments.length })}
             </Text>
           </Col>
           <Col>
@@ -277,7 +287,7 @@ const DoctorDashboard = () => {
                 </Space>
               </Card>
               <Button icon={<ClockCircleOutlined />} onClick={fetchData} loading={loading}>
-                Làm mới
+                {t('staff:dashboard.refresh')}
               </Button>
             </Space>
           </Col>
@@ -289,10 +299,10 @@ const DoctorDashboard = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable style={{ borderRadius: 12 }}>
             <Statistic
-              title="Lịch Hôm Nay"
+              title={t('staff:dashboard.doctor.todaySchedule')}
               value={stats?.todayAppointments || 0}
               prefix={<TeamOutlined style={{ color: '#1890ff' }} />}
-              suffix="bệnh nhân"
+              suffix={t('staff:dashboard.doctor.patients')}
               valueStyle={{ color: '#1890ff' }}
             />
             <Progress
@@ -307,7 +317,10 @@ const DoctorDashboard = () => {
               style={{ marginTop: 8 }}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
-              Đã hoàn thành {completedCount}/{todayAppointments.length}
+              {t('staff:dashboard.doctor.completedRatio', {
+                completed: completedCount,
+                total: todayAppointments.length,
+              })}
             </Text>
           </Card>
         </Col>
@@ -315,15 +328,15 @@ const DoctorDashboard = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable style={{ borderRadius: 12 }}>
             <Statistic
-              title="Tuần Này"
+              title={t('staff:dashboard.doctor.thisWeek')}
               value={stats?.weekAppointments || 0}
               prefix={<CalendarOutlined style={{ color: '#722ed1' }} />}
-              suffix="lịch hẹn"
+              suffix={t('staff:dashboard.stats.today.suffix')}
               valueStyle={{ color: '#722ed1' }}
             />
             <div style={{ marginTop: 16 }}>
               <Text type="secondary" style={{ fontSize: 12 }}>
-                <TrophyOutlined /> Hiệu suất ổn định
+                <TrophyOutlined /> {t('staff:dashboard.doctor.stablePerformance')}
               </Text>
             </div>
           </Card>
@@ -332,15 +345,16 @@ const DoctorDashboard = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable style={{ borderRadius: 12 }}>
             <Statistic
-              title="Đã Hoàn Thành"
+              title={t('staff:dashboard.doctor.completedMonth')}
               value={stats?.monthCompleted || 0}
               prefix={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
-              suffix="trong tháng"
+              suffix={t('staff:dashboard.doctor.inMonth')}
               valueStyle={{ color: '#52c41a' }}
             />
             <div style={{ marginTop: 16 }}>
               <Text type="secondary" style={{ fontSize: 12 }}>
-                <StarFilled style={{ color: '#faad14' }} /> Đánh giá: {stats?.rating || 4.8}/5.0
+                <StarFilled style={{ color: '#faad14' }} />{' '}
+                {t('staff:dashboard.doctor.rating', { rating: stats?.rating || 4.8 })}
               </Text>
             </div>
           </Card>
@@ -349,8 +363,12 @@ const DoctorDashboard = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable style={{ borderRadius: 12 }}>
             <Statistic
-              title="Lịch Tiếp Theo"
-              value={stats?.nextAppointment?.time || '--:--'}
+              title={t('staff:dashboard.doctor.nextSchedule')}
+              value={
+                stats?.nextAppointment?.actualScheduledTime
+                  ? stats.nextAppointment.actualScheduledTime.substring(0, 5)
+                  : formatTimeSlot(stats?.nextAppointment?.time) || '--:--'
+              }
               prefix={<BellOutlined style={{ color: '#faad14' }} />}
               valueStyle={{ color: '#faad14' }}
             />
@@ -365,7 +383,7 @@ const DoctorDashboard = () => {
               <Text type="secondary" style={{ fontSize: 12 }}>
                 {stats?.nextAppointment
                   ? `${stats.nextAppointment.patientName}`
-                  : 'Không có lịch sắp tới'}
+                  : t('staff:dashboard.doctor.noUpcoming')}
               </Text>
             </div>
           </Card>
@@ -380,9 +398,13 @@ const DoctorDashboard = () => {
               <Space>
                 <ClockCircleOutlined style={{ color: '#1890ff' }} />
                 <Text strong style={{ fontSize: 16 }}>
-                  Lịch Trình Hôm Nay
+                  {t('staff:dashboard.doctor.todaysTimeline')}
                 </Text>
-                <Tag color="blue">{todayAppointments.length} lịch</Tag>
+                <Tag color="blue">
+                  {t('staff:dashboard.doctor.appointmentsCount', {
+                    count: todayAppointments.length,
+                  })}
+                </Tag>
               </Space>
             }
             extra={
@@ -390,8 +412,16 @@ const DoctorDashboard = () => {
                 value={viewMode}
                 onChange={setViewMode}
                 options={[
-                  { label: 'Timeline', value: 'timeline', icon: <ClockCircleOutlined /> },
-                  { label: 'Lưới', value: 'grid', icon: <CalendarTwoTone /> },
+                  {
+                    label: t('staff:dashboard.doctor.viewMode.timeline'),
+                    value: 'timeline',
+                    icon: <ClockCircleOutlined />,
+                  },
+                  {
+                    label: t('staff:dashboard.doctor.viewMode.grid'),
+                    value: 'grid',
+                    icon: <CalendarTwoTone />,
+                  },
                 ]}
               />
             }
@@ -404,7 +434,7 @@ const DoctorDashboard = () => {
             ) : todayAppointments.length === 0 ? (
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description="Không có lịch hẹn nào hôm nay"
+                description={t('staff:dashboard.doctor.noAppointments')}
               />
             ) : viewMode === 'timeline' ? (
               <div style={{ padding: '0 12px' }}>
@@ -427,11 +457,14 @@ const DoctorDashboard = () => {
                           borderRadius: 8,
                         }}
                         actions={[
-                          <Tooltip key="view" title="Xem chi tiết">
+                          <Tooltip
+                            key="view"
+                            title={t('staff:dashboard.urgentList.actions.detail')}
+                          >
                             <EyeOutlined onClick={() => handleViewAppointment(appointment)} />
                           </Tooltip>,
                           appointment.status === 'SCHEDULED' && (
-                            <Tooltip key="start" title="Bắt đầu">
+                            <Tooltip key="start" title={t('staff:dashboard.doctor.modal.startInt')}>
                               <PlayCircleOutlined
                                 key="start"
                                 style={{ color: '#1890ff' }}
@@ -440,7 +473,10 @@ const DoctorDashboard = () => {
                             </Tooltip>
                           ),
                           appointment.status === 'IN_PROGRESS' && (
-                            <Tooltip key="complete" title="Hoàn thành">
+                            <Tooltip
+                              key="complete"
+                              title={t('staff:dashboard.doctor.modal.completeInt')}
+                            >
                               <CheckCircleOutlined
                                 key="complete"
                                 style={{ color: '#52c41a' }}
@@ -495,7 +531,7 @@ const DoctorDashboard = () => {
             title={
               <Space>
                 <TrophyOutlined style={{ color: '#722ed1' }} />
-                <Text strong>Tổng Quan Tuần</Text>
+                <Text strong>{t('staff:dashboard.doctor.weeklyOverview')}</Text>
               </Space>
             }
             style={{ borderRadius: 12, marginBottom: 24 }}
@@ -503,7 +539,7 @@ const DoctorDashboard = () => {
             <Space direction="vertical" size="large" style={{ width: '100%' }}>
               <div>
                 <Row justify="space-between" style={{ marginBottom: 4 }}>
-                  <Text>Hoàn thành</Text>
+                  <Text>{t('staff:dashboard.doctor.completed')}</Text>
                   <Text strong>
                     {weeklyStats.completed.value}/{weeklyStats.completed.total}
                   </Text>
@@ -512,7 +548,7 @@ const DoctorDashboard = () => {
               </div>
               <div>
                 <Row justify="space-between" style={{ marginBottom: 4 }}>
-                  <Text>Đang xử lý</Text>
+                  <Text>{t('staff:dashboard.doctor.processing')}</Text>
                   <Text strong>
                     {weeklyStats.inProgress.value}/{weeklyStats.inProgress.total}
                   </Text>
@@ -521,7 +557,7 @@ const DoctorDashboard = () => {
               </div>
               <div>
                 <Row justify="space-between" style={{ marginBottom: 4 }}>
-                  <Text>Đã hủy</Text>
+                  <Text>{t('staff:dashboard.doctor.cancelled')}</Text>
                   <Text strong>
                     {weeklyStats.cancelled.value}/{weeklyStats.cancelled.total}
                   </Text>
@@ -536,14 +572,17 @@ const DoctorDashboard = () => {
             title={
               <Space>
                 <StarFilled style={{ color: '#faad14' }} />
-                <Text strong>Ghi Chú Nhanh</Text>
+                <Text strong>{t('staff:dashboard.doctor.quickNotes')}</Text>
               </Space>
             }
             style={{ borderRadius: 12 }}
           >
-            <Empty description="Chưa có ghi chú nào" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            <Empty
+              description={t('staff:dashboard.doctor.noNotes')}
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
             <Button type="dashed" block style={{ marginTop: 16 }}>
-              + Thêm ghi chú
+              {t('staff:dashboard.doctor.addNote')}
             </Button>
           </Card>
         </Col>
@@ -563,7 +602,7 @@ const DoctorDashboard = () => {
           <Space>
             <MedicineBoxOutlined style={{ color: '#1890ff' }} />
             <Text strong style={{ fontSize: 18 }}>
-              Chi Tiết Lịch Hẹn #{selectedAppointment?.id}
+              {t('staff:dashboard.doctor.modal.detailTitle', { id: selectedAppointment?.id })}
             </Text>
           </Space>
         }
@@ -571,7 +610,7 @@ const DoctorDashboard = () => {
         onCancel={() => setDetailModalOpen(false)}
         footer={[
           <Button key="close" onClick={() => setDetailModalOpen(false)}>
-            Đóng
+            {t('staff:dashboard.doctor.modal.close')}
           </Button>,
           selectedAppointment?.status === 'SCHEDULED' && (
             <Button
@@ -583,7 +622,7 @@ const DoctorDashboard = () => {
                 setDetailModalOpen(false);
               }}
             >
-              Bắt đầu tiêm
+              {t('staff:dashboard.doctor.modal.startInt')}
             </Button>
           ),
           (selectedAppointment?.status === 'IN_PROGRESS' ||
@@ -598,7 +637,7 @@ const DoctorDashboard = () => {
                 setDetailModalOpen(false);
               }}
             >
-              Hoàn thành
+              {t('staff:dashboard.doctor.modal.completeInt')}
             </Button>
           ),
         ]}
@@ -608,7 +647,7 @@ const DoctorDashboard = () => {
           <Row gutter={24}>
             <Col span={24}>
               <Descriptions bordered column={1} labelStyle={{ width: '150px', fontWeight: 'bold' }}>
-                <Descriptions.Item label="Thời gian">
+                <Descriptions.Item label={t('staff:dashboard.doctor.modal.time')}>
                   <Tag icon={<ClockCircleOutlined />} color="blue">
                     {selectedAppointment.time}
                   </Tag>
@@ -616,40 +655,44 @@ const DoctorDashboard = () => {
                     {dayjs().format('DD/MM/YYYY')}
                   </Text>
                 </Descriptions.Item>
-                <Descriptions.Item label="Bệnh nhân">
+                <Descriptions.Item label={t('staff:dashboard.doctor.modal.patient')}>
                   <Space>
                     <Avatar icon={<UserOutlined />} />
                     <Text strong>{selectedAppointment.patient}</Text>
                   </Space>
                 </Descriptions.Item>
-                <Descriptions.Item label="Liên hệ">
+                <Descriptions.Item label={t('staff:dashboard.doctor.modal.contact')}>
                   <Space>
                     <PhoneOutlined /> {selectedAppointment.phone}
                   </Space>
                 </Descriptions.Item>
-                <Descriptions.Item label="Vắc-xin">
+                <Descriptions.Item label={t('staff:dashboard.doctor.modal.vaccine')}>
                   <Space direction="vertical">
                     <Tag color="cyan" style={{ fontSize: 14, padding: '4px 8px' }}>
                       {selectedAppointment.vaccine}
                     </Tag>
                     {selectedAppointment.doseNumber && (
-                      <Text type="secondary">Mũi số: {selectedAppointment.doseNumber}</Text>
+                      <Text type="secondary">
+                        {t('staff:dashboard.doctor.modal.dose', {
+                          number: selectedAppointment.doseNumber,
+                        })}
+                      </Text>
                     )}
                   </Space>
                 </Descriptions.Item>
-                <Descriptions.Item label="Trạng thái">
+                <Descriptions.Item label={t('staff:dashboard.doctor.modal.status')}>
                   <Badge
                     status={getStatusConfig(selectedAppointment.status).color}
                     text={getStatusConfig(selectedAppointment.status).text}
                   />
                 </Descriptions.Item>
-                <Descriptions.Item label="Ghi chú">
+                <Descriptions.Item label={t('staff:dashboard.doctor.modal.notes')}>
                   <Text>{selectedAppointment.notes}</Text>
                 </Descriptions.Item>
                 {selectedAppointment.urgent && (
-                  <Descriptions.Item label="Độ ưu tiên">
+                  <Descriptions.Item label={t('staff:dashboard.doctor.modal.priority')}>
                     <Tag color="red" icon={<EnvironmentOutlined />}>
-                      Cần xử lý gấp
+                      {t('staff:dashboard.doctor.modal.urgentAction')}
                     </Tag>
                   </Descriptions.Item>
                 )}

@@ -38,6 +38,7 @@ import { callLogout } from '@/services/auth.service';
 import { useAccountStore } from '@/stores/useAccountStore';
 
 const { Header, Sider, Content } = Layout;
+// Force HMR refresh
 
 const LayoutAdmin = () => {
   const navigate = useNavigate();
@@ -86,71 +87,71 @@ const LayoutAdmin = () => {
     {
       key: '/admin',
       icon: <DashboardOutlined />,
-      label: t('admin:dashboard.title'),
+      label: t('admin:common.menu.dashboard'),
     },
     {
       key: '/admin/appointments',
       icon: <CalendarOutlined />,
-      label: 'Quản lý lịch hẹn',
+      label: t('admin:common.menu.appointments'),
     },
     {
       key: '/admin/orders',
       icon: <ShoppingOutlined />,
-      label: 'Quản lý đơn hàng',
+      label: t('admin:common.menu.orders'),
     },
     {
       key: 'user-management',
       icon: <TeamOutlined />,
-      label: 'Quản lý người dùng',
+      label: t('admin:common.menu.userManagement'),
       children: [
         {
           key: '/admin/patients',
-          label: 'Bệnh nhân',
+          label: t('admin:common.menu.patients'),
         },
         {
           key: '/admin/cashiers',
-          label: 'Thu ngân',
+          label: t('admin:common.menu.cashiers'),
         },
         {
           key: '/admin/doctors',
-          label: 'Bác sĩ',
+          label: t('admin:common.menu.doctors'),
         },
       ],
     },
     {
       key: '/admin/vaccines',
       icon: <MedicineBoxOutlined />,
-      label: t('admin:vaccines.title'),
+      label: t('admin:common.menu.vaccines'),
     },
     {
       key: '/admin/centers',
       icon: <BankOutlined />,
-      label: t('admin:centers.title'),
+      label: t('admin:common.menu.centers'),
     },
     {
       key: '/admin/permissions',
       icon: <SafetyOutlined />,
-      label: t('admin:permissions.title'),
+      label: t('admin:common.menu.permissions'),
     },
     {
       key: '/admin/news',
       icon: <NotificationOutlined />,
-      label: t('admin:news.title'),
+      label: t('admin:common.menu.news'),
     },
     {
       key: '/admin/roles',
       icon: <KeyOutlined />,
-      label: t('admin:roles.title'),
+      label: t('admin:common.menu.roles'),
     },
     {
       key: '/admin/ai-knowledge',
       icon: <RobotOutlined />,
-      label: 'AI Knowledge',
+      label: t('admin:common.menu.aiKnowledge'),
     },
     {
       key: '/admin/monitor',
       icon: <SafetyCertificateFilled />,
-      label: 'Blockchain Monitor',
+      label: t('admin:common.menu.monitor'),
     },
   ];
 
@@ -195,7 +196,7 @@ const LayoutAdmin = () => {
                     VaxSafe
                   </span>
                   <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">
-                    Admin Portal
+                    {t('admin:common.header.subtitle')}
                   </span>
                 </div>
               )}
@@ -280,7 +281,7 @@ const LayoutAdmin = () => {
             <div className="hidden md:block w-64">
               <Input
                 prefix={<SearchOutlined className="text-slate-400" />}
-                placeholder="Search..."
+                placeholder={t('admin:common.header.searchPlaceholder')}
                 className="rounded-xl border-slate-200 bg-slate-50 hover:bg-white focus:bg-white transition-all py-2"
                 bordered={false}
               />
@@ -289,7 +290,7 @@ const LayoutAdmin = () => {
 
           {}
           <Space size={20}>
-            <Tooltip title="Notifications">
+            <Tooltip title={t('admin:common.header.notifications')}>
               <Button
                 type="text"
                 icon={<BellOutlined className="text-xl text-slate-600" />}

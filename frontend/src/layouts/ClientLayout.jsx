@@ -7,7 +7,14 @@ import useCartStore from '@/stores/useCartStore';
 import Footer from './client/ClientFooter';
 import Navbar from './client/ClientHeader';
 
-const NO_FOOTER_ROUTES = ['/success', '/cancel', '/profile', '/appointments', '/cart', '/wallet'];
+const NO_FOOTER_ROUTES = [
+  '/success',
+  '/cancel',
+  '/profile',
+  '/appointments',
+  '/cart',
+  '/vaccine-passport',
+];
 
 const LayoutClient = () => {
   const location = useLocation();

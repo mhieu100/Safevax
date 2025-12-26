@@ -94,6 +94,8 @@ public class AppointmentService {
                                 response.setPaymentMethod(
                                         payment.getMethod() != null ? payment.getMethod().name() : null);
                                 response.setPaymentAmount(payment.getAmount());
+                                response.setPaymentCurrency(
+                                        payment.getCurrency() != null ? payment.getCurrency() : "VND");
                             });
                     return response;
                 })
@@ -128,6 +130,8 @@ public class AppointmentService {
                                 response.setPaymentMethod(
                                         payment.getMethod() != null ? payment.getMethod().name() : null);
                                 response.setPaymentAmount(payment.getAmount());
+                                response.setPaymentCurrency(
+                                        payment.getCurrency() != null ? payment.getCurrency() : "VND");
                             });
                     return response;
                 })
@@ -159,6 +163,8 @@ public class AppointmentService {
                                 response.setPaymentMethod(
                                         payment.getMethod() != null ? payment.getMethod().name() : null);
                                 response.setPaymentAmount(payment.getAmount());
+                                response.setPaymentCurrency(
+                                        payment.getCurrency() != null ? payment.getCurrency() : "VND");
                             });
                     return response;
                 })
@@ -179,6 +185,7 @@ public class AppointmentService {
                     response.setPaymentStatus(payment.getStatus() != null ? payment.getStatus().name() : null);
                     response.setPaymentMethod(payment.getMethod() != null ? payment.getMethod().name() : null);
                     response.setPaymentAmount(payment.getAmount());
+                    response.setPaymentCurrency(payment.getCurrency() != null ? payment.getCurrency() : "VND");
                 });
 
         return response;
@@ -327,6 +334,7 @@ public class AppointmentService {
                     response.setPaymentStatus(payment.getStatus() != null ? payment.getStatus().name() : null);
                     response.setPaymentMethod(payment.getMethod() != null ? payment.getMethod().name() : null);
                     response.setPaymentAmount(payment.getAmount());
+                    response.setPaymentCurrency(payment.getCurrency() != null ? payment.getCurrency() : "VND");
                 });
         return response;
     }

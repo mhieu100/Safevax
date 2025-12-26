@@ -165,13 +165,13 @@ const ChatBot = () => {
   }, []);
 
   return (
-    <div id="tour-chatbot" className="fixed bottom-6 right-6 z-[2000] flex flex-col items-end">
+    <div id="tour-chatbot" className="fixed bottom-6 right-6 z-[10000] flex flex-col items-end">
       {}
       {isOpen && (
         <div
           className={`${
             isExpanded
-              ? 'fixed inset-0 z-[2010] w-full h-full rounded-none m-0'
+              ? 'fixed inset-0 z-[10010] w-full h-full rounded-none m-0'
               : 'mb-4 w-[350px] sm:w-[400px] h-[500px] rounded-2xl border border-slate-100'
           } bg-white shadow-2xl flex flex-col overflow-hidden animate-fade-in-up transition-all duration-300 ease-in-out`}
         >

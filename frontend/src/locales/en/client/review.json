@@ -1,0 +1,18 @@
+{
+  "title": "Review & Confirm",
+  "subtitle": "Please review your booking details before confirming",
+  "vaccineInformation": "Vaccine Information",
+  "appointmentDetails": "Appointment Details",
+  "dateTime": "Date & Time",
+  "location": "Location",
+  "patient": "Patient",
+  "unknownCenter": "Unknown Center",
+  "selfBooking": "Self Booking",
+  "familyBooking": "Family Booking",
+  "termsOfService": "Terms of Service",
+  "privacyPolicy": "Privacy Policy",
+  "iAgreeTo": "I agree to the",
+  "totalAmount": "Total Amount",
+  "firstDose": "x 1 (First Dose)",
+  "blockchainVerified": "Blockchain Verified Transaction"
+}

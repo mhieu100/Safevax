@@ -1,4 +1,8 @@
 {
+  "chooseMethod": "Choose Payment Method",
+  "chooseMethodDesc": "Select how you would like to pay for your vaccination",
+  "back": "Back",
+  "reviewBooking": "Review Booking",
   "success": {
     "title": "Payment Successful!",
     "loading": "Loading information...",

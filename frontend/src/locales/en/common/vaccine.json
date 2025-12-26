@@ -71,5 +71,30 @@
   "totalEstimate": "Total Estimate",
   "storageRequirements": "Storage Requirements",
   "contraindication": "Contraindication",
-  "contraindicationsTab": "Contraindications"
+  "contraindicationsTab": "Contraindications",
+  "searchPlaceholder": "Search...",
+  "disease": "Disease",
+  "targetGroup": "Target Group",
+  "age": "Age",
+  "originCountry": "Origin Country",
+  "months": "Months",
+  "years": "Years",
+  "selectDiseases": "Select diseases",
+  "selectTargets": "Select targets",
+  "selectDoses": "Select doses",
+  "selectCountries": "Select countries",
+  "targetGroups": {
+    "INFANT": "Infant",
+    "CHILD": "Child",
+    "TEEN": "Teenager",
+    "ADULT": "Adult",
+    "ELDERLY": "Elderly",
+    "PREGNANT": "Pregnant Women",
+    "TRAVEL": "Travel",
+    "ALL": "All",
+    "NEWBORN": "Newborn",
+    "SCHOOL_AGE": "School Age",
+    "ADULT_ROUTINE": "Adult Routine",
+    "ELDERLY_CARE": "Elderly Care"
+  }
 }

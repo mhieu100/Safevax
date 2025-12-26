@@ -1,4 +1,8 @@
 {
+  "chooseMethod": "Chọn phương thức thanh toán",
+  "chooseMethodDesc": "Chọn cách bạn muốn thanh toán cho việc tiêm chủng",
+  "back": "Quay lại",
+  "reviewBooking": "Xem lại đặt lịch",
   "success": {
     "title": "Thanh toán thành công!",
     "loading": "Đang tải thông tin...",

@@ -17,6 +17,7 @@ public class TransactionResultResponse {
     private Double amount;
     private String transactionId;
     private String method;
+    private String currency;
 
     // Booking info
     private String vaccineName;

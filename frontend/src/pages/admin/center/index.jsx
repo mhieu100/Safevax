@@ -2,6 +2,7 @@ import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, message, notification, Popconfirm, Space } from 'antd';
 import queryString from 'query-string';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { sfLike } from 'spring-filter-query-builder';
 import DataTable from '@/components/data-table';
 import { callDeleteCenter } from '@/services/center.service';
@@ -9,6 +10,7 @@ import { useCenterStore } from '@/stores/useCenterStore';
 import ModalCenter from './components/CenterModal';
 
 const CenterPage = () => {
+  const { t } = useTranslation(['admin']);
   const tableRef = useRef();
 
   const reloadTable = () => {
@@ -26,11 +28,11 @@ const CenterPage = () => {
   const handleDeleteCompany = async (id) => {
     if (id) {
       const res = await callDeleteCenter(id);
-      message.success('Xóa cơ sở tiêm chủng thành công');
+      message.success(t('admin:centers.deleteSuccess'));
       reloadTable();
       if (res) {
         notification.error({
-          message: 'Đã xảy ra lỗi',
+          message: t('admin:centers.error'),
           description: res.message,
         });
       }
@@ -39,7 +41,7 @@ const CenterPage = () => {
 
   const columns = [
     {
-      title: 'STT',
+      title: t('admin:centers.stt'),
       key: 'index',
       width: 50,
       align: 'center',
@@ -49,7 +51,7 @@ const CenterPage = () => {
       hideInSearch: true,
     },
     {
-      title: 'Hình ảnh',
+      title: t('admin:centers.image'),
       dataIndex: 'image',
       hideInSearch: true,
       render: (text) => (
@@ -66,33 +68,33 @@ const CenterPage = () => {
       ),
     },
     {
-      title: 'Tên cơ sở',
+      title: t('admin:centers.centerName'),
       dataIndex: 'name',
       sorter: true,
     },
     {
-      title: 'Địa chỉ',
+      title: t('admin:centers.address'),
       dataIndex: 'address',
       sorter: true,
     },
     {
-      title: 'Số điện thoại',
+      title: t('admin:centers.phone'),
       dataIndex: 'phoneNumber',
       hideInSearch: true,
     },
     {
-      title: 'Sức chứa',
+      title: t('admin:centers.capacity'),
       dataIndex: 'capacity',
       hideInSearch: true,
       sorter: true,
     },
     {
-      title: 'Giờ làm việc',
+      title: t('admin:centers.workingHours'),
       hideInSearch: true,
       dataIndex: 'workingHours',
     },
     {
-      title: 'Thao tác',
+      title: t('admin:centers.actions'),
       hideInSearch: true,
       width: 50,
       render: (_value, entity) => (
@@ -110,11 +112,11 @@ const CenterPage = () => {
 
           <Popconfirm
             placement="leftTop"
-            title="Xác nhận xóa cơ sở"
-            description="Bạn có chắc chắn muốn xóa cơ sở tiêm chủng này?"
+            title={t('admin:centers.confirmDeleteTitle')}
+            description={t('admin:centers.confirmDelete')}
             onConfirm={() => handleDeleteCompany(entity.centerId)}
-            okText="Xác nhận"
-            cancelText="Hủy"
+            okText={t('common:modal.confirm')}
+            cancelText={t('common:modal.cancel')}
           >
             <span style={{ cursor: 'pointer', margin: '0 10px' }}>
               <DeleteOutlined
@@ -169,7 +171,7 @@ const CenterPage = () => {
     <>
       <DataTable
         actionRef={tableRef}
-        headerTitle="Danh sách cơ sở tiêm chủng"
+        headerTitle={t('admin:centers.centerList')}
         rowKey="centerId"
         loading={isFetching}
         columns={columns}
@@ -187,7 +189,11 @@ const CenterPage = () => {
           showTotal: (total, range) => {
             return (
               <div>
-                {range[0]}-{range[1]} trên tổng số {total} dòng
+                {t('admin:centers.pagination', {
+                  range0: range[0],
+                  range1: range[1],
+                  total: total,
+                })}
               </div>
             );
           },
@@ -196,7 +202,7 @@ const CenterPage = () => {
         toolBarRender={() => {
           return (
             <Button icon={<PlusOutlined />} type="primary" onClick={() => setOpenModal(true)}>
-              Thêm mới
+              {t('admin:centers.addCenter')}
             </Button>
           );
         }}

@@ -1,9 +1,12 @@
 import {
   DollarOutlined,
+  ExperimentOutlined,
   FilterOutlined,
   GlobalOutlined,
+  MedicineBoxOutlined,
   SearchOutlined,
   SortAscendingOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
 import { Button, Input, Select, Slider } from 'antd';
 
@@ -11,14 +14,36 @@ import debounce from 'lodash/debounce';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MAX_PRICE, MIN_PRICE } from '@/constants';
-import { callGetAllCountries } from '@/services/vaccine.service';
+
+import {
+  callGetAllCountries,
+  callGetAllDiseases,
+  callGetAllDosesRequired,
+  callGetAllTargetGroups,
+} from '@/services/vaccine.service';
 import { formatPrice } from '@/utils/formatPrice';
 
 const { Option } = Select;
 
-const LeftFilterSection = ({ setPriceRange, country, setCountry, sortBy, setSortBy, onSearch }) => {
+const LeftFilterSection = ({
+  setPriceRange,
+  country,
+  setCountry,
+  sortBy,
+  setSortBy,
+  onSearch,
+  doses,
+  setDoses,
+  disease,
+  setDisease,
+  target,
+  setTarget,
+}) => {
   const { t } = useTranslation();
   const [countries, setCountries] = useState([]);
+  const [dosesList, setDosesList] = useState([]);
+  const [diseasesList, setDiseasesList] = useState([]);
+  const [targetGroupsList, setTargetGroupsList] = useState([]);
   const [sliderRange, setSliderRange] = useState([MIN_PRICE, MAX_PRICE]);
   const [searchValue, setSearchValue] = useState('');
 
@@ -26,14 +51,33 @@ const LeftFilterSection = ({ setPriceRange, country, setCountry, sortBy, setSort
     setCountry(value);
   };
 
+  const handleDiseaseChange = (value) => {
+    setDisease(value);
+  };
+
+  const handleTargetChange = (value) => {
+    setTarget(value);
+  };
+
+  const handleDosesChange = (value) => {
+    setDoses(value);
+  };
+
   useEffect(() => {
-    const handleFetchCountries = async () => {
-      const response = await callGetAllCountries();
-      if (response?.data) {
-        setCountries(response.data);
-      }
+    const fetchFilters = async () => {
+      const [countriesRes, dosesRes, diseasesRes, targetsRes] = await Promise.all([
+        callGetAllCountries(),
+        callGetAllDosesRequired(),
+        callGetAllDiseases(),
+        callGetAllTargetGroups(),
+      ]);
+
+      if (countriesRes?.data) setCountries(countriesRes.data);
+      if (dosesRes?.data) setDosesList(dosesRes.data.sort((a, b) => a - b));
+      if (diseasesRes?.data) setDiseasesList(diseasesRes.data);
+      if (targetsRes?.data) setTargetGroupsList(targetsRes.data);
     };
-    handleFetchCountries();
+    fetchFilters();
   }, []);
 
   const handleSortChange = (value) => {
@@ -68,6 +112,11 @@ const LeftFilterSection = ({ setPriceRange, country, setCountry, sortBy, setSort
   const clearAllFilters = () => {
     setSortBy(null);
     setCountry([]);
+    setDisease([]);
+    setTarget([]);
+    setDoses([]);
+    setTarget([]);
+    setDoses([]);
     setPriceRange([MIN_PRICE, MAX_PRICE]);
     setSliderRange([MIN_PRICE, MAX_PRICE]);
     setSearchValue('');
@@ -82,6 +131,11 @@ const LeftFilterSection = ({ setPriceRange, country, setCountry, sortBy, setSort
             <FilterOutlined className="text-blue-600" /> {t('vaccine.filters')}
           </h3>
           {(country.length > 0 ||
+            disease?.length > 0 ||
+            target?.length > 0 ||
+            doses?.length > 0 ||
+            target?.length > 0 ||
+            doses?.length > 0 ||
             sortBy ||
             sliderRange[0] !== MIN_PRICE ||
             sliderRange[1] !== MAX_PRICE) && (
@@ -91,7 +145,7 @@ const LeftFilterSection = ({ setPriceRange, country, setCountry, sortBy, setSort
               onClick={clearAllFilters}
               className="text-xs text-red-500 hover:text-red-600 hover:bg-red-50"
             >
-              Reset
+              {t('vaccine.clearAll')}
             </Button>
           )}
         </div>
@@ -99,7 +153,7 @@ const LeftFilterSection = ({ setPriceRange, country, setCountry, sortBy, setSort
         {/* Search */}
         <div className="mb-8">
           <Input
-            placeholder={t('vaccine.searchPlaceholder', 'Search...')}
+            placeholder={t('vaccine.searchPlaceholder')}
             prefix={<SearchOutlined className="text-slate-400" />}
             onChange={handleSearchChange}
             value={searchValue}
@@ -112,7 +166,7 @@ const LeftFilterSection = ({ setPriceRange, country, setCountry, sortBy, setSort
         {/* Sort By */}
         <div className="mb-8">
           <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 block">
-            Sort By
+            {t('vaccine.sortBy')}
           </label>
           <Select
             placeholder={t('vaccine.sortBy')}
@@ -134,11 +188,11 @@ const LeftFilterSection = ({ setPriceRange, country, setCountry, sortBy, setSort
         {}
         <div className="mb-8">
           <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 block flex items-center gap-2">
-            <GlobalOutlined /> Origin Country
+            <GlobalOutlined /> {t('vaccine.originCountry')}
           </label>
           <Select
             mode="multiple"
-            placeholder="Select countries"
+            placeholder={t('vaccine.selectCountries')}
             allowClear
             style={{ width: '100%' }}
             value={country}
@@ -157,10 +211,81 @@ const LeftFilterSection = ({ setPriceRange, country, setCountry, sortBy, setSort
           </Select>
         </div>
 
+        {/* Disease */}
+        <div className="mb-8">
+          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 block flex items-center gap-2">
+            <ExperimentOutlined /> {t('vaccine.disease')}
+          </label>
+          <Select
+            mode="multiple"
+            placeholder={t('vaccine.selectDiseases')}
+            allowClear
+            style={{ width: '100%' }}
+            value={disease}
+            onChange={handleDiseaseChange}
+            className="custom-select"
+            size="large"
+            maxTagCount="responsive"
+          >
+            {diseasesList.map((d) => (
+              <Option key={d} value={d}>
+                {d}
+              </Option>
+            ))}
+          </Select>
+        </div>
+
+        {/* Target Group */}
+        <div className="mb-8">
+          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 block flex items-center gap-2">
+            <TeamOutlined /> {t('vaccine.targetGroup')}
+          </label>
+          <Select
+            mode="multiple"
+            placeholder={t('vaccine.selectTargets')}
+            allowClear
+            style={{ width: '100%' }}
+            value={target}
+            onChange={handleTargetChange}
+            className="custom-select"
+            size="large"
+            maxTagCount="responsive"
+          >
+            {targetGroupsList.map((tGroup) => (
+              <Option key={tGroup} value={tGroup}>
+                {t(`vaccine.targetGroups.${tGroup}`, tGroup)}
+              </Option>
+            ))}
+          </Select>
+        </div>
+
+        {/* Doses Required */}
+        <div className="mb-8">
+          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 block flex items-center gap-2">
+            <MedicineBoxOutlined /> {t('vaccine.dosesRequired')}
+          </label>
+          <Select
+            mode="multiple"
+            placeholder={t('vaccine.selectDoses')}
+            allowClear
+            style={{ width: '100%' }}
+            value={doses}
+            onChange={handleDosesChange}
+            className="custom-select"
+            size="large"
+          >
+            {dosesList.map((d) => (
+              <Option key={d} value={d}>
+                {d} Dose{d > 1 ? 's' : ''}
+              </Option>
+            ))}
+          </Select>
+        </div>
+
         {}
         <div>
           <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 block flex items-center gap-2">
-            <DollarOutlined /> Price Range
+            <DollarOutlined /> {t('vaccine.priceRange')}
           </label>
           <div className="px-2">
             <Slider

@@ -55,7 +55,6 @@
     "lastUpdated": "Cập nhật lần cuối",
     "verifiedRecords": "Hồ sơ đã xác minh trên Blockchain",
     "provider": "Nhà cung cấp",
-
     "block": "Khối",
     "transactionHash": "Mã giao dịch",
     "digitalVerification": "Xác minh kỹ thuật số",
@@ -74,10 +73,8 @@
     "lastVaccination": "Lần tiêm cuối",
     "recordsTitle": "Hồ sơ tiêm chủng",
     "recordsSubtitle": "Hồ sơ y tế chính thức được lưu trữ trên blockchain",
-
     "patientIdentityHash": "Mã định danh bệnh nhân",
     "appointmentId": "Mã lịch hẹn",
-
     "ipfsHash": "IPFS Hash",
     "notes": "Ghi chú",
     "noNotes": "Không có ghi chú thêm",
@@ -109,7 +106,14 @@
     "relative": "Người thân",
     "bookNext": "Đặt tiếp",
     "readyToBook": "Sẵn sàng đặt lịch",
-    "needToBook": "Cần đặt lịch"
+    "needToBook": "Cần đặt lịch",
+    "myProtectionStatus": "Trạng thái bảo vệ của tôi",
+    "verified": "Đã xác minh",
+    "completed": "Đã hoàn thành",
+    "recommendation": "Khuyến nghị",
+    "recommendationDesc": "Để đảm bảo bảo vệ đầy đủ, bước tiếp theo được khuyến nghị là:",
+    "bookNow": "Đặt ngay",
+    "verifiedOnBlockchain": "Đã xác minh trên Blockchain"
   },
   "blockchainAppointmentStatus": {
     "UP_TO_DATE": "Hoàn thành",

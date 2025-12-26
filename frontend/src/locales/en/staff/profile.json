@@ -1,0 +1,31 @@
+{
+  "role": {
+    "doctor": "Doctor",
+    "cashier": "Cashier"
+  },
+  "tabs": {
+    "personalInfo": "Personal Information",
+    "statistics": "Statistics",
+    "settings": "Settings"
+  },
+  "info": {
+    "fullName": "Full Name",
+    "email": "Email",
+    "role": "Role",
+    "center": "Center"
+  },
+  "stats": {
+    "todayAppointments": "Today Appointments",
+    "completed": "Completed",
+    "pending": "Pending",
+    "totalPatients": "Total Patients"
+  },
+  "security": {
+    "title": "Security",
+    "changePassword": "Change Password"
+  },
+  "avatar": {
+    "title": "Avatar",
+    "update": "Update Avatar"
+  }
+}

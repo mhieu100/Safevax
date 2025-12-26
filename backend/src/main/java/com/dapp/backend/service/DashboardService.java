@@ -97,15 +97,19 @@ public class DashboardService {
                 double rating = 4.8;
 
                 Appointment nextApt = appointmentRepository
-                                .findFirstByDoctorAndStatusAndScheduledDateGreaterThanEqualOrderByScheduledDateAscScheduledTimeSlotAsc(
+                                .findFirstByDoctorAndStatusAndScheduledDateGreaterThanEqualOrderByScheduledDateAscActualScheduledTimeAscScheduledTimeSlotAsc(
                                                 doctorUser, AppointmentStatus.SCHEDULED, today);
 
                 DoctorDashboardStatsResponse.NextAppointmentInfo nextAptInfo = null;
                 if (nextApt != null) {
-                        nextAptInfo = new DoctorDashboardStatsResponse.NextAppointmentInfo(
-                                        nextApt.getScheduledTimeSlot().toString(),
-                                        nextApt.getPatient().getFullName(),
-                                        nextApt.getVaccine().getName());
+                        nextAptInfo = DoctorDashboardStatsResponse.NextAppointmentInfo.builder()
+                                        .time(nextApt.getScheduledTimeSlot().toString())
+                                        .patientName(nextApt.getPatient().getFullName())
+                                        .vaccineName(nextApt.getVaccine().getName())
+                                        .actualScheduledTime(nextApt.getActualScheduledTime() != null
+                                                        ? nextApt.getActualScheduledTime().toString()
+                                                        : null)
+                                        .build();
                 }
 
                 return DoctorDashboardStatsResponse.builder()

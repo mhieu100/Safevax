@@ -42,7 +42,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
         long countByDoctorAndStatusAndScheduledDateBetween(User doctor, AppointmentStatus status, LocalDate startDate,
                         LocalDate endDate);
 
-        Appointment findFirstByDoctorAndStatusAndScheduledDateGreaterThanEqualOrderByScheduledDateAscScheduledTimeSlotAsc(
+        Appointment findFirstByDoctorAndStatusAndScheduledDateGreaterThanEqualOrderByScheduledDateAscActualScheduledTimeAscScheduledTimeSlotAsc(
                         User doctor, AppointmentStatus status, LocalDate date);
 
         long countByCenterAndStatus(Center center, AppointmentStatus status);

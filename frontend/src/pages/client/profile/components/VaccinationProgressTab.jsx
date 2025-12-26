@@ -64,8 +64,8 @@ const VaccinationProgressTab = () => {
             const apt = appointments.find((a) => (a.doseNumber || 0) === i);
 
             let stepStatus = 'wait';
-            let description = t('client:vaccinationHistory.notScheduled');
-            const title = `${t('client:vaccinationHistory.dose')} ${i}`;
+            let description = t('client:records.vaccinationHistory.notScheduled');
+            const title = `${t('client:records.vaccinationHistory.dose')} ${i}`;
             let date = null;
             let isVerified = false;
 
@@ -85,12 +85,12 @@ const VaccinationProgressTab = () => {
 
               if (apt.appointmentStatus === 'COMPLETED') {
                 stepStatus = 'finish';
-                description = t('client:vaccinationHistory.completed');
+                description = t('client:records.vaccinationHistory.completed');
                 date = apt.vaccinationDate || apt.scheduledDate;
                 if (!route.isFamily) completedDoses++;
               } else if (apt.appointmentStatus !== 'CANCELLED') {
                 stepStatus = 'process';
-                description = t('client:vaccinationHistory.scheduled');
+                description = t('client:records.vaccinationHistory.scheduled');
                 date = apt.scheduledDate;
               }
             } else {
@@ -98,14 +98,14 @@ const VaccinationProgressTab = () => {
 
               if (i === 1 && !apt) {
                 stepStatus = 'wait';
-                description = t('client:progress.readyToBook');
+                description = t('client:records.progress.readyToBook');
                 // Recommendation Logic (Prioritize User's In-Progress)
                 if (!nextVaccine && !route.isFamily && route.status === 'IN_PROGRESS') {
                   // prioritized
                 }
               } else if (prevApt && prevApt.appointmentStatus === 'COMPLETED') {
                 stepStatus = 'wait';
-                description = t('client:progress.needToBook');
+                description = t('client:records.progress.needToBook');
               }
             }
 
@@ -168,15 +168,17 @@ const VaccinationProgressTab = () => {
   return (
     <div className="space-y-6">
       <div className="mb-4">
-        <Title level={4}>{t('client:progress.title')}</Title>
-        <Text type="secondary">{t('client:progress.subtitle')}</Text>
+        <Title level={4}>{t('client:records.progress.title')}</Title>
+        <Text type="secondary">{t('client:records.progress.subtitle')}</Text>
       </div>
 
       {/* My Status Section */}
       <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6">
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
           <div className="flex-1 w-full">
-            <h4 className="text-gray-600 mb-2 font-medium">My Protection Status</h4>
+            <h4 className="text-gray-600 mb-2 font-medium">
+              {t('client:records.progress.myProtectionStatus')}
+            </h4>
             <Progress
               percent={stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}
               strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
@@ -185,11 +187,15 @@ const VaccinationProgressTab = () => {
           <div className="flex gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">{stats.verified}</div>
-              <div className="text-xs text-gray-400 uppercase tracking-wider">Verified</div>
+              <div className="text-xs text-gray-400 uppercase tracking-wider">
+                {t('client:records.progress.verified')}
+              </div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">{stats.completed}</div>
-              <div className="text-xs text-gray-400 uppercase tracking-wider">Completed</div>
+              <div className="text-xs text-gray-400 uppercase tracking-wider">
+                {t('client:records.progress.completed')}
+              </div>
             </div>
           </div>
         </div>
@@ -197,11 +203,15 @@ const VaccinationProgressTab = () => {
 
       {recommendation && (
         <Alert
-          message={<span className="font-semibold text-blue-800">{t('Recommendation')}</span>}
+          message={
+            <span className="font-semibold text-blue-800">
+              {t('client:records.progress.recommendation')}
+            </span>
+          }
           description={
             <div className="flex flex-col gap-2 mt-1">
               <span className="text-blue-700">
-                To ensure full protection, the next recommended step is:
+                {t('client:records.progress.recommendationDesc')}
                 <b>
                   {' '}
                   {recommendation.vaccineName} - Dose {recommendation.doseNumber}
@@ -217,7 +227,7 @@ const VaccinationProgressTab = () => {
                   )
                 }
               >
-                Book Now
+                {t('client:records.progress.bookNow')}
               </Button>
             </div>
           }
@@ -240,11 +250,11 @@ const VaccinationProgressTab = () => {
               <div>
                 <h3 className="text-lg font-bold text-blue-800">{journey.vaccineName}</h3>
                 <div className="text-slate-500 text-sm">
-                  {t('client:progress.patient')}:{' '}
+                  {t('client:records.progress.patient')}:{' '}
                   <span className="font-medium text-slate-700">{journey.patientName}</span>
                   {journey.isFamily && (
                     <Tag color="purple" className="ml-2">
-                      {t('client:progress.relative')}
+                      {t('client:records.progress.relative')}
                     </Tag>
                   )}
                 </div>
@@ -253,11 +263,11 @@ const VaccinationProgressTab = () => {
               {journey.steps.filter((s) => s.status === 'finish').length >=
               journey.requiredDoses ? (
                 <Tag color="green" icon={<CheckCircleFilled />}>
-                  {t('client:vaccinationHistory.completed')}
+                  {t('client:records.vaccinationHistory.completed')}
                 </Tag>
               ) : journey.steps.some((s) => s.status === 'process') ? (
                 <Tag color="blue" icon={<ClockCircleFilled />}>
-                  {t('client:vaccinationHistory.scheduled')}
+                  {t('client:records.vaccinationHistory.scheduled')}
                 </Tag>
               ) : (
                 <Button
@@ -272,7 +282,7 @@ const VaccinationProgressTab = () => {
                     )
                   }
                 >
-                  {t('client:progress.bookNext')}
+                  {t('client:records.progress.bookNext')}
                 </Button>
               )}
             </div>
@@ -288,7 +298,7 @@ const VaccinationProgressTab = () => {
                   <div className="flex items-center gap-1">
                     <span>{step.title}</span>
                     {step.isVerified && (
-                      <Tooltip title="Verified on Blockchain">
+                      <Tooltip title={t('client:records.progress.verifiedOnBlockchain')}>
                         <SafetyCertificateOutlined className="text-emerald-500" />
                       </Tooltip>
                     )}

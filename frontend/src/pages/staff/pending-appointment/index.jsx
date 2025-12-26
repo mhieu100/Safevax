@@ -12,6 +12,7 @@ import { Avatar, Button, Card, Space, Tag, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import queryString from 'query-string';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { sfLike } from 'spring-filter-query-builder';
 import DataTable from '@/components/data-table';
 import { TIME_SLOT_LABELS } from '@/constants';
@@ -30,6 +31,7 @@ import ProcessUrgentAppointmentModal from '../dashboard/components/ProcessUrgent
 const { Text } = Typography;
 
 const PendingAppointmentPage = () => {
+  const { t } = useTranslation(['staff']);
   const tableRef = useRef();
 
   const isFetching = useAppointmentStore((state) => state.isFetching);
@@ -52,7 +54,7 @@ const PendingAppointmentPage = () => {
 
   const columns = [
     {
-      title: 'Mã LH',
+      title: t('staff:appointments.columns.code'),
       dataIndex: 'id',
       width: 100,
       fixed: 'left',
@@ -63,7 +65,7 @@ const PendingAppointmentPage = () => {
       ),
     },
     {
-      title: 'Bệnh Nhân',
+      title: t('staff:appointments.columns.patient'),
       dataIndex: 'patientName',
       width: 200,
       render: (text, record) => (
@@ -74,7 +76,7 @@ const PendingAppointmentPage = () => {
           </Space>
           {record.appointmentStatus === 'RESCHEDULE' && (
             <Tag color="orange" icon={<EditOutlined />} style={{ fontSize: 11 }}>
-              Đổi lịch
+              {t('staff:appointments.tags.editSchedule')}
             </Tag>
           )}
           <Text type="secondary" style={{ fontSize: 12 }}>
@@ -84,13 +86,13 @@ const PendingAppointmentPage = () => {
       ),
     },
     {
-      title: 'Vaccine',
+      title: t('staff:appointments.columns.vaccine'),
       dataIndex: 'vaccineName',
       width: 150,
       render: (text) => <Tag color="blue">{text}</Tag>,
     },
     {
-      title: 'Ngày Đăng Ký',
+      title: t('staff:appointments.columns.registerDate'),
       dataIndex: 'desiredDate',
       width: 160,
       render: (_text, record) => {
@@ -113,7 +115,7 @@ const PendingAppointmentPage = () => {
             )}
             {isUrgent && (
               <Tag color="red" icon={<ClockCircleOutlined />} style={{ fontSize: 11 }}>
-                GẤP
+                {t('staff:appointments.tags.urgent')}
               </Tag>
             )}
           </Space>
@@ -121,7 +123,7 @@ const PendingAppointmentPage = () => {
       },
     },
     {
-      title: 'Ngày Chính Thức',
+      title: t('staff:appointments.columns.officialDate'),
       dataIndex: 'scheduledDate',
       width: 180,
       render: (_text, record) => {
@@ -134,11 +136,12 @@ const PendingAppointmentPage = () => {
           return (
             <Space direction="vertical" size={4}>
               <Text type="secondary" style={{ fontSize: 12, fontStyle: 'italic' }}>
-                Chờ xếp lịch...
+                {t('staff:appointments.tags.waitingSchedule')}
               </Text>
               {isReschedule && record.rescheduledAt && (
                 <Text type="warning" style={{ fontSize: 11 }}>
-                  Đổi lúc: {dayjs(record.rescheduledAt).format('DD/MM HH:mm')}
+                  {t('staff:appointments.tags.rescheduledAt')}{' '}
+                  {dayjs(record.rescheduledAt).format('DD/MM HH:mm')}
                 </Text>
               )}
             </Space>
@@ -155,12 +158,13 @@ const PendingAppointmentPage = () => {
             </Space>
             {actualTime && (
               <Text strong style={{ fontSize: 12, color: '#52c41a' }}>
-                Giờ chính thức: {actualTime.substring(0, 5)}
+                {t('staff:appointments.tags.officialTime')} {actualTime.substring(0, 5)}
               </Text>
             )}
             {isReschedule && record.rescheduledAt && (
               <Text type="warning" style={{ fontSize: 11 }}>
-                Đổi lúc: {dayjs(record.rescheduledAt).format('DD/MM HH:mm')}
+                {t('staff:appointments.tags.rescheduledAt')}{' '}
+                {dayjs(record.rescheduledAt).format('DD/MM HH:mm')}
               </Text>
             )}
           </Space>
@@ -168,7 +172,7 @@ const PendingAppointmentPage = () => {
       },
     },
     {
-      title: 'Trung Tâm / Bác Sĩ',
+      title: t('staff:appointments.columns.centerDoctor'),
       dataIndex: 'centerName',
       width: 220,
       render: (text, record) => {
@@ -185,7 +189,7 @@ const PendingAppointmentPage = () => {
               </Space>
             ) : (
               <Text type="secondary" style={{ fontSize: 12, fontStyle: 'italic' }}>
-                Chờ chỉ định bác sĩ...
+                {t('staff:appointments.tags.waitingDoctor')}
               </Text>
             )}
           </Space>
@@ -193,7 +197,7 @@ const PendingAppointmentPage = () => {
       },
     },
     {
-      title: 'Trạng Thái',
+      title: t('staff:appointments.columns.status'),
       dataIndex: 'appointmentStatus',
       width: 150,
       render: (appointmentStatus) => (
@@ -203,15 +207,15 @@ const PendingAppointmentPage = () => {
       ),
     },
     {
-      title: 'Thanh Toán',
+      title: t('staff:appointments.columns.payment'),
       dataIndex: 'paymentStatus',
       width: 180,
       render: (paymentStatus, record) => {
         const statusLabels = {
-          [PaymentStatus.SUCCESS]: 'Đã phản công',
-          [PaymentStatus.PROCESSING]: 'Đang xử lý',
-          [PaymentStatus.INITIATED]: 'Tiền mặt',
-          [PaymentStatus.FAILED]: 'Thất bại',
+          [PaymentStatus.SUCCESS]: t('staff:appointments.payment.success'),
+          [PaymentStatus.PROCESSING]: t('staff:appointments.payment.processing'),
+          [PaymentStatus.INITIATED]: t('staff:appointments.payment.cash'),
+          [PaymentStatus.FAILED]: t('staff:appointments.payment.failed'),
         };
 
         const paymentDisplay =
@@ -238,7 +242,7 @@ const PendingAppointmentPage = () => {
               </>
             ) : (
               <Text type="secondary" style={{ fontSize: 12 }}>
-                Chưa thanh toán
+                {t('staff:appointments.payment.unpaid')}
               </Text>
             )}
           </Space>
@@ -246,7 +250,7 @@ const PendingAppointmentPage = () => {
       },
     },
     {
-      title: 'Hành Động',
+      title: t('staff:appointments.columns.actions'),
       key: 'actions',
       width: 200,
       fixed: 'right',
@@ -271,21 +275,21 @@ const PendingAppointmentPage = () => {
                       borderColor: '#ff7a45',
                     }}
                   >
-                    Duyệt Đổi Lịch
+                    {t('staff:appointments.actions.approveReschedule')}
                   </Button>
                   <Text type="warning" style={{ fontSize: 11, textAlign: 'center' }}>
-                    Yêu cầu đổi lịch
+                    {t('staff:appointments.actions.rescheduleRequest')}
                   </Text>
                 </>
               ) : (
-                <Tooltip title="Phân công lịch hẹn cho bác sĩ">
+                <Tooltip title={t('staff:appointments.actions.assignTooltip')}>
                   <Button
                     type="primary"
                     icon={<CalendarOutlined />}
                     onClick={() => handleAssignAppointment(record)}
                     block
                   >
-                    Phân Công
+                    {t('staff:appointments.actions.assign')}
                   </Button>
                 </Tooltip>
               )}
@@ -295,7 +299,7 @@ const PendingAppointmentPage = () => {
 
         return (
           <Tag color="success" icon={<CheckCircleOutlined />} style={{ padding: '4px 12px' }}>
-            Đã phân công
+            {t('staff:appointments.tags.assigned')}
           </Tag>
         );
       },
@@ -338,13 +342,15 @@ const PendingAppointmentPage = () => {
         title={
           <Space>
             <ClockCircleOutlined />
-            <span>Danh Sách Lịch Hẹn</span>
-            <Tag color="warning">{meta.total || 0} lịch hẹn</Tag>
+            <span>{t('staff:appointments.titleList')}</span>
+            <Tag color="warning">
+              {meta.total || 0} {t('staff:dashboard.stats.today.suffix')}
+            </Tag>
           </Space>
         }
         extra={
           <Button icon={<ReloadOutlined />} onClick={reloadTable}>
-            Làm mới
+            {t('staff:appointments.refresh')}
           </Button>
         }
       >
@@ -366,7 +372,11 @@ const PendingAppointmentPage = () => {
             total: meta.total,
             showTotal: (total, range) => (
               <Text>
-                Hiển thị {range[0]}-{range[1]} trong tổng số {total} lịch hẹn
+                {t('staff:appointments.pagination', {
+                  range0: range[0],
+                  range1: range[1],
+                  total: total,
+                })}
               </Text>
             ),
           }}

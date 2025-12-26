@@ -1,14 +1,54 @@
 {
   "title": "Doctor Schedule",
   "mySchedule": "My Schedule",
-  "availableSlots": "Available Slots",
-  "bookedSlots": "Booked Slots",
-  "selectDoctor": "Select Doctor",
-  "selectDate": "Select Date",
-  "updateSchedule": "Update Schedule",
-  "addSchedule": "Add Schedule",
-  "deleteSchedule": "Delete Schedule",
-  "updateSuccess": "Schedule updated successfully",
-  "addSuccess": "Schedule added successfully",
-  "deleteSuccess": "Schedule deleted successfully"
+  "subtitle": "Manage doctor schedules",
+  "loading": "Loading doctor list...",
+  "viewMode": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "week": "This Week"
+  },
+  "viewingDate": "Viewing schedule for: {{date}} ({{day}})",
+  "error": "Unable to load doctor list. Please try again!",
+  "noDoctors": {
+    "title": "No doctors found",
+    "desc": "No doctors found working at your center on this day"
+  },
+  "doctorCard": {
+    "specialty": "Specialty: {{specialty}}",
+    "shift": "Shift: {{shift}}",
+    "phone": "Phone: {{phone}}",
+    "statusToday": "Today's Status:",
+    "available": "available",
+    "booked": "booked",
+    "availableSchedule": "Available Schedule:",
+    "viewDetail": "View Detail",
+    "bookedLabel": "Booked",
+    "emptyLabel": "Empty"
+  },
+  "summary": {
+    "title": "Today's Schedule Overview",
+    "totalDoctors": "Total Doctors",
+    "availableSlots": "Available Slots",
+    "bookedSlots": "Booked Slots",
+    "availabilityRate": "Availability Rate"
+  },
+  "modal": {
+    "slotInfoTitle": "Time Slot Information",
+    "doctorDetailTitle": "Doctor Schedule Details",
+    "close": "Close",
+    "assign": "Assign Appointment",
+    "developing": "Assign appointment feature is under development",
+    "doctor": "Doctor",
+    "specialty": "Specialty",
+    "phone": "Phone",
+    "shift": "Shift",
+    "selectedSlotInfo": "Selected Slot Information",
+    "time": "Time",
+    "status": "Status",
+    "statusAvailable": "Empty Slot - Available for assignment",
+    "statusBooked": "Booked",
+    "canAssign": "You can assign an appointment to this time slot",
+    "detailSchedule": "Detailed Schedule"
+  }
 }

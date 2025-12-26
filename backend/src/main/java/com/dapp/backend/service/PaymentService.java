@@ -54,6 +54,7 @@ public class PaymentService {
                                         .amount(payment.getAmount())
                                         .transactionId(String.valueOf(payment.getId()))
                                         .method(payment.getMethod() != null ? payment.getMethod().name() : null)
+                                        .currency(payment.getCurrency() != null ? payment.getCurrency() : "VND")
                                         .vaccineName(appointment.getVaccine() != null
                                                         ? appointment.getVaccine().getName()
                                                         : "N/A")
@@ -216,7 +217,8 @@ public class PaymentService {
                                 .referenceType(payment.getReferenceType().name())
                                 .amount(payment.getAmount())
                                 .transactionId(String.valueOf(payment.getId()))
-                                .method(payment.getMethod() != null ? payment.getMethod().name() : null);
+                                .method(payment.getMethod() != null ? payment.getMethod().name() : null)
+                                .currency(payment.getCurrency() != null ? payment.getCurrency() : "VND");
 
                 if (payment.getReferenceType() == TypeTransactionEnum.APPOINTMENT) {
                         Appointment appointment = appointmentRepository.findById(payment.getReferenceId())

@@ -1,0 +1,28 @@
+{
+  "title": "Admin Dashboard",
+  "welcome": "Welcome to Admin Panel",
+  "overview": "Overview",
+  "statistics": "Statistics",
+  "pageTitle": "System Overview",
+  "pageSubtitle": "Real-time statistics on vaccination activities and users",
+  "stats": {
+    "patients": "Total Patients",
+    "doctors": "Total Doctors",
+    "centers": "Total Centers",
+    "vaccines": "Vaccine Types"
+  },
+  "appointments": {
+    "pending": "Pending Appointments",
+    "pendingDesc": "Need doctor assignment",
+    "completed": "Completed Appointments",
+    "cancelled": "Cancelled Appointments"
+  },
+  "charts": {
+    "bookingTrend": "Booking Trend (Last 30 Days)",
+    "vaccineDistribution": "Vaccine Distribution (By Country)",
+    "dailyLabel": "Daily Vaccinations"
+  },
+  "error": {
+    "load": "Failed to load data"
+  }
+}

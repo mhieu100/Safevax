@@ -81,7 +81,7 @@ const WalletVaccinePassport = () => {
         }
       } catch (err) {
         console.error('Error fetching vaccine records:', err);
-        setError(t('client:vaccinePassport.errorFetch'));
+        setError(t('client:records.vaccinePassport.errorFetch'));
       } finally {
         setLoading(false);
       }
@@ -100,7 +100,7 @@ const WalletVaccinePassport = () => {
 
   const columns = [
     {
-      title: t('client:vaccinePassport.vaccine'),
+      title: t('client:records.vaccinePassport.vaccine'),
       dataIndex: 'vaccineName',
       key: 'vaccineName',
       width: 200,
@@ -112,14 +112,14 @@ const WalletVaccinePassport = () => {
           <div>
             <div className="font-medium text-slate-800 line-clamp-2">{text}</div>
             <Text type="secondary" className="text-xs">
-              {t('client:vaccinePassport.dose')} #{record.doseNumber}
+              {t('client:records.vaccinePassport.dose')} #{record.doseNumber}
             </Text>
           </div>
         </div>
       ),
     },
     {
-      title: t('client:vaccinePassport.date'),
+      title: t('client:records.vaccinePassport.date'),
       dataIndex: 'vaccinationDate',
       key: 'vaccinationDate',
       width: 140,
@@ -131,7 +131,7 @@ const WalletVaccinePassport = () => {
       ),
     },
     {
-      title: t('client:vaccinePassport.site'),
+      title: t('client:records.vaccinePassport.site'),
       dataIndex: 'site',
       key: 'site',
       width: 120,
@@ -142,7 +142,7 @@ const WalletVaccinePassport = () => {
       ),
     },
     {
-      title: t('client:vaccinePassport.center'),
+      title: t('client:records.vaccinePassport.center'),
       dataIndex: 'centerName',
       key: 'centerName',
       width: 200,
@@ -153,20 +153,20 @@ const WalletVaccinePassport = () => {
       ),
     },
     {
-      title: t('client:vaccinePassport.status'),
+      title: t('client:records.vaccinePassport.status'),
       key: 'status',
       width: 160,
       render: (_, record) => (
         <div className="flex items-center gap-2">
           <Tag icon={<CheckCircleFilled />} color="success" className="rounded-full px-3 border-0">
-            {t('client:vaccinePassport.completed')}
+            {t('client:records.vaccinePassport.completed')}
           </Tag>
           {record.transactionHash && <BlockchainBadge verified={true} compact={true} />}
         </div>
       ),
     },
     {
-      title: t('client:vaccinePassport.actions'),
+      title: t('client:records.vaccinePassport.actions'),
       key: 'actions',
       width: 120,
       fixed: 'right',
@@ -190,7 +190,7 @@ const WalletVaccinePassport = () => {
                 setVerificationModalOpen(true);
               }}
             >
-              {t('client:vaccinePassport.verify')}
+              {t('client:records.vaccinePassport.verify')}
             </Button>
           </div>
         ),
@@ -266,7 +266,7 @@ const WalletVaccinePassport = () => {
                 <div className="flex items-center justify-between p-2">
                   <div>
                     <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                      {t('client:vaccinePassport.totalRecords')}
+                      {t('client:records.vaccinePassport.totalRecords')}
                     </Text>
                     <div className="text-3xl font-bold text-blue-600 mt-1">{records.length}</div>
                   </div>
@@ -283,7 +283,7 @@ const WalletVaccinePassport = () => {
                 <div className="flex items-center justify-between p-2">
                   <div>
                     <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                      {t('client:vaccinePassport.vaccinesTaken')}
+                      {t('client:records.vaccinePassport.vaccinesTaken')}
                     </Text>
                     <div className="text-3xl font-bold text-emerald-600 mt-1">
                       {new Set(records.map((r) => r.vaccineName)).size}
@@ -302,7 +302,7 @@ const WalletVaccinePassport = () => {
                 <div className="flex items-center justify-between p-2">
                   <div>
                     <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                      {t('client:vaccinePassport.lastVaccination')}
+                      {t('client:records.vaccinePassport.lastVaccination')}
                     </Text>
                     <div className="text-lg font-bold text-purple-600 mt-2">
                       {records.length > 0
@@ -331,7 +331,7 @@ const WalletVaccinePassport = () => {
                     pageSize: 10,
                     showSizeChanger: true,
                     showTotal: (total) =>
-                      t('client:vaccinePassport.totalRecordsCount', { count: total }),
+                      t('client:records.vaccinePassport.totalRecordsCount', { count: total }),
                   }}
                   scroll={{ x: 'max-content' }}
                   expandable={{
@@ -344,21 +344,23 @@ const WalletVaccinePassport = () => {
                           className="bg-white rounded-lg"
                         >
                           <Descriptions.Item
-                            label={t('client:vaccinePassport.patientIdentityHash')}
+                            label={t('client:records.vaccinePassport.patientIdentityHash')}
                             span={2}
                           >
                             <Text className="font-mono text-xs text-slate-500">
                               {record.patientIdentityHash}
                             </Text>
                           </Descriptions.Item>
-                          <Descriptions.Item label={t('client:vaccinePassport.appointmentId')}>
+                          <Descriptions.Item
+                            label={t('client:records.vaccinePassport.appointmentId')}
+                          >
                             <span className="font-mono text-slate-700">{record.appointmentId}</span>
                           </Descriptions.Item>
 
                           {record.transactionHash && (
                             <>
                               <Descriptions.Item
-                                label={t('client:vaccinePassport.transactionHash')}
+                                label={t('client:records.vaccinePassport.transactionHash')}
                                 span={2}
                               >
                                 <Text className="font-mono text-xs text-emerald-600 break-all">
@@ -366,7 +368,7 @@ const WalletVaccinePassport = () => {
                                 </Text>
                               </Descriptions.Item>
                               <Descriptions.Item
-                                label={t('client:vaccinePassport.ipfsHash')}
+                                label={t('client:records.vaccinePassport.ipfsHash')}
                                 span={2}
                               >
                                 <div className="flex items-center gap-2">
@@ -380,7 +382,7 @@ const WalletVaccinePassport = () => {
                                       href={`https://ipfs.io/ipfs/${record.ipfsHash}`}
                                       target="_blank"
                                     >
-                                      {t('client:vaccinePassport.viewOnIpfs')}
+                                      {t('client:records.vaccinePassport.viewOnIpfs')}
                                     </Button>
                                   )}
                                 </div>
@@ -396,7 +398,7 @@ const WalletVaccinePassport = () => {
               ) : (
                 <Empty
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  description={t('client:vaccinePassport.noRecords')}
+                  description={t('client:records.vaccinePassport.noRecords')}
                 />
               )}
             </Card>

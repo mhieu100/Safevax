@@ -1,0 +1,28 @@
+{
+  "title": "Bảng điều khiển Quản trị",
+  "welcome": "Chào mừng đến Trang quản trị",
+  "overview": "Tổng quan",
+  "statistics": "Thống kê",
+  "pageTitle": "Tổng quan hệ thống",
+  "pageSubtitle": "Thống kê thời gian thực về hoạt động tiêm chủng và người dùng",
+  "stats": {
+    "patients": "Tổng bệnh nhân",
+    "doctors": "Tổng bác sĩ",
+    "centers": "Tổng trung tâm",
+    "vaccines": "Loại Vaccine"
+  },
+  "appointments": {
+    "pending": "Lịch hẹn chờ xử lý",
+    "pendingDesc": "Cần phân công bác sĩ",
+    "completed": "Lịch hẹn đã hoàn thành",
+    "cancelled": "Lịch hẹn đã hủy"
+  },
+  "charts": {
+    "bookingTrend": "Xu hướng đặt lịch (30 ngày qua)",
+    "vaccineDistribution": "Phân bố Vaccine (Theo quốc gia)",
+    "dailyLabel": "Lượt tiêm hàng ngày"
+  },
+  "error": {
+    "load": "Không thể tải dữ liệu"
+  }
+}

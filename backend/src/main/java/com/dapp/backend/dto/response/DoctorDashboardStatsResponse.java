@@ -27,5 +27,6 @@ public class DoctorDashboardStatsResponse {
         private String time;
         private String patientName;
         private String vaccineName;
+        private String actualScheduledTime;
     }
 }

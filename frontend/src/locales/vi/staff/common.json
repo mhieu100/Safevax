@@ -17,6 +17,18 @@
   "confirm": "Xác nhận",
   "yes": "Có",
   "no": "Không",
+  "menu": {
+    "viewSchedule": "Xem Lịch",
+    "walkInBooking": "Đặt Lịch Walk-in",
+    "pendingList": "Danh Sách Chờ",
+    "doctorSchedule": "Lịch Bác Sĩ",
+    "calendar": "Lịch Trình"
+  },
+  "header": {
+    "subtitle": "Cổng nhân viên",
+    "searchPlaceholder": "Tìm kiếm...",
+    "notifications": "Thông báo"
+  },
   "security": {
     "title": "Cài đặt bảo mật",
     "accountSecure": "Tài khoản an toàn",

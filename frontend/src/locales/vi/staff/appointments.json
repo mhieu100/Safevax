@@ -1,5 +1,41 @@
 {
   "title": "Quản lý Lịch hẹn",
+  "titleList": "Danh Sách Lịch Hẹn",
+  "refresh": "Làm mới",
+  "columns": {
+    "code": "Mã LH",
+    "patient": "Bệnh Nhân",
+    "vaccine": "Vaccine",
+    "registerDate": "Ngày Đăng Ký",
+    "officialDate": "Ngày Chính Thức",
+    "centerDoctor": "Trung Tâm / Bác Sĩ",
+    "status": "Trạng Thái",
+    "payment": "Thanh Toán",
+    "actions": "Hành Động"
+  },
+  "tags": {
+    "editSchedule": "Đổi lịch",
+    "urgent": "GẤP",
+    "waitingSchedule": "Chờ xếp lịch...",
+    "rescheduledAt": "Đổi lúc:",
+    "officialTime": "Giờ chính thức:",
+    "waitingDoctor": "Chờ chỉ định bác sĩ...",
+    "assigned": "Đã phân công"
+  },
+  "payment": {
+    "success": "Thành công",
+    "processing": "Đang xử lý",
+    "cash": "Tiền mặt",
+    "failed": "Thất bại",
+    "unpaid": "Chưa thanh toán"
+  },
+  "actions": {
+    "approveReschedule": "Duyệt Đổi Lịch",
+    "rescheduleRequest": "Yêu cầu đổi lịch",
+    "assignTooltip": "Phân công lịch hẹn cho bác sĩ",
+    "assign": "Phân Công"
+  },
+  "pagination": "Hiển thị {{range0}}-{{range1}} trong tổng số {{total}} lịch hẹn",
   "pending": "Lịch hẹn chờ xử lý",
   "processing": "Đang xử lý",
   "completed": "Hoàn thành",
@@ -7,11 +43,8 @@
   "urgent": "Khẩn cấp",
   "appointmentList": "Danh sách lịch hẹn",
   "patientName": "Tên bệnh nhân",
-  "vaccine": "Vắc-xin",
   "date": "Ngày",
   "time": "Giờ",
-  "status": "Trạng thái",
-  "actions": "Thao tác",
   "assign": "Phân công",
   "reschedule": "Đổi lịch",
   "cancel": "Hủy",

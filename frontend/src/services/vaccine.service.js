@@ -4,6 +4,18 @@ export async function getCountries() {
   return apiClient.get('/api/vaccines/countries');
 }
 
+export async function getManufacturers() {
+  return apiClient.get('/api/vaccines/manufacturers');
+}
+
+export async function getDosesRequired() {
+  return apiClient.get('/api/vaccines/doses-required');
+}
+
+export async function getDiseases() {
+  return apiClient.get('/api/vaccines/diseases');
+}
+
 export async function getBySlug(slug) {
   return apiClient.get(`/api/vaccines/${slug}`);
 }
@@ -98,6 +110,10 @@ export async function getPostPregnancyVaccines() {
 
 export const callFetchCountry = getCountries;
 export const callGetAllCountries = getCountries;
+export const callGetAllManufacturers = getManufacturers;
+export const callGetAllDosesRequired = getDosesRequired;
+export const callGetAllDiseases = getDiseases;
+export const callGetAllTargetGroups = getTargetGroups;
 export const callGetBySlug = getBySlug;
 export const callGetBySku = getBySlug;
 export const callFetchVaccineBySlug = getBySlug;

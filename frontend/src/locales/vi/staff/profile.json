@@ -1,0 +1,31 @@
+{
+  "role": {
+    "doctor": "Bác sĩ",
+    "cashier": "Thu ngân"
+  },
+  "tabs": {
+    "personalInfo": "Thông tin cá nhân",
+    "statistics": "Thống kê",
+    "settings": "Cài đặt"
+  },
+  "info": {
+    "fullName": "Họ và tên",
+    "email": "Email",
+    "role": "Vai trò",
+    "center": "Trung tâm"
+  },
+  "stats": {
+    "todayAppointments": "Lịch hẹn hôm nay",
+    "completed": "Đã hoàn thành",
+    "pending": "Đang chờ",
+    "totalPatients": "Tổng bệnh nhân"
+  },
+  "security": {
+    "title": "Bảo mật",
+    "changePassword": "Đổi mật khẩu"
+  },
+  "avatar": {
+    "title": "Ảnh đại diện",
+    "update": "Cập nhật ảnh đại diện"
+  }
+}

@@ -1,8 +1,160 @@
 {
-  "title": "Bảng điều khiển Nhân viên",
-  "welcome": "Chào mừng đến Trang nhân viên",
-  "todayAppointments": "Lịch hẹn hôm nay",
-  "pendingAppointments": "Lịch hẹn chờ xử lý",
-  "completedAppointments": "Lịch hẹn hoàn thành",
-  "statistics": "Thống kê"
+  "title": "Bảng Điều Khiển",
+  "greeting": "Xin chào, {{name}} 👋",
+  "center": "Trung tâm: {{name}}",
+  "refresh": "Làm mới",
+  "redirectingDoctor": "Đang chuyển hướng đến Dashboard Bác sĩ...",
+  "error": {
+    "load": "Không thể tải dữ liệu Dashboard"
+  },
+  "stats": {
+    "urgent": {
+      "title": "Cần Xử Lý Gấp",
+      "suffix": "lịch hẹn",
+      "desc": "Ưu tiên xử lý ngay"
+    },
+    "urgencyMessages": {
+      "RESCHEDULE_PENDING": "Yêu cầu đổi lịch chờ phê duyệt",
+      "NO_DOCTOR": "Chưa có bác sĩ",
+      "COMING_SOON": "Sắp đến giờ hẹn",
+      "OVERDUE": "Quá giờ hẹn",
+      "default": "Cần xử lý"
+    },
+    "today": {
+      "title": "Lịch Hôm Nay",
+      "suffix": "lịch hẹn",
+      "desc": "Lịch hẹn trong ngày"
+    },
+    "weekCompleted": {
+      "title": "Đã Hoàn Thành",
+      "suffix": "lịch hẹn",
+      "desc": "Trong tuần này"
+    },
+    "weekCancelled": {
+      "title": "Đã Hủy",
+      "suffix": "lịch hẹn",
+      "desc": "Trong tuần này"
+    }
+  },
+  "urgentList": {
+    "title": "Danh Sách Ưu Tiên",
+    "cases": "hồ sơ",
+    "viewAll": "Xem tất cả",
+    "reschedule": "ĐỔI LỊCH",
+    "dose": "Mũi {{number}}",
+    "urgencyMessage": "Cần xử lý",
+    "changeTo": "Đổi sang:",
+    "empty": {
+      "title": "Không có việc gấp!",
+      "desc": "Hệ thống đang hoạt động ổn định."
+    },
+    "actions": {
+      "process": "Xử Lý",
+      "detail": "Chi Tiết"
+    }
+  },
+  "quickActions": {
+    "title": "Thao Tác Nhanh",
+    "viewDoctorSchedule": "Xem Lịch Bác Sĩ",
+    "pendingList": "Danh Sách Chờ",
+    "assignedList": "Đã Phân Công"
+  },
+  "urgencyGuide": {
+    "title": "Hướng Dẫn Ưu Tiên",
+    "detail": "Chi tiết",
+    "p1": "Priority 1: Khẩn cấp (Đổi lịch, < 24h)",
+    "p2": "Priority 2: Cao (Chưa có BS, sắp đến giờ)",
+    "p3": "Priority 3: Trung bình (Lịch hẹn thường)",
+    "p4": "Priority 4: Thấp (Lịch hẹn xa)"
+  },
+  "priority": {
+    "1": "Cực Khẩn",
+    "2": "Cao",
+    "3": "Trung Bình",
+    "4": "Thấp",
+    "5": "Không xác định"
+  },
+  "doctor": {
+    "greeting": "Xin chào, BS. {{name}} 👋",
+    "greetingSub": "Chúc bạn một ngày làm việc hiệu quả. Hôm nay có {{count}} lịch hẹn.",
+    "todaySchedule": "Lịch Hôm Nay",
+    "patients": "bệnh nhân",
+    "completedRatio": "Đã hoàn thành {{completed}}/{{total}}",
+    "thisWeek": "Tuần Này",
+    "stablePerformance": "Hiệu suất ổn định",
+    "completedMonth": "Đã Hoàn Thành",
+    "inMonth": "Trong tháng này",
+    "rating": "Đánh giá: {{rating}}/5.0",
+    "nextSchedule": "Lịch Tiếp Theo",
+    "noUpcoming": "Không có lịch sắp tới",
+    "todaysTimeline": "Dòng Thời Gian",
+    "appointmentsCount": "{{count}} lịch",
+    "viewMode": {
+      "timeline": "Timeline",
+      "grid": "Lưới"
+    },
+    "noAppointments": "Không có lịch hẹn nào hôm nay",
+    "weeklyOverview": "Tổng Quan Tuần",
+    "completed": "Hoàn thành",
+    "processing": "Đang xử lý",
+    "cancelled": "Đã hủy",
+    "quickNotes": "Ghi Chú Nhanh",
+    "noNotes": "Chưa có ghi chú nào",
+    "addNote": "+ Thêm ghi chú",
+    "status": {
+      "completed": "Đã hoàn thành",
+      "inProgress": "Đang tiêm",
+      "scheduled": "Chờ tiêm",
+      "cancelled": "Đã hủy",
+      "pendingApproval": "Chờ duyệt"
+    },
+    "modal": {
+      "startVaccination": "Bắt đầu tiêm",
+      "confirmStart": "Xác nhận bắt đầu tiêm cho bệnh nhân {{name}}?",
+      "okStart": "Bắt đầu",
+      "cancel": "Hủy",
+      "startedSuccess": "Bắt đầu ca tiêm #{{id}} thành công",
+      "notesDefault": "Không có ghi chú",
+      "detailTitle": "Chi Tiết Lịch Hẹn #{{id}}",
+      "close": "Đóng",
+      "startInt": "Bắt đầu tiêm",
+      "completeInt": "Hoàn thành",
+      "time": "Thời gian",
+      "patient": "Bệnh nhân",
+      "contact": "Liên hệ",
+      "vaccine": "Vắc xin",
+      "dose": "Mũi {{number}}",
+      "status": "Trạng thái",
+      "notes": "Ghi chú",
+      "priority": "Mức độ ưu tiên",
+      "urgentAction": "Cần xử lý gấp"
+    }
+  },
+  "processModal": {
+    "errorTitle": "Lỗi",
+    "errorLoadSlots": "Không thể tải lịch trống của bác sĩ",
+    "selectSlot": "Vui lòng chọn khung giờ!",
+    "doctorNotFound": "Không tìm thấy thông tin bác sĩ",
+    "updateSuccess": "Cập nhật lịch hẹn thành công!",
+    "generalError": "Có lỗi xảy ra",
+    "updateError": "Không thể cập nhật lịch hẹn",
+    "patientInfo": "Thông Tin Bệnh Nhân",
+    "appointmentDate": "Ngày hẹn:",
+    "oldSchedule": "Lịch Cũ",
+    "newSchedule": "Lịch Mới",
+    "selectDoctorFirst": "Chọn bác sĩ để xem lịch",
+    "doctorBusy": "Bác sĩ bận cả ngày",
+    "titleReschedule": "Duyệt Đổi Lịch Hẹn",
+    "titleAssign": "Phân Công Bác Sĩ",
+    "approveSave": "Phê duyệt & Lưu",
+    "confirmAssign": "Xác nhận Phân công",
+    "internalNote": "Ghi chú nội bộ",
+    "notePlaceholder": "Ghi chú thêm cho bác sĩ/ticket...",
+    "selectDoctorDate": "Chọn bác sĩ cho ngày {{date}}",
+    "selectDoctorLabel": "Chọn Bác Sĩ Phụ Trách",
+    "selectDoctorPlaceholder": "-- Chọn bác sĩ --",
+    "emptySlots": "Khung Giờ Trống",
+    "slotsCount": "{{count}} slots",
+    "close": "Close"
+  }
 }

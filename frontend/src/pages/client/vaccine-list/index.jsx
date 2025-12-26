@@ -12,6 +12,9 @@ const VaccineListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(12);
   const [country, setCountry] = useState([]);
+  const [disease, setDisease] = useState([]);
+  const [target, setTarget] = useState([]);
+  const [doses, setDoses] = useState([]);
   const [sortBy, setSortBy] = useState(null);
   const [priceRange, setPriceRange] = useState([MIN_PRICE, MAX_PRICE]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,7 +43,14 @@ const VaccineListPage = () => {
   const filter = {
     current: currentPage,
     pageSize: pageSize,
-    filters: { price: priceRange, country: country, search: searchTerm },
+    filters: {
+      price: priceRange,
+      country: country,
+      search: searchTerm,
+      disease: disease,
+      targetGroup: target,
+      dosesRequired: doses,
+    },
     sort,
   };
 
@@ -64,6 +74,12 @@ const VaccineListPage = () => {
                 setSortBy={setSortBy}
                 setPriceRange={setPriceRange}
                 onSearch={debouncedSearch}
+                disease={disease}
+                setDisease={setDisease}
+                target={target}
+                setTarget={setTarget}
+                doses={doses}
+                setDoses={setDoses}
               />
             )}
           </aside>

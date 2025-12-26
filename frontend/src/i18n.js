@@ -1,9 +1,8 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-
+import enAdminDashboard from './locales/en/admin/adminDashboard.json';
 import enAdminCenters from './locales/en/admin/centers.json';
 import enAdminCommon from './locales/en/admin/common.json';
-import enAdminDashboard from './locales/en/admin/dashboard.json';
 import enAdminNews from './locales/en/admin/news.json';
 import enAdminOrders from './locales/en/admin/orders.json';
 import enAdminPermissions from './locales/en/admin/permissions.json';
@@ -12,6 +11,8 @@ import enAdminUsers from './locales/en/admin/users.json';
 import enAdminVaccines from './locales/en/admin/vaccines.json';
 import enClientAppointments from './locales/en/client/appointments.json';
 import enClientBooking from './locales/en/client/booking.json';
+import enClientCheckout from './locales/en/client/checkout.json';
+import enClientContact from './locales/en/client/contact.json';
 import enClientDashboard from './locales/en/client/dashboard.json';
 import enClientFamily from './locales/en/client/family.json';
 import enClientHome from './locales/en/client/home.json';
@@ -20,6 +21,7 @@ import enClientOrders from './locales/en/client/orders.json';
 import enClientPayment from './locales/en/client/payment.json';
 import enClientProfile from './locales/en/client/profile.json';
 import enClientRecords from './locales/en/client/records.json';
+import enClientReview from './locales/en/client/review.json';
 import enClientSettings from './locales/en/client/settings.json';
 import enCommonAuth from './locales/en/common/auth.json';
 import enCommonBlockchain from './locales/en/common/blockchain.json';
@@ -38,10 +40,10 @@ import enStaffCalendar from './locales/en/staff/calendar.json';
 import enStaffCommon from './locales/en/staff/common.json';
 import enStaffDashboard from './locales/en/staff/dashboard.json';
 import enStaffDoctorSchedule from './locales/en/staff/doctorSchedule.json';
-
+import enStaffProfile from './locales/en/staff/profile.json';
+import viAdminDashboard from './locales/vi/admin/adminDashboard.json';
 import viAdminCenters from './locales/vi/admin/centers.json';
 import viAdminCommon from './locales/vi/admin/common.json';
-import viAdminDashboard from './locales/vi/admin/dashboard.json';
 import viAdminNews from './locales/vi/admin/news.json';
 import viAdminOrders from './locales/vi/admin/orders.json';
 import viAdminPermissions from './locales/vi/admin/permissions.json';
@@ -50,6 +52,8 @@ import viAdminUsers from './locales/vi/admin/users.json';
 import viAdminVaccines from './locales/vi/admin/vaccines.json';
 import viClientAppointments from './locales/vi/client/appointments.json';
 import viClientBooking from './locales/vi/client/booking.json';
+import viClientCheckout from './locales/vi/client/checkout.json';
+import viClientContact from './locales/vi/client/contact.json';
 import viClientDashboard from './locales/vi/client/dashboard.json';
 import viClientFamily from './locales/vi/client/family.json';
 import viClientHome from './locales/vi/client/home.json';
@@ -58,6 +62,7 @@ import viClientOrders from './locales/vi/client/orders.json';
 import viClientPayment from './locales/vi/client/payment.json';
 import viClientProfile from './locales/vi/client/profile.json';
 import viClientRecords from './locales/vi/client/records.json';
+import viClientReview from './locales/vi/client/review.json';
 import viClientSettings from './locales/vi/client/settings.json';
 import viCommonAuth from './locales/vi/common/auth.json';
 import viCommonBlockchain from './locales/vi/common/blockchain.json';
@@ -76,6 +81,7 @@ import viStaffCalendar from './locales/vi/staff/calendar.json';
 import viStaffCommon from './locales/vi/staff/common.json';
 import viStaffDashboard from './locales/vi/staff/dashboard.json';
 import viStaffDoctorSchedule from './locales/vi/staff/doctorSchedule.json';
+import viStaffProfile from './locales/vi/staff/profile.json';
 
 const LANGUAGE_KEY = 'lang';
 
@@ -113,12 +119,16 @@ i18n.use(initReactI18next).init({
         common: enStaffCommon,
         dashboard: enStaffDashboard,
         doctorSchedule: enStaffDoctorSchedule,
+        profile: enStaffProfile,
       },
       client: {
         layout: enClientLayout,
         booking: enClientBooking,
+        contact: enClientContact,
+        checkout: enClientCheckout,
         records: enClientRecords,
         profile: enClientProfile,
+        review: enClientReview,
         dashboard: enClientDashboard,
         family: enClientFamily,
         appointments: enClientAppointments,
@@ -160,12 +170,15 @@ i18n.use(initReactI18next).init({
         common: viStaffCommon,
         dashboard: viStaffDashboard,
         doctorSchedule: viStaffDoctorSchedule,
+        profile: viStaffProfile,
       },
       client: {
         layout: viClientLayout,
         booking: viClientBooking,
+        checkout: viClientCheckout,
         records: viClientRecords,
         profile: viClientProfile,
+        review: viClientReview,
         dashboard: viClientDashboard,
         family: viClientFamily,
         appointments: viClientAppointments,
@@ -173,6 +186,7 @@ i18n.use(initReactI18next).init({
         home: viClientHome,
         orders: viClientOrders,
         payment: viClientPayment,
+        contact: viClientContact,
       },
     },
   },
@@ -193,3 +207,4 @@ export const changeLanguage = (lang) => {
 };
 
 export default i18n;
+// Force HMR refresh for translations

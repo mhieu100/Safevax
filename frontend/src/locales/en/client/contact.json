@@ -1,0 +1,14 @@
+{
+  "title": "Vaccination Center System",
+  "subtitle": "Look up locations, phone numbers, and working hours of centers near you",
+  "searchPlaceholder": "Search by name or address...",
+  "foundCenters": "Found {{count}} centers",
+  "notFound": "No matching centers found",
+  "status": {
+    "active": "Active"
+  },
+  "actions": {
+    "directions": "Directions",
+    "call": "Call"
+  }
+}

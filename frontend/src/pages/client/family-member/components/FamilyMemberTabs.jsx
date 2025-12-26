@@ -148,7 +148,7 @@ const FamilyMemberTabs = ({ activeTab, onTabChange, member, history, familyMembe
       content: <VaccineRecordTab familyMemberId={familyMemberId} />,
     },
     4: {
-      title: t('client:progress.title'),
+      title: t('client:records.progress.title'),
       content: <MemberVaccinationProgress memberId={familyMemberId} />,
     },
   };

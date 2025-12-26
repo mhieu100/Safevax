@@ -64,7 +64,7 @@ const DropdownUser = () => {
       key: 'wallet',
       label: t('user.vaccineWallet'),
       icon: <WalletOutlined />,
-      onClick: () => navigate('/wallet'),
+      onClick: () => navigate('/vaccine-passport'),
     },
     {
       key: 'my-orders',
@@ -97,7 +97,12 @@ const DropdownUser = () => {
   ];
 
   return (
-    <Dropdown menu={{ items: userItems }} placement="bottomRight" className="hidden md:block">
+    <Dropdown
+      menu={{ items: userItems }}
+      placement="bottomRight"
+      className="hidden md:block"
+      overlayStyle={{ zIndex: 10001 }}
+    >
       <Avatar
         src={
           user?.avatar ||

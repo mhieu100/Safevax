@@ -46,7 +46,7 @@ public class PaymentController {
         if ("mobile".equals(platform)) {
             response.sendRedirect("myapp://payment/success?referenceId=" + referenceId + "&payment=" + payment);
         } else {
-            response.sendRedirect(frontendSuccessUrl);
+            response.sendRedirect(frontendSuccessUrl + "?id=" + referenceId + "&payment=" + payment);
         }
     }
 
@@ -90,7 +90,7 @@ public class PaymentController {
             if ("mobile".equals(platform)) {
                 redirectUrl = "myapp://payment/success?referenceId=" + referenceId + "&payment=" + paymentId;
             } else {
-                redirectUrl = frontendSuccessUrl;
+                redirectUrl = frontendSuccessUrl + "?id=" + referenceId + "&payment=" + paymentId;
             }
         } else {
             paymentService.cancelPayment(paymentRequest);
@@ -105,8 +105,9 @@ public class PaymentController {
 
     @PostMapping("/meta-mask")
     @ApiMessage("Update payment with MetaMask")
-    public void updatePaymentMetaMask(@RequestBody PaymentRequest request) throws AppException {
+    public PaymentRequest updatePaymentMetaMask(@RequestBody PaymentRequest request) throws AppException {
         paymentService.updatePaymentMetaMask(request);
+        return request;
     }
 
     @GetMapping("/my-history")

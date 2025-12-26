@@ -29,6 +29,7 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
   callGetTodayAppointments,
@@ -40,8 +41,10 @@ import ProcessUrgentAppointmentModal from './components/ProcessUrgentAppointment
 import UrgencyGuide from './components/UrgencyGuide';
 
 const { Title, Text } = Typography;
+// Force HMR
 
 const StaffDashboard = () => {
+  const { t } = useTranslation(['staff']);
   const navigate = useNavigate();
   const user = useAccountStore((state) => state.user);
   const isCashierRole = user?.role === 'CASHIER';
@@ -70,7 +73,7 @@ const StaffDashboard = () => {
         setStats(statsRes);
       }
     } catch (_err) {
-      setError('Không thể tải dữ liệu dashboard');
+      setError(t('staff:dashboard.error.load'));
     } finally {
       setLoading(false);
     }
@@ -135,14 +138,7 @@ const StaffDashboard = () => {
   };
 
   const getPriorityText = (priorityLevel) => {
-    const texts = {
-      1: 'CỰC KHẨN',
-      2: 'KHẨN',
-      3: 'CAO',
-      4: 'TRUNG BÌNH',
-      5: 'THẤP',
-    };
-    return texts[priorityLevel] || 'THẤP';
+    return t(`staff:dashboard.priority.${priorityLevel}`) || t('staff:dashboard.priority.5');
   };
 
   const renderCashierDashboard = () => (
@@ -152,9 +148,11 @@ const StaffDashboard = () => {
         <Row justify="space-between" align="middle">
           <Col>
             <Title level={2} style={{ margin: 0 }}>
-              Xin chào, {user?.fullName} 👋
+              {t('staff:dashboard.greeting', { name: user?.fullName })}
             </Title>
-            <Text type="secondary">Trung tâm: {user?.centerName || 'Trung tâm tiêm chủng'}</Text>
+            <Text type="secondary">
+              {t('staff:dashboard.center', { name: user?.centerName || 'Center' })}
+            </Text>
           </Col>
           <Col>
             <Space>
@@ -169,7 +167,7 @@ const StaffDashboard = () => {
                 onClick={fetchUrgentAppointments}
                 loading={loading}
               >
-                Làm mới
+                {t('staff:dashboard.refresh')}
               </Button>
             </Space>
           </Col>
@@ -181,10 +179,10 @@ const StaffDashboard = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable style={{ borderRadius: 12 }}>
             <Statistic
-              title="Cần Xử Lý Gấp"
+              title={t('staff:dashboard.stats.urgent.title')}
               value={stats?.urgentAppointments || 0}
               prefix={<ThunderboltOutlined style={{ color: '#ff4d4f' }} />}
-              suffix="lịch hẹn"
+              suffix={t('staff:dashboard.stats.urgent.suffix')}
               valueStyle={{ color: '#ff4d4f' }}
             />
             <Progress
@@ -195,7 +193,7 @@ const StaffDashboard = () => {
               style={{ marginTop: 8 }}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
-              Ưu tiên xử lý ngay
+              {t('staff:dashboard.stats.urgent.desc')}
             </Text>
           </Card>
         </Col>
@@ -203,10 +201,10 @@ const StaffDashboard = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable style={{ borderRadius: 12 }}>
             <Statistic
-              title="Đã Xếp Hôm Nay"
+              title={t('staff:dashboard.stats.today.title')}
               value={stats?.todayAppointments || 0}
               prefix={<CalendarOutlined style={{ color: '#1890ff' }} />}
-              suffix="lịch hẹn"
+              suffix={t('staff:dashboard.stats.today.suffix')}
               valueStyle={{ color: '#1890ff' }}
             />
             <Progress
@@ -217,7 +215,7 @@ const StaffDashboard = () => {
               style={{ marginTop: 8 }}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
-              Tiến độ trong ngày
+              {t('staff:dashboard.stats.today.desc')}
             </Text>
           </Card>
         </Col>
@@ -225,10 +223,10 @@ const StaffDashboard = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable style={{ borderRadius: 12 }}>
             <Statistic
-              title="Hoàn Thành Tuần"
+              title={t('staff:dashboard.stats.weekCompleted.title')}
               value={stats?.weekCompleted || 0}
               prefix={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
-              suffix="lịch hẹn"
+              suffix={t('staff:dashboard.stats.weekCompleted.suffix')}
               valueStyle={{ color: '#52c41a' }}
             />
             <Progress
@@ -239,7 +237,7 @@ const StaffDashboard = () => {
               style={{ marginTop: 8 }}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
-              Hiệu suất tốt
+              {t('staff:dashboard.stats.weekCompleted.desc')}
             </Text>
           </Card>
         </Col>
@@ -247,10 +245,10 @@ const StaffDashboard = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable style={{ borderRadius: 12 }}>
             <Statistic
-              title="Đã Hủy Tuần"
+              title={t('staff:dashboard.stats.weekCancelled.title')}
               value={stats?.weekCancelled || 0}
               prefix={<CloseCircleOutlined style={{ color: '#faad14' }} />}
-              suffix="lịch hẹn"
+              suffix={t('staff:dashboard.stats.weekCancelled.suffix')}
               valueStyle={{ color: '#faad14' }}
             />
             <Progress
@@ -261,7 +259,7 @@ const StaffDashboard = () => {
               style={{ marginTop: 8 }}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
-              Tỷ lệ hủy thấp
+              {t('staff:dashboard.stats.weekCancelled.desc')}
             </Text>
           </Card>
         </Col>
@@ -275,18 +273,18 @@ const StaffDashboard = () => {
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <ThunderboltOutlined style={{ fontSize: 24, color: '#faad14' }} />
                 <Text strong style={{ fontSize: 18 }}>
-                  Danh Sách Cần Xử Lý
+                  {t('staff:dashboard.urgentList.title')}
                 </Text>
                 <Text
                   style={{ textAlign: 'center', marginLeft: 8, fontSize: 12, color: '#faad14' }}
                 >
-                  ({urgentAppointments.length} trường hợp)
+                  ({urgentAppointments.length} {t('staff:dashboard.urgentList.cases')})
                 </Text>
               </div>
             }
             extra={
               <Button type="link" onClick={() => navigate('/staff/pending-appointments')}>
-                Xem tất cả <RightOutlined />
+                {t('staff:dashboard.urgentList.viewAll')} <RightOutlined />
               </Button>
             }
             style={{ borderRadius: 12, minHeight: 500 }}
@@ -308,8 +306,8 @@ const StaffDashboard = () => {
             ) : urgentAppointments.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '60px 0' }}>
                 <CheckCircleOutlined style={{ fontSize: 64, color: '#52c41a', marginBottom: 16 }} />
-                <Title level={4}>Không có việc gấp!</Title>
-                <Text type="secondary">Hệ thống đang hoạt động ổn định.</Text>
+                <Title level={4}>{t('staff:dashboard.urgentList.empty.title')}</Title>
+                <Text type="secondary">{t('staff:dashboard.urgentList.empty.desc')}</Text>
               </div>
             ) : (
               <List
@@ -334,7 +332,7 @@ const StaffDashboard = () => {
                         style={{ minWidth: 100, borderRadius: 4 }}
                         onClick={() => handleAssignAppointment(item)}
                       >
-                        Xử Lý
+                        {t('staff:dashboard.urgentList.actions.process')}
                       </Button>,
                       <Button
                         key="view"
@@ -342,7 +340,7 @@ const StaffDashboard = () => {
                         style={{ minWidth: 100, borderRadius: 4 }}
                         onClick={() => navigate(`/staff/appointments/${item.id}`)}
                       >
-                        Chi Tiết
+                        {t('staff:dashboard.urgentList.actions.detail')}
                       </Button>,
                     ]}
                   >
@@ -406,7 +404,7 @@ const StaffDashboard = () => {
                                 color="purple"
                                 style={{ margin: 0, padding: '0 4px', fontSize: 10 }}
                               >
-                                ĐỔI LỊCH
+                                {t('staff:dashboard.urgentList.reschedule')}
                               </Tag>
                             )}
                           </Space>
@@ -443,7 +441,7 @@ const StaffDashboard = () => {
                             {item.vaccineName}
                           </Tag>
                           <Tag style={{ margin: 0, padding: '0 6px', fontSize: 11 }}>
-                            Mũi {item.doseNumber || 1}
+                            {t('staff:dashboard.urgentList.dose', { number: item.doseNumber || 1 })}
                           </Tag>
 
                           {}
@@ -457,7 +455,8 @@ const StaffDashboard = () => {
                           >
                             <ExclamationCircleOutlined style={{ marginRight: 4 }} />
                             <Text type="danger" style={{ fontSize: 12 }} ellipsis>
-                              {item.urgencyMessage || 'Cần xử lý'}
+                              {t(`staff:dashboard.stats.urgencyMessages.${item.urgencyType}`) ||
+                                t('staff:dashboard.stats.urgencyMessages.default')}
                             </Text>
                           </div>
                         </div>
@@ -466,7 +465,7 @@ const StaffDashboard = () => {
                         {item.desiredDate && (
                           <div style={{ fontSize: 12, color: '#cf1322', marginTop: 2 }}>
                             <ClockCircleOutlined style={{ marginRight: 4 }} />
-                            <strong>Đổi sang:</strong>{' '}
+                            <strong>{t('staff:dashboard.urgentList.changeTo')}</strong>{' '}
                             {dayjs(item.desiredDate).format('DD/MM/YYYY')} {item.desiredTime}
                           </div>
                         )}
@@ -485,7 +484,7 @@ const StaffDashboard = () => {
             title={
               <Space>
                 <ThunderboltOutlined style={{ color: '#1890ff' }} />
-                <Text strong>Thao Tác Nhanh</Text>
+                <Text strong>{t('staff:dashboard.quickActions.title')}</Text>
               </Space>
             }
             style={{ borderRadius: 12, marginBottom: 24 }}
@@ -497,7 +496,7 @@ const StaffDashboard = () => {
                 icon={<CalendarOutlined />}
                 onClick={() => navigate('/staff/calendar-view')}
               >
-                Xem Lịch Bác Sĩ
+                {t('staff:dashboard.quickActions.viewDoctorSchedule')}
               </Button>
               <Button
                 block
@@ -505,7 +504,7 @@ const StaffDashboard = () => {
                 icon={<ClockCircleOutlined />}
                 onClick={() => navigate('/staff/pending-appointments')}
               >
-                Danh Sách Chờ
+                {t('staff:dashboard.quickActions.pendingList')}
               </Button>
               <Button
                 block
@@ -513,7 +512,7 @@ const StaffDashboard = () => {
                 icon={<CheckCircleOutlined />}
                 onClick={() => navigate('/staff/appointments?status=assigned')}
               >
-                Đã Phân Công
+                {t('staff:dashboard.quickActions.assignedList')}
               </Button>
             </Space>
           </Card>
@@ -522,12 +521,12 @@ const StaffDashboard = () => {
             title={
               <Space>
                 <InfoCircleOutlined style={{ color: '#faad14' }} />
-                <Text strong>Hướng Dẫn Ưu Tiên</Text>
+                <Text strong>{t('staff:dashboard.urgencyGuide.title')}</Text>
               </Space>
             }
             extra={
               <Button type="link" size="small" onClick={() => setShowGuideModal(true)}>
-                Chi tiết
+                {t('staff:dashboard.urgencyGuide.detail')}
               </Button>
             }
             style={{ borderRadius: 12 }}
@@ -537,20 +536,20 @@ const StaffDashboard = () => {
                 {
                   color: 'red',
                   dot: <ExclamationCircleOutlined />,
-                  children: <Text strong>Priority 1: Cực Khẩn (Đổi lịch, &lt; 24h)</Text>,
+                  children: <Text strong>{t('staff:dashboard.urgencyGuide.p1')}</Text>,
                 },
                 {
                   color: 'orange',
                   dot: <WarningOutlined />,
-                  children: <Text>Priority 2: Khẩn (Quá hạn xử lý)</Text>,
+                  children: <Text>{t('staff:dashboard.urgencyGuide.p2')}</Text>,
                 },
                 {
                   color: 'gold',
-                  children: 'Priority 3: Cao (Sắp đến giờ)',
+                  children: t('staff:dashboard.urgencyGuide.p3'),
                 },
                 {
                   color: 'blue',
-                  children: 'Priority 4: Thường',
+                  children: t('staff:dashboard.urgencyGuide.p4'),
                 },
               ]}
             />
@@ -603,7 +602,7 @@ const StaffDashboard = () => {
           height: '100vh',
         }}
       >
-        <Spin size="large" tip="Đang chuyển hướng đến Dashboard Bác sĩ..." />
+        <Spin size="large" tip={t('staff:dashboard.redirectingDoctor')} />
       </div>
     );
   };

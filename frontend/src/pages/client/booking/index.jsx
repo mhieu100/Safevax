@@ -179,7 +179,11 @@ const BookingPage = () => {
         } else if (paymentData.method === 'METAMASK') {
           await handleMetamaskPayment(paymentData);
         } else {
-          navigate('/success');
+          try {
+            navigate(`/success?id=${paymentData.referenceId || ''}`);
+          } catch (_e) {
+            navigate('/success');
+          }
         }
       }
       if (error) {
@@ -223,14 +227,14 @@ const BookingPage = () => {
       message.loading(t('booking.processing'));
       await tx.wait();
 
-      await updatePaymentMetaMask({
+      const result = await updatePaymentMetaMask({
         paymentId: paymentData.paymentId,
         referenceId: paymentData.referenceId,
         type: 'APPOINTMENT',
       });
 
       message.success(t('booking.paymentSuccess'));
-      navigate('/success');
+      navigate(`/success?id=${result?.referenceId || paymentData.referenceId || ''}`);
     } catch (error) {
       console.error(error);
       message.error(error.message || t('booking.paymentFailed'));

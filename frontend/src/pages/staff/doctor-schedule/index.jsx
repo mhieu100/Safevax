@@ -30,11 +30,13 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getDoctorsWithScheduleAPI } from '@/services/doctor.service';
 
 const { Title, Text } = Typography;
 
 const DoctorSchedule = () => {
+  const { t } = useTranslation(['staff']);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [viewMode, setViewMode] = useState('today');
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -69,7 +71,7 @@ const DoctorSchedule = () => {
 
       setDoctors(transformedDoctors);
     } catch (_error) {
-      message.error('Không thể tải danh sách bác sĩ. Vui lòng thử lại!');
+      message.error(t('staff:doctorSchedule.error'));
     } finally {
       setLoading(false);
     }
@@ -165,7 +167,11 @@ const DoctorSchedule = () => {
           <Col>
             <Badge
               status={isAvailable ? 'success' : 'error'}
-              text={isAvailable ? 'Trống' : 'Đã đặt'}
+              text={
+                isAvailable
+                  ? t('staff:doctorSchedule.doctorCard.emptyLabel')
+                  : t('staff:doctorSchedule.doctorCard.bookedLabel')
+              }
             />
           </Col>
         </Row>
@@ -194,9 +200,11 @@ const DoctorSchedule = () => {
         <Row justify="space-between" align="middle">
           <Col>
             <Title level={2} style={{ color: 'white', margin: 0 }}>
-              <CalendarOutlined /> Lịch Bác Sĩ
+              <CalendarOutlined /> {t('staff:doctorSchedule.title')}
             </Title>
-            <Text style={{ color: 'rgba(255,255,255,0.9)' }}>Quản lý lịch làm việc của bác sĩ</Text>
+            <Text style={{ color: 'rgba(255,255,255,0.9)' }}>
+              {t('staff:doctorSchedule.subtitle')}
+            </Text>
           </Col>
           <Col style={{ textAlign: 'right' }}>
             <Title level={4} style={{ color: 'white', margin: 0 }}>
@@ -212,7 +220,7 @@ const DoctorSchedule = () => {
         <div style={{ textAlign: 'center', padding: '50px' }}>
           <Spin size="large" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
           <div style={{ marginTop: '16px' }}>
-            <Text type="secondary">Đang tải danh sách bác sĩ...</Text>
+            <Text type="secondary">{t('staff:doctorSchedule.loading')}</Text>
           </div>
         </div>
       )}
@@ -229,9 +237,9 @@ const DoctorSchedule = () => {
                     value={viewMode}
                     onChange={handleViewModeChange}
                     options={[
-                      { label: 'Hôm nay', value: 'today' },
-                      { label: 'Ngày mai', value: 'tomorrow' },
-                      { label: 'Tuần này', value: 'week' },
+                      { label: t('staff:doctorSchedule.viewMode.today'), value: 'today' },
+                      { label: t('staff:doctorSchedule.viewMode.tomorrow'), value: 'tomorrow' },
+                      { label: t('staff:doctorSchedule.viewMode.week'), value: 'week' },
                     ]}
                   />
                 </Space>
@@ -259,8 +267,10 @@ const DoctorSchedule = () => {
             <Space>
               <CalendarOutlined style={{ color: '#1890ff', fontSize: '18px' }} />
               <Text strong style={{ color: '#1890ff' }}>
-                Đang xem lịch ngày: {selectedDate.format('DD/MM/YYYY')} (
-                {selectedDate.format('dddd')})
+                {t('staff:doctorSchedule.viewingDate', {
+                  date: selectedDate.format('DD/MM/YYYY'),
+                  day: selectedDate.format('dddd'),
+                })}
               </Text>
             </Space>
           </Card>
@@ -272,11 +282,9 @@ const DoctorSchedule = () => {
                 <Card style={{ textAlign: 'center', padding: '50px' }}>
                   <UserOutlined style={{ fontSize: 64, color: '#d9d9d9', marginBottom: 16 }} />
                   <Title level={4} type="secondary">
-                    Không có bác sĩ nào
+                    {t('staff:doctorSchedule.noDoctors.title')}
                   </Title>
-                  <Text type="secondary">
-                    Không tìm thấy bác sĩ nào làm việc tại trung tâm của bạn vào ngày này
-                  </Text>
+                  <Text type="secondary">{t('staff:doctorSchedule.noDoctors.desc')}</Text>
                 </Card>
               </Col>
             ) : (
@@ -309,7 +317,11 @@ const DoctorSchedule = () => {
                         />
                         <div>
                           <div style={{ fontWeight: 'bold' }}>BS. {doctor.name}</div>
-                          <small>Chuyên khoa: {doctor.specialty}</small>
+                          <small>
+                            {t('staff:doctorSchedule.doctorCard.specialty', {
+                              specialty: doctor.specialty,
+                            })}
+                          </small>
                         </div>
                       </Space>
                     }
@@ -319,28 +331,30 @@ const DoctorSchedule = () => {
                         <Space>
                           <ClockCircleOutlined />
                           <Text type="secondary" style={{ fontSize: '13px' }}>
-                            Ca làm việc: {doctor.workingHours}
+                            {t('staff:doctorSchedule.doctorCard.shift', {
+                              shift: doctor.workingHours,
+                            })}
                           </Text>
                         </Space>
                         <Space>
                           <PhoneOutlined />
                           <Text type="secondary" style={{ fontSize: '13px' }}>
-                            SĐT: {doctor.phone}
+                            {t('staff:doctorSchedule.doctorCard.phone', { phone: doctor.phone })}
                           </Text>
                         </Space>
                       </Space>
                     </div>
 
                     <div style={{ marginBottom: '16px' }}>
-                      <Text strong>Trạng thái hôm nay:</Text>
+                      <Text strong>{t('staff:doctorSchedule.doctorCard.statusToday')}</Text>
                       <div style={{ marginTop: '8px' }}>
                         <Space>
                           <Badge
-                            count={`${doctor.availableSlots} trống`}
+                            count={`${doctor.availableSlots} ${t('staff:doctorSchedule.doctorCard.available')}`}
                             style={{ backgroundColor: '#52c41a' }}
                           />
                           <Badge
-                            count={`${doctor.bookedSlots} đã đặt`}
+                            count={`${doctor.bookedSlots} ${t('staff:doctorSchedule.doctorCard.booked')}`}
                             style={{ backgroundColor: '#f5222d' }}
                           />
                         </Space>
@@ -355,7 +369,7 @@ const DoctorSchedule = () => {
                       }}
                     >
                       <Text strong style={{ display: 'block', marginBottom: '8px' }}>
-                        Lịch khả dụng:
+                        {t('staff:doctorSchedule.doctorCard.availableSchedule')}
                       </Text>
                       <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                         {doctor.schedule.map((slot, index) => renderTimeSlot(doctor, slot, index))}
@@ -369,7 +383,7 @@ const DoctorSchedule = () => {
                       block
                       onClick={() => handleViewDoctorDetail(doctor)}
                     >
-                      Xem chi tiết lịch
+                      {t('staff:doctorSchedule.doctorCard.viewDetail')}
                     </Button>
                   </Card>
                 </Col>
@@ -382,14 +396,14 @@ const DoctorSchedule = () => {
             title={
               <Space>
                 <MedicineBoxOutlined />
-                <Text strong>Tổng Quan Lịch Hôm Nay</Text>
+                <Text strong>{t('staff:doctorSchedule.summary.title')}</Text>
               </Space>
             }
           >
             <Row gutter={16}>
               <Col xs={12} sm={6}>
                 <Statistic
-                  title="Tổng bác sĩ"
+                  title={t('staff:doctorSchedule.summary.totalDoctors')}
                   value={summary.totalDoctors}
                   styles={{ content: { color: '#1890ff' } }}
                   prefix={<UserOutlined />}
@@ -397,7 +411,7 @@ const DoctorSchedule = () => {
               </Col>
               <Col xs={12} sm={6}>
                 <Statistic
-                  title="Slot trống"
+                  title={t('staff:doctorSchedule.summary.availableSlots')}
                   value={summary.totalAvailableSlots}
                   styles={{ content: { color: '#52c41a' } }}
                   prefix={<CheckCircleOutlined />}
@@ -405,7 +419,7 @@ const DoctorSchedule = () => {
               </Col>
               <Col xs={12} sm={6}>
                 <Statistic
-                  title="Slot đã đặt"
+                  title={t('staff:doctorSchedule.summary.bookedSlots')}
                   value={summary.totalBookedSlots}
                   styles={{ content: { color: '#f5222d' } }}
                   prefix={<CloseCircleOutlined />}
@@ -413,7 +427,7 @@ const DoctorSchedule = () => {
               </Col>
               <Col xs={12} sm={6}>
                 <Statistic
-                  title="Tỷ lệ trống"
+                  title={t('staff:doctorSchedule.summary.availabilityRate')}
                   value={summary.availabilityRate}
                   styles={{ content: { color: '#13c2c2' } }}
                   suffix="%"
@@ -430,12 +444,12 @@ const DoctorSchedule = () => {
           selectedSlot ? (
             <Space>
               <ClockCircleOutlined />
-              <Text strong>Thông Tin Slot Thời Gian</Text>
+              <Text strong>{t('staff:doctorSchedule.modal.slotInfoTitle')}</Text>
             </Space>
           ) : (
             <Space>
               <UserOutlined />
-              <Text strong>Chi Tiết Lịch Bác Sĩ</Text>
+              <Text strong>{t('staff:doctorSchedule.modal.doctorDetailTitle')}</Text>
             </Space>
           )
         }
@@ -443,18 +457,18 @@ const DoctorSchedule = () => {
         onCancel={() => setDetailModalOpen(false)}
         footer={[
           <Button key="close" onClick={() => setDetailModalOpen(false)}>
-            Đóng
+            {t('staff:doctorSchedule.modal.close')}
           </Button>,
           selectedSlot && (
             <Button
               key="assign"
               type="primary"
               onClick={() => {
-                message.success('Chức năng phân công lịch hẹn đang phát triển');
+                message.success(t('staff:doctorSchedule.modal.developing'));
                 setDetailModalOpen(false);
               }}
             >
-              Phân công lịch hẹn
+              {t('staff:doctorSchedule.modal.assign')}
             </Button>
           ),
         ]}
@@ -463,20 +477,22 @@ const DoctorSchedule = () => {
         {selectedDoctor && (
           <>
             <Descriptions column={2} bordered style={{ marginBottom: '16px' }}>
-              <Descriptions.Item label="Bác sĩ" span={2}>
+              <Descriptions.Item label={t('staff:doctorSchedule.modal.doctor')} span={2}>
                 <Space>
                   <Avatar icon={<UserOutlined />} />
                   <Text strong>BS. {selectedDoctor.name}</Text>
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label="Chuyên khoa">{selectedDoctor.specialty}</Descriptions.Item>
-              <Descriptions.Item label="Số điện thoại">
+              <Descriptions.Item label={t('staff:doctorSchedule.modal.specialty')}>
+                {selectedDoctor.specialty}
+              </Descriptions.Item>
+              <Descriptions.Item label={t('staff:doctorSchedule.modal.phone')}>
                 <Space>
                   <PhoneOutlined />
                   {selectedDoctor.phone}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label="Ca làm việc" span={2}>
+              <Descriptions.Item label={t('staff:doctorSchedule.modal.shift')} span={2}>
                 <Space>
                   <ClockCircleOutlined />
                   {selectedDoctor.workingHours}
@@ -485,20 +501,23 @@ const DoctorSchedule = () => {
             </Descriptions>
 
             {selectedSlot ? (
-              <Card title="Thông tin slot được chọn" style={{ background: '#f6ffed' }}>
+              <Card
+                title={t('staff:doctorSchedule.modal.selectedSlotInfo')}
+                style={{ background: '#f6ffed' }}
+              >
                 <Descriptions column={1}>
-                  <Descriptions.Item label="Thời gian">
+                  <Descriptions.Item label={t('staff:doctorSchedule.modal.time')}>
                     <Tag color="blue" icon={<ClockCircleOutlined />}>
                       {selectedSlot.time}
                     </Tag>
                   </Descriptions.Item>
-                  <Descriptions.Item label="Trạng thái">
+                  <Descriptions.Item label={t('staff:doctorSchedule.modal.status')}>
                     <Badge
                       status={selectedSlot.status === 'available' ? 'success' : 'error'}
                       text={
                         selectedSlot.status === 'available'
-                          ? 'Slot trống - Có thể phân công'
-                          : 'Đã có lịch hẹn'
+                          ? t('staff:doctorSchedule.modal.statusAvailable')
+                          : t('staff:doctorSchedule.modal.statusBooked')
                       }
                     />
                   </Descriptions.Item>
@@ -514,13 +533,16 @@ const DoctorSchedule = () => {
                   >
                     <Text type="secondary">
                       <CheckCircleOutlined style={{ color: '#52c41a', marginRight: '8px' }} />
-                      Bạn có thể phân công lịch hẹn cho slot thời gian này
+                      {t('staff:doctorSchedule.modal.canAssign')}
                     </Text>
                   </div>
                 )}
               </Card>
             ) : (
-              <Card title="Lịch làm việc chi tiết" style={{ marginTop: '16px' }}>
+              <Card
+                title={t('staff:doctorSchedule.modal.detailSchedule')}
+                style={{ marginTop: '16px' }}
+              >
                 <List
                   size="small"
                   dataSource={selectedDoctor.schedule}
@@ -535,10 +557,14 @@ const DoctorSchedule = () => {
                         </Col>
                         <Col>
                           {slot.status === 'available' ? (
-                            <Tag color="success">Trống</Tag>
+                            <Tag color="success">
+                              {t('staff:doctorSchedule.doctorCard.emptyLabel')}
+                            </Tag>
                           ) : (
                             <Space>
-                              <Tag color="error">Đã đặt</Tag>
+                              <Tag color="error">
+                                {t('staff:doctorSchedule.doctorCard.bookedLabel')}
+                              </Tag>
                               <Text type="secondary" style={{ fontSize: '12px' }}>
                                 {slot.patient} - {slot.vaccine}
                               </Text>

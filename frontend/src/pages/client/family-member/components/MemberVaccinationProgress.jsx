@@ -230,7 +230,7 @@ const MemberVaccinationProgress = ({ memberId, customData }) => {
 
       {/* Timeline Section */}
       <div className="p-4 bg-slate-50 rounded-xl">
-        <h3 className="font-semibold text-gray-700 mb-4">{t('client:progress.title')}</h3>
+        <h3 className="font-semibold text-gray-700 mb-4">{t('client:records.progress.title')}</h3>
         {journeyData.length === 0 ? (
           <div className="text-center text-gray-500 py-4">{t('client:dashboard.noData')}</div>
         ) : (

@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-import { sfGt, sfLike, sfLt } from 'spring-filter-query-builder';
+import { sfEqual, sfGt, sfLike, sfLt } from 'spring-filter-query-builder';
 
 export const buildQuery = ({ current = 1, pageSize = 10, filters = {}, sort = {} }) => {
   const q = {
@@ -14,8 +14,13 @@ export const buildQuery = ({ current = 1, pageSize = 10, filters = {}, sort = {}
       const [min, max] = value;
       filterStrings.push(`(${sfGt(field, min)} and ${sfLt(field, max)})`);
     } else if (Array.isArray(value) && value.length > 0) {
-      const orFilters = value.map((v) => sfLike(field, v)).join(' or ');
-      filterStrings.push(`(${orFilters})`);
+      if (field === 'dosesRequired') {
+        const orFilters = value.map((v) => sfEqual(field, v)).join(' or ');
+        filterStrings.push(`(${orFilters})`);
+      } else {
+        const orFilters = value.map((v) => sfLike(field, v)).join(' or ');
+        filterStrings.push(`(${orFilters})`);
+      }
     } else if (field === 'search' && value) {
       filterStrings.push(`(${sfLike('name', value)} or ${sfLike('country', value)})`);
     } else if (value !== undefined && value !== null && value !== '') {

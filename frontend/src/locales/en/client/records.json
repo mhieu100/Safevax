@@ -55,7 +55,6 @@
     "lastUpdated": "Last Updated",
     "verifiedRecords": "Blockchain-Verified Records",
     "provider": "Provider",
-
     "block": "Block",
     "transactionHash": "Transaction Hash",
     "digitalVerification": "Digital Verification",
@@ -74,10 +73,8 @@
     "lastVaccination": "Last Vaccination",
     "recordsTitle": "Vaccination Records",
     "recordsSubtitle": "Official medical records stored on blockchain",
-
     "patientIdentityHash": "Patient Identity Hash",
     "appointmentId": "Appointment ID",
-
     "ipfsHash": "IPFS Hash",
     "notes": "Notes",
     "noNotes": "No additional notes",
@@ -109,7 +106,14 @@
     "relative": "Relative",
     "bookNext": "Book Next",
     "readyToBook": "Ready to Book",
-    "needToBook": "Need to Book"
+    "needToBook": "Need to Book",
+    "myProtectionStatus": "My Protection Status",
+    "verified": "Verified",
+    "completed": "Completed",
+    "recommendation": "Recommendation",
+    "recommendationDesc": "To ensure full protection, the next recommended step is:",
+    "bookNow": "Book Now",
+    "verifiedOnBlockchain": "Verified on Blockchain"
   },
   "blockchainAppointmentStatus": {
     "UP_TO_DATE": "Up to Date",

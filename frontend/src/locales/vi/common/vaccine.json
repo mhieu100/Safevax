@@ -70,5 +70,30 @@
   "selectQuantity": "Chọn số lượng",
   "totalEstimate": "Tạm tính",
   "storageRequirements": "Yêu cầu bảo quản",
-  "contraindication": "Lưu ý nghiêm trọng"
+  "contraindication": "Lưu ý nghiêm trọng",
+  "searchPlaceholder": "Tìm kiếm...",
+  "disease": "Loại bệnh",
+  "targetGroup": "Đối tượng",
+  "age": "Độ tuổi",
+  "originCountry": "Nước sản xuất",
+  "months": "Tháng",
+  "years": "Tuổi",
+  "selectDiseases": "Chọn loại bệnh",
+  "selectTargets": "Chọn đối tượng",
+  "selectDoses": "Chọn số liều",
+  "selectCountries": "Chọn quốc gia",
+  "targetGroups": {
+    "INFANT": "Trẻ sơ sinh",
+    "CHILD": "Trẻ em",
+    "TEEN": "Thanh thiếu niên",
+    "ADULT": "Người lớn",
+    "ELDERLY": "Người cao tuổi",
+    "PREGNANT": "Phụ nữ mang thai",
+    "TRAVEL": "Du lịch",
+    "ALL": "Tất cả",
+    "NEWBORN": "Trẻ sơ sinh (Newborn)",
+    "SCHOOL_AGE": "Tuổi đi học",
+    "ADULT_ROUTINE": "Người lớn (Định kỳ)",
+    "ELDERLY_CARE": "Chăm sóc người cao tuổi"
+  }
 }

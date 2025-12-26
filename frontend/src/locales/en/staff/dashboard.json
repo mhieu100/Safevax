@@ -1,8 +1,160 @@
 {
-  "title": "Staff Dashboard",
-  "welcome": "Welcome to Staff Panel",
-  "todayAppointments": "Today's Appointments",
-  "pendingAppointments": "Pending Appointments",
-  "completedAppointments": "Completed Appointments",
-  "statistics": "Statistics"
+  "title": "Dashboard",
+  "greeting": "Hello, {{name}} 👋",
+  "center": "Center: {{name}}",
+  "refresh": "Refresh",
+  "redirectingDoctor": "Redirecting to Doctor Dashboard...",
+  "error": {
+    "load": "Failed to load Dashboard data"
+  },
+  "stats": {
+    "urgent": {
+      "title": "Urgent Tasks",
+      "suffix": "appointments",
+      "desc": "Priority Processing"
+    },
+    "urgencyMessages": {
+      "RESCHEDULE_PENDING": "Reschedule request needs approval",
+      "NO_DOCTOR": "No doctor assigned",
+      "COMING_SOON": "Coming soon",
+      "OVERDUE": "Overdue",
+      "default": "Action needed"
+    },
+    "today": {
+      "title": "Today's",
+      "suffix": "appointments",
+      "desc": "Appointments today"
+    },
+    "weekCompleted": {
+      "title": "Completed",
+      "suffix": "appointments",
+      "desc": "This week"
+    },
+    "weekCancelled": {
+      "title": "Cancelled",
+      "suffix": "appointments",
+      "desc": "This week"
+    }
+  },
+  "urgentList": {
+    "title": "Priority List",
+    "cases": "cases",
+    "viewAll": "View All",
+    "reschedule": "RESCHEDULE",
+    "dose": "Dose {{number}}",
+    "urgencyMessage": "Action Needed",
+    "changeTo": "Change to:",
+    "empty": {
+      "title": "No urgent tasks!",
+      "desc": "System is running smoothly."
+    },
+    "actions": {
+      "process": "Process",
+      "detail": "Detail"
+    }
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "viewDoctorSchedule": "View Doctor Schedule",
+    "pendingList": "Waiting List",
+    "assignedList": "Assigned List"
+  },
+  "urgencyGuide": {
+    "title": "Priority Guide",
+    "detail": "Detail",
+    "p1": "Priority 1: Urgent (Reschedule, < 24h)",
+    "p2": "Priority 2: High (No Doctor, imminent)",
+    "p3": "Priority 3: Medium (Standard appointment)",
+    "p4": "Priority 4: Low (Distant future)"
+  },
+  "priority": {
+    "1": "Critical",
+    "2": "High",
+    "3": "Medium",
+    "4": "Low",
+    "5": "Unknown"
+  },
+  "doctor": {
+    "greeting": "Hello, Dr. {{name}} 👋",
+    "greetingSub": "Have a productive day. You have {{count}} appointments today.",
+    "todaySchedule": "Today's Schedule",
+    "patients": "patients",
+    "completedRatio": "Completed {{completed}}/{{total}}",
+    "thisWeek": "This Week",
+    "stablePerformance": "Stable Performance",
+    "completedMonth": "Completed (Month)",
+    "inMonth": "In this month",
+    "rating": "Rating: {{rating}}/5.0",
+    "nextSchedule": "Next Appointment",
+    "noUpcoming": "No upcoming appointments",
+    "todaysTimeline": "Timeline",
+    "appointmentsCount": "{{count}} appts",
+    "viewMode": {
+      "timeline": "Timeline",
+      "grid": "Grid"
+    },
+    "noAppointments": "No appointments today",
+    "weeklyOverview": "Weekly Overview",
+    "completed": "Completed",
+    "processing": "Processing",
+    "cancelled": "Cancelled",
+    "quickNotes": "Quick Notes",
+    "noNotes": "No notes yet",
+    "addNote": "+ Add Note",
+    "status": {
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "scheduled": "Scheduled",
+      "cancelled": "Cancelled",
+      "pendingApproval": "Pending Approval"
+    },
+    "modal": {
+      "startVaccination": "Start Vaccination",
+      "confirmStart": "Confirm start vaccination for patient {{name}}?",
+      "okStart": "Start",
+      "cancel": "Cancel",
+      "startedSuccess": "Successfully started appointment #{{id}}",
+      "notesDefault": "No notes",
+      "detailTitle": "Appointment Detail #{{id}}",
+      "close": "Close",
+      "startInt": "Start Vaccination",
+      "completeInt": "Complete",
+      "time": "Time",
+      "patient": "Patient",
+      "contact": "Contact",
+      "vaccine": "Vaccine",
+      "dose": "Dose {{number}}",
+      "status": "Status",
+      "notes": "Notes",
+      "priority": "Priority",
+      "urgentAction": "Urgent Action Needed"
+    }
+  },
+  "processModal": {
+    "errorTitle": "Error",
+    "errorLoadSlots": "Unable to load doctor available slots",
+    "selectSlot": "Please select a time slot!",
+    "doctorNotFound": "Doctor information not found",
+    "updateSuccess": "Appointment updated successfully!",
+    "generalError": "An error occurred",
+    "updateError": "Unable to update appointment",
+    "patientInfo": "Patient Information",
+    "appointmentDate": "Appointment Date:",
+    "oldSchedule": "Old Schedule",
+    "newSchedule": "New Schedule",
+    "selectDoctorFirst": "Select doctor to view slots",
+    "doctorBusy": "Doctor is busy all day",
+    "titleReschedule": "Approve Reschedule",
+    "titleAssign": "Assign Doctor",
+    "approveSave": "Approve & Save",
+    "confirmAssign": "Confirm Assignment",
+    "internalNote": "Internal Note",
+    "notePlaceholder": "Additional notes for doctor/ticket...",
+    "selectDoctorDate": "Select doctor for {{date}}",
+    "selectDoctorLabel": "Select Doctor in Charge",
+    "selectDoctorPlaceholder": "-- Select Doctor --",
+    "emptySlots": "Available Slots",
+    "slotsCount": "{{count}} slots",
+    "close": "Close"
+  }
 }

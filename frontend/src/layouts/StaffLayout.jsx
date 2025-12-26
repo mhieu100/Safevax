@@ -45,6 +45,7 @@ const LayoutStaff = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  // Force HMR refresh
 
   useEffect(() => {
     setActiveMenu(location.pathname);
@@ -97,7 +98,7 @@ const LayoutStaff = () => {
     },
     {
       key: '/staff/walk-in-booking',
-      label: 'Đặt lịch Walk-in',
+      label: t('staff:common.menu.walkInBooking'),
       icon: <UserAddOutlined />,
       roles: ['CASHIER'],
     },
@@ -169,7 +170,7 @@ const LayoutStaff = () => {
                     VaxSafe
                   </span>
                   <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">
-                    Staff Portal
+                    {t('staff:common.header.subtitle')}
                   </span>
                 </div>
               )}
@@ -253,7 +254,7 @@ const LayoutStaff = () => {
             <div className="hidden md:block w-64">
               <Input
                 prefix={<SearchOutlined className="text-slate-400" />}
-                placeholder="Search..."
+                placeholder={t('staff:common.header.searchPlaceholder')}
                 className="rounded-xl border-slate-200 bg-slate-50 hover:bg-white focus:bg-white transition-all py-2"
                 bordered={false}
               />
@@ -262,7 +263,7 @@ const LayoutStaff = () => {
 
           {}
           <Space size={20}>
-            <Tooltip title="Notifications">
+            <Tooltip title={t('staff:common.header.notifications')}>
               <Button
                 type="text"
                 icon={<BellOutlined className="text-xl text-slate-600" />}

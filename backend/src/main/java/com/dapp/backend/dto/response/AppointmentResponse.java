@@ -34,6 +34,7 @@ public class AppointmentResponse {
     String paymentStatus;
     String paymentMethod;
     Double paymentAmount;
+    String paymentCurrency;
     Long familyMemberId;
     Long vaccinationCourseId;
     Integer vaccineTotalDoses;

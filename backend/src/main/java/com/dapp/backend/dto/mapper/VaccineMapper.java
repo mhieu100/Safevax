@@ -43,6 +43,7 @@ public class VaccineMapper {
                 .postPregnancy(v.getPostPregnancy())
                 .priorityLevel(v.getPriorityLevel())
                 .category(v.getCategory())
+                .disease(v.getDisease())
                 .build();
     }
 
@@ -75,6 +76,7 @@ public class VaccineMapper {
                 .postPregnancy(request.getPostPregnancy())
                 .priorityLevel(request.getPriorityLevel())
                 .category(request.getCategory())
+                .disease(request.getDisease())
                 .build();
     }
 
@@ -129,6 +131,9 @@ public class VaccineMapper {
         }
         if (request.getCategory() != null) {
             vaccine.setCategory(request.getCategory());
+        }
+        if (request.getDisease() != null) {
+            vaccine.setDisease(request.getDisease());
         }
     }
 

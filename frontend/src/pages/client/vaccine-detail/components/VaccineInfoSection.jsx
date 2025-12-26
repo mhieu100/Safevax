@@ -173,7 +173,7 @@ const VaccineInfoSection = ({ vaccine }) => {
             <InfoCard
               icon={<CalendarOutlined />}
               label={t('vaccine.daysForNextDose')}
-              value={vaccine.daysForNextDose ? `${vaccine.daysForNextDose} ${t('days')}` : 'N/A'}
+              value={vaccine.duration ? `${vaccine.duration} ${t('days')}` : 'N/A'}
             />
           </div>
 

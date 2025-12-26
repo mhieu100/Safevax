@@ -1,0 +1,14 @@
+{
+  "title": "Hệ thống trung tâm tiêm chủng",
+  "subtitle": "Tra cứu địa điểm, số điện thoại và giờ làm việc của các trung tâm gần bạn",
+  "searchPlaceholder": "Tìm kiếm theo tên hoặc địa chỉ...",
+  "foundCenters": "Tìm thấy {{count}} trung tâm",
+  "notFound": "Không tìm thấy trung tâm nào phù hợp",
+  "status": {
+    "active": "Đang hoạt động"
+  },
+  "actions": {
+    "directions": "Chỉ đường",
+    "call": "Gọi điện"
+  }
+}

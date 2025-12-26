@@ -17,6 +17,18 @@
   "confirm": "Confirm",
   "yes": "Yes",
   "no": "No",
+  "menu": {
+    "viewSchedule": "View Schedule",
+    "walkInBooking": "Walk-in Booking",
+    "pendingList": "Pending List",
+    "doctorSchedule": "Doctor Schedule",
+    "calendar": "Calendar"
+  },
+  "header": {
+    "subtitle": "Staff Portal",
+    "searchPlaceholder": "Search...",
+    "notifications": "Notifications"
+  },
   "security": {
     "title": "Security Settings",
     "accountSecure": "Account Secure",

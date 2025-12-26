@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class VaccineService {
     private final VaccineRepository vaccineRepository;
@@ -24,15 +23,12 @@ public class VaccineService {
         this.vaccineRepository = vaccineRepository;
     }
 
-    
     private String generateSlug(String name) {
         if (name == null || name.trim().isEmpty()) {
             return "";
         }
 
-
         String slug = name.toLowerCase().trim();
-        
 
         slug = slug.replaceAll("[àáạảãâầấậẩẫăằắặẳẵ]", "a");
         slug = slug.replaceAll("[èéẹẻẽêềếệểễ]", "e");
@@ -41,16 +37,14 @@ public class VaccineService {
         slug = slug.replaceAll("[ùúụủũưừứựửữ]", "u");
         slug = slug.replaceAll("[ỳýỵỷỹ]", "y");
         slug = slug.replaceAll("đ", "d");
-        
 
         slug = slug.replaceAll("[^a-z0-9\\s-]", "");
         slug = slug.replaceAll("\\s+", "-");
         slug = slug.replaceAll("-+", "-");
-        
+
         return slug;
     }
 
-    
     private String generateUniqueSlug(String baseName, Long excludeId) {
         String baseSlug = generateSlug(baseName);
         String uniqueSlug = baseSlug;
@@ -59,15 +53,14 @@ public class VaccineService {
         while (true) {
             final String checkSlug = uniqueSlug;
             var existing = vaccineRepository.findBySlug(checkSlug);
-            
+
             if (existing.isEmpty()) {
                 break;
             }
-            
+
             if (excludeId != null && existing.get().getId() == excludeId) {
                 break;
             }
-            
 
             uniqueSlug = baseSlug + "-" + counter;
             counter++;
@@ -78,6 +71,18 @@ public class VaccineService {
 
     public List<String> getAllCountries() {
         return vaccineRepository.findDistinctCountries();
+    }
+
+    public List<String> getAllManufacturers() {
+        return vaccineRepository.findDistinctManufacturers();
+    }
+
+    public List<Integer> getAllDosesRequired() {
+        return vaccineRepository.findDistinctDosesRequired();
+    }
+
+    public List<String> getAllDiseases() {
+        return vaccineRepository.findDistinctDiseases();
     }
 
     public Vaccine getVaccineBySku(String slug) throws AppException {
@@ -92,10 +97,10 @@ public class VaccineService {
 
     public Pagination getAllVaccines(Specification<Vaccine> specification, Pageable pageable) {
 
-        Specification<Vaccine> finalSpec = specification != null 
-            ? specification.and(VaccineSpecifications.notDeleted()) 
-            : VaccineSpecifications.notDeleted();
-        
+        Specification<Vaccine> finalSpec = specification != null
+                ? specification.and(VaccineSpecifications.notDeleted())
+                : VaccineSpecifications.notDeleted();
+
         Page<Vaccine> pageVaccine = vaccineRepository.findAll(finalSpec, pageable);
         Pagination pagination = new Pagination();
         Pagination.Meta meta = new Pagination.Meta();
@@ -115,7 +120,6 @@ public class VaccineService {
             request.setSlug(slug);
         }
 
-
         Vaccine vaccine = VaccineMapper.toEntity(request);
         Vaccine savedVaccine = vaccineRepository.save(vaccine);
 
@@ -127,12 +131,10 @@ public class VaccineService {
         Vaccine existingVaccine = vaccineRepository.findById(id)
                 .orElseThrow(() -> new AppException("Vaccine not found with id: " + id));
 
-
         if (request.getSlug() == null || request.getSlug().trim().isEmpty()) {
             String slug = generateUniqueSlug(request.getName(), id);
             request.setSlug(slug);
         }
-
 
         VaccineMapper.updateEntity(existingVaccine, request);
         Vaccine updatedVaccine = vaccineRepository.save(existingVaccine);
@@ -144,7 +146,6 @@ public class VaccineService {
         Vaccine vaccine = vaccineRepository.findById(id)
                 .orElseThrow(() -> new AppException("Vaccine not found with id: " + id));
 
-
         vaccine.setIsDeleted(true);
         vaccineRepository.save(vaccine);
     }
@@ -152,13 +153,14 @@ public class VaccineService {
     public List<Vaccine> getVaccinesByName(String name) {
         return vaccineRepository.findAllByName(name);
     }
-    
+
     // === Methods mới cho việc gợi ý vaccine theo đối tượng ===
-    
+
     /**
      * Lấy vaccine gợi ý theo độ tuổi và giới tính
+     * 
      * @param ageInMonths Tuổi tính theo tháng
-     * @param gender Giới tính (MALE/FEMALE)
+     * @param gender      Giới tính (MALE/FEMALE)
      * @return Danh sách vaccine phù hợp
      */
     public List<VaccineResponse> getRecommendedVaccines(Integer ageInMonths, String gender) {
@@ -166,7 +168,7 @@ public class VaccineService {
         List<Vaccine> vaccines = vaccineRepository.findRecommendedVaccines(ageInMonths, genderValue);
         return vaccines.stream().map(VaccineMapper::toResponse).toList();
     }
-    
+
     /**
      * Lấy vaccine an toàn cho phụ nữ mang thai
      */
@@ -174,7 +176,7 @@ public class VaccineService {
         List<Vaccine> vaccines = vaccineRepository.findPregnancySafeVaccines();
         return vaccines.stream().map(VaccineMapper::toResponse).toList();
     }
-    
+
     /**
      * Lấy vaccine cần tiêm trước khi mang thai
      */
@@ -182,7 +184,7 @@ public class VaccineService {
         List<Vaccine> vaccines = vaccineRepository.findPrePregnancyVaccines();
         return vaccines.stream().map(VaccineMapper::toResponse).toList();
     }
-    
+
     /**
      * Lấy vaccine cần tiêm sau sinh
      */
@@ -190,25 +192,28 @@ public class VaccineService {
         List<Vaccine> vaccines = vaccineRepository.findPostPregnancyVaccines();
         return vaccines.stream().map(VaccineMapper::toResponse).toList();
     }
-    
+
     /**
      * Lấy vaccine theo nhóm đối tượng
+     * 
      * @param targetGroup NEWBORN, INFANT, TODDLER, CHILD, TEEN, ADULT, ELDERLY
      */
     public List<VaccineResponse> getVaccinesByTargetGroup(String targetGroup) {
         List<Vaccine> vaccines = vaccineRepository.findByTargetGroup(targetGroup.toUpperCase());
         return vaccines.stream().map(VaccineMapper::toResponse).toList();
     }
-    
+
     /**
      * Lấy vaccine theo danh mục
-     * @param category BASIC_CHILDHOOD, SCHOOL_AGE, ADULT_ROUTINE, PREGNANCY, ELDERLY_CARE, TRAVEL, COVID19
+     * 
+     * @param category BASIC_CHILDHOOD, SCHOOL_AGE, ADULT_ROUTINE, PREGNANCY,
+     *                 ELDERLY_CARE, TRAVEL, COVID19
      */
     public List<VaccineResponse> getVaccinesByCategory(String category) {
         List<Vaccine> vaccines = vaccineRepository.findByCategory(category.toUpperCase());
         return vaccines.stream().map(VaccineMapper::toResponse).toList();
     }
-    
+
     /**
      * Lấy vaccine thiết yếu theo độ tuổi
      */
@@ -216,14 +221,14 @@ public class VaccineService {
         List<Vaccine> vaccines = vaccineRepository.findEssentialVaccinesByAge(ageInMonths);
         return vaccines.stream().map(VaccineMapper::toResponse).toList();
     }
-    
+
     /**
      * Lấy danh sách categories
      */
     public List<String> getAllCategories() {
         return vaccineRepository.findDistinctCategories();
     }
-    
+
     /**
      * Lấy danh sách target groups
      */

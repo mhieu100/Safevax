@@ -12,6 +12,7 @@ import {
   Typography,
 } from 'antd';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAccountStore } from '@/stores/useAccountStore';
 import ModalUpdateAvatar from './components/ModalUpdateAvatar';
 import ModalUpdatePassword from './components/ModalUpdatePassword';
@@ -19,16 +20,13 @@ import ModalUpdatePassword from './components/ModalUpdatePassword';
 const { Title, Text } = Typography;
 
 const StaffProfilePage = () => {
+  const { t } = useTranslation(['staff']);
   const user = useAccountStore((state) => state.user);
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
   const getRoleName = (role) => {
-    const roleMap = {
-      DOCTOR: 'Bác sĩ',
-      CASHIER: 'Thu ngân',
-    };
-    return roleMap[role] || role;
+    return role ? t(`staff:profile.role.${role.toLowerCase()}`) : role;
   };
 
   const tabItems = [
@@ -36,15 +34,19 @@ const StaffProfilePage = () => {
       key: '1',
       label: (
         <span>
-          <UserOutlined /> Thông tin cá nhân
+          <UserOutlined /> {t('staff:profile.tabs.personalInfo')}
         </span>
       ),
       children: (
         <Card>
           <Descriptions bordered column={1}>
-            <Descriptions.Item label="Họ và tên">{user?.fullName || 'N/A'}</Descriptions.Item>
-            <Descriptions.Item label="Email">{user?.email || 'N/A'}</Descriptions.Item>
-            <Descriptions.Item label="Vai trò">
+            <Descriptions.Item label={t('staff:profile.info.fullName')}>
+              {user?.fullName || 'N/A'}
+            </Descriptions.Item>
+            <Descriptions.Item label={t('staff:profile.info.email')}>
+              {user?.email || 'N/A'}
+            </Descriptions.Item>
+            <Descriptions.Item label={t('staff:profile.info.role')}>
               <Space>
                 <Text strong style={{ color: '#1890ff' }}>
                   {getRoleName(user?.role)}
@@ -52,7 +54,9 @@ const StaffProfilePage = () => {
               </Space>
             </Descriptions.Item>
             {user?.centerName && (
-              <Descriptions.Item label="Trung tâm">{user.centerName}</Descriptions.Item>
+              <Descriptions.Item label={t('staff:profile.info.center')}>
+                {user.centerName}
+              </Descriptions.Item>
             )}
           </Descriptions>
         </Card>
@@ -65,7 +69,7 @@ const StaffProfilePage = () => {
       key: '2',
       label: (
         <span>
-          <CalendarOutlined /> Thống kê
+          <CalendarOutlined /> {t('staff:profile.tabs.statistics')}
         </span>
       ),
       children: (
@@ -73,7 +77,7 @@ const StaffProfilePage = () => {
           <Col xs={24} sm={12} lg={6}>
             <Card>
               <Statistic
-                title="Lịch hẹn hôm nay"
+                title={t('staff:profile.stats.todayAppointments')}
                 value={0}
                 styles={{ content: { color: '#1890ff' } }}
               />
@@ -82,7 +86,7 @@ const StaffProfilePage = () => {
           <Col xs={24} sm={12} lg={6}>
             <Card>
               <Statistic
-                title="Đã hoàn thành"
+                title={t('staff:profile.stats.completed')}
                 value={0}
                 styles={{ content: { color: '#52c41a' } }}
               />
@@ -90,13 +94,17 @@ const StaffProfilePage = () => {
           </Col>
           <Col xs={24} sm={12} lg={6}>
             <Card>
-              <Statistic title="Đang chờ" value={0} styles={{ content: { color: '#faad14' } }} />
+              <Statistic
+                title={t('staff:profile.stats.pending')}
+                value={0}
+                styles={{ content: { color: '#faad14' } }}
+              />
             </Card>
           </Col>
           <Col xs={24} sm={12} lg={6}>
             <Card>
               <Statistic
-                title="Tổng bệnh nhân"
+                title={t('staff:profile.stats.totalPatients')}
                 value={0}
                 styles={{ content: { color: '#722ed1' } }}
               />
@@ -111,31 +119,31 @@ const StaffProfilePage = () => {
     key: '3',
     label: (
       <span>
-        <SettingOutlined /> Cài đặt
+        <SettingOutlined /> {t('staff:profile.tabs.settings')}
       </span>
     ),
     children: (
       <Card>
         <Space orientation="vertical" size="large" style={{ width: '100%' }}>
           <div>
-            <Title level={5}>Bảo mật</Title>
+            <Title level={5}>{t('staff:profile.security.title')}</Title>
             <Button
               icon={<LockOutlined />}
               onClick={() => setPasswordModalVisible(true)}
               size="large"
             >
-              Đổi mật khẩu
+              {t('staff:profile.security.changePassword')}
             </Button>
           </div>
 
           <div>
-            <Title level={5}>Ảnh đại diện</Title>
+            <Title level={5}>{t('staff:profile.avatar.title')}</Title>
             <Button
               icon={<UserOutlined />}
               onClick={() => setAvatarModalVisible(true)}
               size="large"
             >
-              Cập nhật ảnh đại diện
+              {t('staff:profile.avatar.update')}
             </Button>
           </div>
         </Space>

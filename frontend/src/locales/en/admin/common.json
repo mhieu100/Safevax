@@ -18,6 +18,27 @@
   "confirm": "Confirm",
   "yes": "Yes",
   "no": "No",
+  "menu": {
+    "dashboard": "Dashboard",
+    "appointments": "Appointment Management",
+    "orders": "Order Management",
+    "userManagement": "User Management",
+    "patients": "Patients",
+    "cashiers": "Cashiers",
+    "doctors": "Doctors",
+    "vaccines": "Vaccine Management",
+    "centers": "Center Management",
+    "permissions": "Permissions",
+    "news": "News",
+    "roles": "Roles",
+    "aiKnowledge": "AI Knowledge",
+    "monitor": "Blockchain Monitor"
+  },
+  "header": {
+    "subtitle": "Admin Portal",
+    "searchPlaceholder": "Search...",
+    "notifications": "Notifications"
+  },
   "security": {
     "title": "Security Settings",
     "accountSecure": "Account Secure",

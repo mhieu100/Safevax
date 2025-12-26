@@ -54,7 +54,7 @@ const TopCheckoutSection = ({ currentStep, doseNumber }) => {
               icon: <CreditCardOutlined className={currentStep >= 1 ? 'text-blue-600' : ''} />,
             },
             {
-              title: t('booking.review'),
+              title: t('booking.reviewStep'),
               description: t('booking.confirmDetails'),
               icon: <CheckCircleOutlined className={currentStep >= 2 ? 'text-blue-600' : ''} />,
             },
