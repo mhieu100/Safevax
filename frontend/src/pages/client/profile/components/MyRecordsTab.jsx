@@ -9,17 +9,17 @@ const MyRecordsTab = () => {
   const items = [
     {
       key: 'passport',
-      label: t('client:myRecords.digitalPassport'),
+      label: t('client:records.myRecords.digitalPassport'),
       children: <VaccinePassportTab />,
     },
     {
       key: 'history',
-      label: t('client:myRecords.vaccinationHistory'),
+      label: t('client:records.myRecords.vaccinationHistory'),
       children: <VaccinationHistoryTab />,
     },
     {
       key: 'records',
-      label: t('client:myRecords.medicalRecords'),
+      label: t('client:records.myRecords.medicalRecords'),
       children: <VaccineRecordTab />,
     },
   ];

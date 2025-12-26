@@ -51,7 +51,7 @@ const ModalUpdateAvatar = ({ open, setOpen }) => {
 
       const updateRes = await callUpdateAvatar(defaultAvatar);
       if (!updateRes) {
-        throw new Error('Xóa ảnh đại diện thất bại');
+        throw new Error(t('client:profile.removeAvatarFailed'));
       }
 
       updateUserInfo({ avatar: defaultAvatar });

@@ -31,7 +31,7 @@ const VaccinationHistoryTab = ({ customData }) => {
       });
     } catch (_err) {
       console.error(_err);
-      setError(t('client:vaccinationHistory.errorLoadHistory'));
+      setError(t('client:records.vaccinationHistory.errorLoadHistory'));
     } finally {
       setLoading(false);
     }
@@ -66,9 +66,9 @@ const VaccinationHistoryTab = ({ customData }) => {
   const getStatusText = (status) => {
     switch (status) {
       case 'COMPLETED':
-        return t('client:vaccinationHistory.completed');
+        return t('client:records.vaccinationHistory.completed');
       case 'IN_PROGRESS':
-        return t('client:vaccinationHistory.inProgress');
+        return t('client:records.vaccinationHistory.inProgress');
       case 'CANCELLED':
         return t('client:appointments.cancelled');
       default:
@@ -93,7 +93,7 @@ const VaccinationHistoryTab = ({ customData }) => {
 
   const routeColumns = [
     {
-      title: t('client:vaccinationHistory.vaccine'), // "Route/Vaccine"
+      title: t('client:records.vaccinationHistory.vaccine'), // "Route/Vaccine"
       key: 'vaccine',
       render: (_, record) => (
         <div>
@@ -101,11 +101,11 @@ const VaccinationHistoryTab = ({ customData }) => {
             {record.vaccineName}
           </Text>
           <div className="text-xs text-slate-500">
-            {t('client:myRecords.progress')}: {record.completedCount}/{record.requiredDoses}{' '}
-            {t('client:vaccinationHistory.doses')}
+            {t('client:records.myRecords.progress')}: {record.completedCount}/{record.requiredDoses}{' '}
+            {t('client:records.vaccinationHistory.doses')}
             {record.cycleIndex > 0 && (
               <Tag className="ml-2">
-                {t('client:vaccinationHistory.cycle', {
+                {t('client:records.vaccinationHistory.cycle', {
                   count: record.cycleIndex + 1,
                   defaultValue: `Cycle ${record.cycleIndex + 1}`,
                 })}
@@ -116,7 +116,7 @@ const VaccinationHistoryTab = ({ customData }) => {
       ),
     },
     {
-      title: t('client:vaccinationHistory.patient'),
+      title: t('client:records.vaccinationHistory.patient'),
       key: 'patient',
       render: (_, record) => (
         <div>
@@ -126,20 +126,20 @@ const VaccinationHistoryTab = ({ customData }) => {
               color="purple"
               className="ml-2 rounded-md bg-purple-50 text-purple-600 border-0 text-[10px]"
             >
-              {t('client:vaccinationHistory.familyMember')}
+              {t('client:records.vaccinationHistory.familyMember')}
             </Tag>
           )}
         </div>
       ),
     },
     {
-      title: t('client:vaccinationHistory.totalAmount'),
+      title: t('client:records.vaccinationHistory.totalAmount'),
       dataIndex: 'totalAmount',
       key: 'amount',
       render: (val) => <span className="font-bold text-slate-700">{formatPrice(val)}</span>,
     },
     {
-      title: t('client:vaccinationHistory.status'),
+      title: t('client:records.vaccinationHistory.status'),
       key: 'status',
       render: (_, record) => (
         <Tag
@@ -156,18 +156,18 @@ const VaccinationHistoryTab = ({ customData }) => {
     // Show appointments
     const columns = [
       {
-        title: t('client:vaccinationHistory.dose'),
+        title: t('client:records.vaccinationHistory.dose'),
         dataIndex: 'doseNumber',
         key: 'dose',
         width: 80,
         render: (d) => (
           <Tag color="blue">
-            {t('client:vaccinationHistory.dose')} {d}
+            {t('client:records.vaccinationHistory.dose')} {d}
           </Tag>
         ),
       },
       {
-        title: t('client:vaccinationHistory.scheduledDate'),
+        title: t('client:records.vaccinationHistory.scheduledDate'),
         dataIndex: 'scheduledDate',
         key: 'date',
         render: (d, r) => (
@@ -178,13 +178,13 @@ const VaccinationHistoryTab = ({ customData }) => {
         ),
       },
       {
-        title: t('client:vaccinationHistory.center'),
+        title: t('client:records.vaccinationHistory.center'),
         dataIndex: 'centerName', // Need to ensure mapped correctly
         key: 'center',
         render: (v) => <span className="text-slate-600">{v || 'N/A'}</span>,
       },
       {
-        title: t('client:vaccinationHistory.status'),
+        title: t('client:records.vaccinationHistory.status'),
         dataIndex: 'appointmentStatus',
         key: 'appointmentStatus',
         render: (s) => (
@@ -198,7 +198,7 @@ const VaccinationHistoryTab = ({ customData }) => {
     return (
       <div className="p-4 bg-slate-50 rounded-xl">
         <Text strong className="mb-2 block">
-          {t('client:vaccinationHistory.appointmentDetails')}
+          {t('client:records.vaccinationHistory.appointmentDetails')}
         </Text>
         <Table
           columns={columns}
@@ -215,10 +215,10 @@ const VaccinationHistoryTab = ({ customData }) => {
     <div className="animate-fade-in space-y-6">
       <div className="mb-6">
         <Title level={3} className="!mb-1 text-slate-800">
-          {t('client:vaccinationHistory.title')}
+          {t('client:records.vaccinationHistory.title')}
         </Title>
         <Text className="text-slate-500 text-lg">
-          {t('client:vaccinationHistory.trackBookings')}
+          {t('client:records.vaccinationHistory.trackBookings')}
         </Text>
       </div>
 
@@ -228,7 +228,7 @@ const VaccinationHistoryTab = ({ customData }) => {
           <div className="text-center">
             <div className="text-3xl font-bold text-blue-600 mb-1">{stats.total}</div>
             <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-              {t('client:vaccinationHistory.totalBookings')} (Routes)
+              {t('client:records.vaccinationHistory.totalBookings')} (Routes)
             </Text>
           </div>
         </Card>
@@ -236,7 +236,7 @@ const VaccinationHistoryTab = ({ customData }) => {
           <div className="text-center">
             <div className="text-3xl font-bold text-emerald-600 mb-1">{stats.completed}</div>
             <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-              {t('client:vaccinationHistory.completed')}
+              {t('client:records.vaccinationHistory.completed')}
             </Text>
           </div>
         </Card>
@@ -244,7 +244,7 @@ const VaccinationHistoryTab = ({ customData }) => {
           <div className="text-center">
             <div className="text-3xl font-bold text-orange-600 mb-1">{stats.inProgress}</div>
             <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-              {t('client:vaccinationHistory.inProgress')}
+              {t('client:records.vaccinationHistory.inProgress')}
             </Text>
           </div>
         </Card>

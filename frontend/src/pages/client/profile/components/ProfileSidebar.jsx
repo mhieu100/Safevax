@@ -20,22 +20,22 @@ const ProfileSidebar = ({ activeTab, onTabChange, setAvatarModalVisible }) => {
     {
       key: '1',
       icon: <AppstoreOutlined className="text-lg" />,
-      label: t('client:sidebar.dashboard'),
+      label: t('client:layout.sidebar.dashboard'),
     },
     {
       key: '2',
       icon: <MedicineBoxOutlined className="text-lg" />,
-      label: t('client:sidebar.myRecords'),
+      label: t('client:layout.sidebar.myRecords'),
     },
     {
       key: '4',
       icon: <TeamOutlined className="text-lg" />,
-      label: t('client:sidebar.familyMembers'),
+      label: t('client:layout.sidebar.familyMembers'),
     },
     {
       key: '5',
       icon: <SettingOutlined className="text-lg" />,
-      label: t('client:sidebar.accountSettings'),
+      label: t('client:layout.sidebar.accountSettings'),
     },
   ];
 
@@ -75,7 +75,7 @@ const ProfileSidebar = ({ activeTab, onTabChange, setAvatarModalVisible }) => {
               color="blue"
               className="rounded-full px-2 border-0 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase"
             >
-              {t('client:cardInfo.patient')}
+              {t('client:layout.cardInfo.patient')}
             </Tag>
             <Text type="secondary" className="text-xs font-mono">
               #{user?.id || '---'}
@@ -86,7 +86,7 @@ const ProfileSidebar = ({ activeTab, onTabChange, setAvatarModalVisible }) => {
 
       <div className="flex-1 py-4">
         <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-6">
-          {t('client:sidebar.menu')}
+          {t('client:layout.sidebar.menu')}
         </h3>
         <Menu
           mode="inline"

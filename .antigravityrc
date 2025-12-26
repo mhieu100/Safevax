@@ -1,0 +1,11 @@
+{
+  "communication": {
+    "language": "vi-VN",
+    "tone": "helpful",
+    "rules": [
+      "Tất cả các giải thích về mã nguồn phải được viết bằng tiếng Việt.",
+      "Sử dụng thuật ngữ kỹ thuật phổ biến (ví dụ: 'biến', 'hàm', 'luồng xử lý') nhưng giữ nguyên các từ khóa lập trình (ví dụ: 'function', 'class').",
+      "Phản hồi phải ngắn gọn, dễ hiểu và đi thẳng vào vấn đề."
+    ]
+  }
+}

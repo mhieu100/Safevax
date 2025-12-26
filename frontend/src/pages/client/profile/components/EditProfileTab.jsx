@@ -116,7 +116,7 @@ const TabEditUser = ({ editMode, setEditMode }) => {
               <Form.Item
                 label={t('client:profile.dateOfBirth')}
                 name="birthday"
-                tooltip="Cannot be changed - used for blockchain identity"
+                tooltip={t('client:profile.cantChangeBirthday')}
               >
                 <Input
                   disabled

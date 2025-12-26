@@ -45,7 +45,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
         }
       } catch (err) {
         console.error('Error fetching vaccine records:', err);
-        setError(t('client:vaccinePassport.errorFetch'));
+        setError(t('client:records.vaccinePassport.errorFetch'));
       } finally {
         setLoading(false);
       }
@@ -56,7 +56,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
 
   const columns = [
     {
-      title: t('client:vaccinePassport.vaccine'),
+      title: t('client:records.vaccinePassport.vaccine'),
       dataIndex: 'vaccineName',
       key: 'vaccineName',
       width: 200,
@@ -68,14 +68,14 @@ const VaccineRecordTab = ({ familyMemberId }) => {
           <div>
             <div className="font-medium text-slate-800 line-clamp-2">{text}</div>
             <Text type="secondary" className="text-xs">
-              {t('client:vaccinePassport.dose')} #{record.doseNumber}
+              {t('client:records.vaccinePassport.dose')} #{record.doseNumber}
             </Text>
           </div>
         </div>
       ),
     },
     {
-      title: t('client:vaccinePassport.date'),
+      title: t('client:records.vaccinePassport.date'),
       dataIndex: 'vaccinationDate',
       key: 'vaccinationDate',
       width: 140,
@@ -87,7 +87,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
       ),
     },
     {
-      title: t('client:vaccinePassport.site'),
+      title: t('client:records.vaccinePassport.site'),
       dataIndex: 'site',
       key: 'site',
       width: 120,
@@ -99,7 +99,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
     },
 
     {
-      title: t('client:vaccinePassport.doctor'),
+      title: t('client:records.vaccinePassport.doctor'),
       dataIndex: 'doctorName',
       key: 'doctorName',
       width: 180,
@@ -113,7 +113,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
       ),
     },
     {
-      title: t('client:vaccinePassport.center'),
+      title: t('client:records.vaccinePassport.center'),
       dataIndex: 'centerName',
       key: 'centerName',
       width: 200,
@@ -124,20 +124,20 @@ const VaccineRecordTab = ({ familyMemberId }) => {
       ),
     },
     {
-      title: t('client:vaccinePassport.status'),
+      title: t('client:records.vaccinePassport.status'),
       key: 'status',
       width: 160,
       render: (_, record) => (
         <div className="flex items-center gap-2">
           <Tag icon={<CheckCircleFilled />} color="success" className="rounded-full px-3 border-0">
-            {t('client:vaccinePassport.completed')}
+            {t('client:records.vaccinePassport.completed')}
           </Tag>
           {record.transactionHash && <BlockchainBadge verified={true} compact={true} />}
         </div>
       ),
     },
     {
-      title: t('client:vaccinePassport.actions'),
+      title: t('client:records.vaccinePassport.actions'),
       key: 'actions',
       width: 100,
       fixed: 'right',
@@ -152,7 +152,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
               setVerificationModalOpen(true);
             }}
           >
-            {t('client:vaccinePassport.verify')}
+            {t('client:records.vaccinePassport.verify')}
           </Button>
         ),
     },
@@ -189,7 +189,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
           <div className="flex items-center justify-between p-2">
             <div>
               <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                {t('client:vaccinePassport.totalRecords')}
+                {t('client:records.vaccinePassport.totalRecords')}
               </Text>
               <div className="text-3xl font-bold text-blue-600 mt-1">{records.length}</div>
             </div>
@@ -206,7 +206,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
           <div className="flex items-center justify-between p-2">
             <div>
               <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                {t('client:vaccinePassport.vaccinesTaken')}
+                {t('client:records.vaccinePassport.vaccinesTaken')}
               </Text>
               <div className="text-3xl font-bold text-emerald-600 mt-1">
                 {new Set(records.map((r) => r.vaccineName)).size}
@@ -225,7 +225,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
           <div className="flex items-center justify-between p-2">
             <div>
               <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                {t('client:vaccinePassport.lastVaccination')}
+                {t('client:records.vaccinePassport.lastVaccination')}
               </Text>
               <div className="text-lg font-bold text-purple-600 mt-2">
                 {records.length > 0
@@ -245,9 +245,11 @@ const VaccineRecordTab = ({ familyMemberId }) => {
       <Card className="rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
         <div className="mb-4 px-2">
           <Title level={4} className="!mb-1 text-slate-800">
-            {t('client:vaccinePassport.recordsTitle')}
+            {t('client:records.vaccinePassport.recordsTitle')}
           </Title>
-          <Text className="text-slate-500">{t('client:vaccinePassport.recordsSubtitle')}</Text>
+          <Text className="text-slate-500">
+            {t('client:records.vaccinePassport.recordsSubtitle')}
+          </Text>
         </div>
 
         {records.length > 0 ? (
@@ -260,7 +262,8 @@ const VaccineRecordTab = ({ familyMemberId }) => {
             pagination={{
               pageSize: 10,
               showSizeChanger: true,
-              showTotal: (total) => t('client:vaccinePassport.totalRecordsCount', { count: total }),
+              showTotal: (total) =>
+                t('client:records.vaccinePassport.totalRecordsCount', { count: total }),
             }}
             scroll={{ x: 1200 }}
             expandable={{
@@ -268,14 +271,14 @@ const VaccineRecordTab = ({ familyMemberId }) => {
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 m-2">
                   <Descriptions bordered size="small" column={2} className="bg-white rounded-lg">
                     <Descriptions.Item
-                      label={t('client:vaccinePassport.patientIdentityHash')}
+                      label={t('client:records.vaccinePassport.patientIdentityHash')}
                       span={2}
                     >
                       <Text className="font-mono text-xs text-slate-500">
                         {record.patientIdentityHash}
                       </Text>
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('client:vaccinePassport.appointmentId')}>
+                    <Descriptions.Item label={t('client:records.vaccinePassport.appointmentId')}>
                       <span className="font-mono text-slate-700">{record.appointmentId}</span>
                     </Descriptions.Item>
 
@@ -283,7 +286,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
                     {record.transactionHash && (
                       <>
                         <Descriptions.Item
-                          label={t('client:vaccinePassport.blockchainRecord')}
+                          label={t('client:records.vaccinePassport.blockchainRecord')}
                           span={2}
                         >
                           <div className="flex items-center gap-2">
@@ -296,12 +299,12 @@ const VaccineRecordTab = ({ familyMemberId }) => {
                                 setVerificationModalOpen(true);
                               }}
                             >
-                              {t('client:vaccinePassport.viewDetails')}
+                              {t('client:records.vaccinePassport.viewDetails')}
                             </Button>
                           </div>
                         </Descriptions.Item>
                         <Descriptions.Item
-                          label={t('client:vaccinePassport.transactionHash')}
+                          label={t('client:records.vaccinePassport.transactionHash')}
                           span={2}
                         >
                           <Text className="font-mono text-xs text-emerald-600 break-all">
@@ -311,7 +314,10 @@ const VaccineRecordTab = ({ familyMemberId }) => {
                       </>
                     )}
 
-                    <Descriptions.Item label={t('client:vaccinePassport.ipfsHash')} span={2}>
+                    <Descriptions.Item
+                      label={t('client:records.vaccinePassport.ipfsHash')}
+                      span={2}
+                    >
                       <div className="flex items-center gap-2">
                         <Text className="font-mono text-xs text-blue-600">
                           {record.ipfsHash || 'N/A'}
@@ -323,15 +329,15 @@ const VaccineRecordTab = ({ familyMemberId }) => {
                             href={`https://ipfs.io/ipfs/${record.ipfsHash}`}
                             target="_blank"
                           >
-                            {t('client:vaccinePassport.viewOnIpfs')}
+                            {t('client:records.vaccinePassport.viewOnIpfs')}
                           </Button>
                         )}
                       </div>
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('client:vaccinePassport.notes')} span={2}>
+                    <Descriptions.Item label={t('client:records.vaccinePassport.notes')} span={2}>
                       {record.notes || (
                         <span className="text-slate-400 italic">
-                          {t('client:vaccinePassport.noNotes')}
+                          {t('client:records.vaccinePassport.noNotes')}
                         </span>
                       )}
                     </Descriptions.Item>
@@ -344,20 +350,20 @@ const VaccineRecordTab = ({ familyMemberId }) => {
         ) : (
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description={t('client:vaccinePassport.noRecords')}
+            description={t('client:records.vaccinePassport.noRecords')}
           />
         )}
       </Card>
 
       <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-100 mt-6 rounded-2xl">
         <Title level={5} className="text-blue-900">
-          📋 {t('client:vaccinePassport.aboutTitle')}
+          📋 {t('client:records.vaccinePassport.aboutTitle')}
         </Title>
         <ul className="text-sm text-blue-800 mt-2 space-y-1 list-disc pl-4">
-          <li>{t('client:vaccinePassport.aboutPoint1')}</li>
-          <li>{t('client:vaccinePassport.aboutPoint2')}</li>
-          <li>{t('client:vaccinePassport.aboutPoint3')}</li>
-          <li>{t('client:vaccinePassport.aboutPoint4')}</li>
+          <li>{t('client:records.vaccinePassport.aboutPoint1')}</li>
+          <li>{t('client:records.vaccinePassport.aboutPoint2')}</li>
+          <li>{t('client:records.vaccinePassport.aboutPoint3')}</li>
+          <li>{t('client:records.vaccinePassport.aboutPoint4')}</li>
         </ul>
       </Card>
 

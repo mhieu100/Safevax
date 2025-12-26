@@ -87,34 +87,42 @@ const VaccinePassportTab = () => {
               </div>
               <div>
                 <Title level={3} className="!text-white !mb-0">
-                  {t('client:vaccinePassport.digitalPassport')}
+                  {t('client:records.vaccinePassport.digitalPassport')}
                 </Title>
                 <Text className="text-white/80">
                   <LockOutlined className="mr-2" />
-                  {t('client:vaccinePassport.securedByBlockchain')}
+                  {t('client:records.vaccinePassport.securedByBlockchain')}
                 </Text>
               </div>
             </div>
             <Tag icon={<CheckCircleFilled />} color="success" className="px-4 py-1 text-base">
-              {t('client:vaccinePassport.verified')}
+              {t('client:records.vaccinePassport.verified')}
             </Tag>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div className="p-4 bg-white/10 rounded-lg backdrop-blur-sm">
               <BlockOutlined className="text-xl mb-2" />
-              <div className="text-xs text-white/70">{t('client:vaccinePassport.network')}</div>
+              <div className="text-xs text-white/70">
+                {t('client:records.vaccinePassport.network')}
+              </div>
               <div className="font-semibold">{passportData.blockchainNetwork}</div>
             </div>
             <div className="p-4 bg-white/10 rounded-lg backdrop-blur-sm">
               <LinkOutlined className="text-xl mb-2" />
-              <div className="text-xs text-white/70">{t('client:vaccinePassport.protocol')}</div>
+              <div className="text-xs text-white/70">
+                {t('client:records.vaccinePassport.protocol')}
+              </div>
               <div className="font-semibold">{passportData.consensusProtocol}</div>
             </div>
             <div className="p-4 bg-white/10 rounded-lg backdrop-blur-sm">
               <VerifiedOutlined className="text-xl mb-2" />
-              <div className="text-xs text-white/70">{t('client:vaccinePassport.status')}</div>
-              <div className="font-semibold">{t('client:vaccinePassport.activeVerified')}</div>
+              <div className="text-xs text-white/70">
+                {t('client:records.vaccinePassport.status')}
+              </div>
+              <div className="font-semibold">
+                {t('client:records.vaccinePassport.activeVerified')}
+              </div>
             </div>
           </div>
         </div>
@@ -127,7 +135,7 @@ const VaccinePassportTab = () => {
             <div className="flex items-center justify-between mb-6">
               <Title level={4}>
                 <SafetyCertificateOutlined className="mr-2 text-purple-600" />
-                {t('client:vaccinePassport.passportInfo')}
+                {t('client:records.vaccinePassport.passportInfo')}
               </Title>
               <Space>
                 <Button
@@ -136,10 +144,10 @@ const VaccinePassportTab = () => {
                   onClick={handleDownload}
                   className="bg-purple-600 hover:bg-purple-700"
                 >
-                  {t('client:vaccinePassport.download')}
+                  {t('client:records.vaccinePassport.download')}
                 </Button>
                 <Button icon={<ShareAltOutlined />} onClick={handleShare}>
-                  {t('client:vaccinePassport.share')}
+                  {t('client:records.vaccinePassport.share')}
                 </Button>
               </Space>
             </div>
@@ -147,7 +155,7 @@ const VaccinePassportTab = () => {
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
                 <Text type="secondary" className="block mb-1">
-                  {t('client:vaccinePassport.fullName')}
+                  {t('client:records.vaccinePassport.fullName')}
                 </Text>
                 <Text strong className="text-base">
                   {user?.fullName || 'N/A'}
@@ -155,7 +163,7 @@ const VaccinePassportTab = () => {
               </div>
               <div>
                 <Text type="secondary" className="block mb-1">
-                  {t('client:vaccinePassport.passportId')}
+                  {t('client:records.vaccinePassport.passportId')}
                 </Text>
                 <Text strong className="text-base font-mono">
                   {user?.identityNumber || user?.id || 'N/A'}
@@ -163,7 +171,7 @@ const VaccinePassportTab = () => {
               </div>
               <div>
                 <Text type="secondary" className="block mb-1">
-                  {t('client:vaccinePassport.issuedDate')}
+                  {t('client:records.vaccinePassport.issuedDate')}
                 </Text>
                 <Text strong>{passportData.issuedDate}</Text>
               </div>
@@ -175,30 +183,32 @@ const VaccinePassportTab = () => {
             <div className="mb-6">
               <Title level={5} className="mb-4">
                 <BlockOutlined className="mr-2 text-purple-600" />
-                {t('client:vaccinePassport.blockchainVerification')}
+                {t('client:records.vaccinePassport.blockchainVerification')}
               </Title>
               <Card className="bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200">
                 <div className="grid grid-cols-1 gap-4">
                   <div className="flex items-center justify-between p-2 bg-white/50 rounded-lg">
-                    <Text type="secondary">{t('client:vaccinePassport.networkType')}:</Text>
+                    <Text type="secondary">{t('client:records.vaccinePassport.networkType')}:</Text>
                     <Tag color="purple" className="m-0">
-                      {t('client:vaccinePassport.permissionedBlockchain')}
+                      {t('client:records.vaccinePassport.permissionedBlockchain')}
                     </Tag>
                   </div>
                   <div className="flex items-center justify-between p-2 bg-white/50 rounded-lg">
-                    <Text type="secondary">{t('client:vaccinePassport.consensus')}:</Text>
+                    <Text type="secondary">{t('client:records.vaccinePassport.consensus')}:</Text>
                     <Tag color="blue" className="m-0">
-                      {t('client:vaccinePassport.proofOfAuthority')}
+                      {t('client:records.vaccinePassport.proofOfAuthority')}
                     </Tag>
                   </div>
                   <div className="flex items-center justify-between p-2 bg-white/50 rounded-lg">
-                    <Text type="secondary">{t('client:vaccinePassport.totalRecords')}:</Text>
+                    <Text type="secondary">
+                      {t('client:records.vaccinePassport.totalRecords')}:
+                    </Text>
                     <Tag color="green" className="m-0">
-                      {vaccineRecords.length} {t('client:vaccinePassport.verified')}
+                      {vaccineRecords.length} {t('client:records.vaccinePassport.verified')}
                     </Tag>
                   </div>
                   <div className="flex items-center justify-between p-2 bg-white/50 rounded-lg">
-                    <Text type="secondary">{t('client:vaccinePassport.lastUpdated')}:</Text>
+                    <Text type="secondary">{t('client:records.vaccinePassport.lastUpdated')}:</Text>
                     <Text className="font-mono text-xs">{vaccineRecords[0]?.date}</Text>
                   </div>
                 </div>
@@ -208,7 +218,7 @@ const VaccinePassportTab = () => {
             {}
             <Title level={5} className="mb-4">
               <LinkOutlined className="mr-2 text-purple-600" />
-              {t('client:vaccinePassport.verifiedRecords')}
+              {t('client:records.vaccinePassport.verifiedRecords')}
             </Title>
             <Timeline
               items={vaccineRecords.map((record) => ({
@@ -231,11 +241,11 @@ const VaccinePassportTab = () => {
                         </Text>
                         <br />
                         <Text type="secondary" className="text-sm">
-                          {t('client:vaccinePassport.dose')} {record.dose} • {record.date}
+                          {t('client:records.vaccinePassport.dose')} {record.dose} • {record.date}
                         </Text>
                       </div>
                       <Tag color="success" icon={<VerifiedOutlined />}>
-                        {t('client:vaccinePassport.verified')}
+                        {t('client:records.vaccinePassport.verified')}
                       </Tag>
                     </div>
 
@@ -243,19 +253,21 @@ const VaccinePassportTab = () => {
 
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-xs">
-                        <Text type="secondary">{t('client:vaccinePassport.provider')}:</Text>
+                        <Text type="secondary">
+                          {t('client:records.vaccinePassport.provider')}:
+                        </Text>
                         <Text className="font-medium">{record.provider}</Text>
                       </div>
 
                       <div className="flex items-center justify-between text-xs">
-                        <Text type="secondary">{t('client:vaccinePassport.block')}:</Text>
+                        <Text type="secondary">{t('client:records.vaccinePassport.block')}:</Text>
                         <Tag color="purple" className="font-mono text-xs">
                           {record.blockNumber}
                         </Tag>
                       </div>
                       <div className="bg-gray-50 p-2 rounded mt-2">
                         <Text type="secondary" className="text-xs block mb-1">
-                          {t('client:vaccinePassport.transactionHash')}:
+                          {t('client:records.vaccinePassport.transactionHash')}:
                         </Text>
                         <Text className="font-mono text-xs break-all text-purple-600" copyable>
                           {record.verificationHash}
@@ -274,14 +286,14 @@ const VaccinePassportTab = () => {
           <Card className="shadow-sm rounded-xl border-2 border-purple-100 mb-6">
             <Title level={5} className="text-center mb-4">
               <QrcodeOutlined className="mr-2 text-purple-600" />
-              {t('client:vaccinePassport.digitalVerification')}
+              {t('client:records.vaccinePassport.digitalVerification')}
             </Title>
             <div className="flex flex-col items-center">
               <div className="p-4 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl border-2 border-purple-200 mb-4">
                 <QRCode value={passportData.qrValue} size={200} />
               </div>
               <Text type="secondary" className="text-center text-xs mb-4">
-                {t('client:vaccinePassport.scanToVerify')}
+                {t('client:records.vaccinePassport.scanToVerify')}
               </Text>
               <Button
                 block
@@ -291,8 +303,8 @@ const VaccinePassportTab = () => {
                 className={!showQR ? 'bg-purple-600 hover:bg-purple-700' : ''}
               >
                 {showQR
-                  ? t('client:vaccinePassport.hideQR')
-                  : t('client:vaccinePassport.showFullQR')}
+                  ? t('client:records.vaccinePassport.hideQR')
+                  : t('client:records.vaccinePassport.showFullQR')}
               </Button>
             </div>
           </Card>
@@ -301,7 +313,7 @@ const VaccinePassportTab = () => {
           <Card className="shadow-sm rounded-xl border-2 border-purple-100">
             <Title level={5} className="mb-4">
               <BlockOutlined className="mr-2 text-purple-600" />
-              {t('client:vaccinePassport.blockchainStats')}
+              {t('client:records.vaccinePassport.blockchainStats')}
             </Title>
             <div className="space-y-4">
               <Card
@@ -311,7 +323,7 @@ const VaccinePassportTab = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Text type="secondary" className="text-xs block mb-1">
-                      {t('client:vaccinePassport.verifiedRecords')}
+                      {t('client:records.vaccinePassport.verifiedRecords')}
                     </Text>
                     <div className="text-2xl font-bold text-green-600">{vaccineRecords.length}</div>
                   </div>
@@ -328,7 +340,7 @@ const VaccinePassportTab = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Text type="secondary" className="text-xs block mb-1">
-                      {t('client:vaccinePassport.chainConfirmations')}
+                      {t('client:records.vaccinePassport.chainConfirmations')}
                     </Text>
                     <div className="text-2xl font-bold text-purple-600">1,247</div>
                   </div>
@@ -345,7 +357,7 @@ const VaccinePassportTab = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Text type="secondary" className="text-xs block mb-1">
-                      {t('client:vaccinePassport.trustScore')}
+                      {t('client:records.vaccinePassport.trustScore')}
                     </Text>
                     <div className="text-2xl font-bold text-blue-600">99.8%</div>
                   </div>
@@ -365,10 +377,10 @@ const VaccinePassportTab = () => {
           <div>
             <Title level={5} className="mb-2">
               <LinkOutlined className="mr-2 text-purple-600" />
-              {t('client:vaccinePassport.exploreOnBlockchain')}
+              {t('client:records.vaccinePassport.exploreOnBlockchain')}
             </Title>
             <Paragraph className="mb-0 text-sm">
-              {t('client:vaccinePassport.viewHistoryExplorer')}
+              {t('client:records.vaccinePassport.viewHistoryExplorer')}
             </Paragraph>
           </div>
           <Button
@@ -378,7 +390,7 @@ const VaccinePassportTab = () => {
             className="bg-purple-600 hover:bg-purple-700"
             href="#"
           >
-            {t('client:vaccinePassport.openExplorer')}
+            {t('client:records.vaccinePassport.openExplorer')}
           </Button>
         </div>
       </Card>

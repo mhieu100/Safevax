@@ -185,7 +185,7 @@ const DashboardTab = ({ onTabChange }) => {
                   {t('client:dashboard.nextAppointment')}
                 </Tag>
                 <Title level={4} className="!mb-1">
-                  {nextAppointment.vaccineName} ({t('client:vaccinationHistory.dose')}{' '}
+                  {nextAppointment.vaccineName} ({t('client:records.vaccinationHistory.dose')}{' '}
                   {nextAppointment.doseNumber})
                 </Title>
                 <Text type="secondary" className="flex items-center gap-2">
@@ -237,7 +237,7 @@ const DashboardTab = ({ onTabChange }) => {
                 <div className="flex-1">
                   <div className="font-bold text-slate-800">{item.vaccineName}</div>
                   <div className="text-xs text-slate-500">
-                    {t('client:vaccinationHistory.completed')} •{' '}
+                    {t('client:records.vaccinationHistory.completed')} •{' '}
                     {dayjs(item.vaccinationDate).format('DD/MM/YYYY')}
                   </div>
                 </div>

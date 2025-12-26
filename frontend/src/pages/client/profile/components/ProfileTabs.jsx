@@ -8,20 +8,20 @@ const ProfileTabs = ({ activeTab, onTabChange, editMode, setEditMode }) => {
   const { t } = useTranslation(['client']);
   const tabConfig = {
     1: {
-      title: t('client:sidebar.dashboard'),
+      title: t('client:layout.sidebar.dashboard'),
       content: <DashboardTab onTabChange={onTabChange} />,
     },
     2: {
-      title: t('client:sidebar.myRecords'),
+      title: t('client:layout.sidebar.myRecords'),
       content: <MyRecordsTab editMode={editMode} setEditMode={setEditMode} />,
     },
     // 3 used to be Appointments
     4: {
-      title: t('client:sidebar.familyMembers'),
+      title: t('client:layout.sidebar.familyMembers'),
       content: <FamilyManagerTab />,
     },
     5: {
-      title: t('client:sidebar.accountSettings', 'Account & Settings'),
+      title: t('client:layout.sidebar.accountSettings', 'Account & Settings'),
       content: <SettingsTab editMode={editMode} setEditMode={setEditMode} />,
     },
   };

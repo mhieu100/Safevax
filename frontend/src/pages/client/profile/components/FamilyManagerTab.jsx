@@ -225,11 +225,11 @@ const FamilyManagerTab = () => {
           <div className="flex items-center gap-2 text-slate-600">
             <MedicineBoxOutlined className="text-purple-500" />
             <Text className="text-xs">
-              {record.totalVaccines} {t('client:vaccinationHistory.vaccine').toLowerCase()}s
+              {record.totalVaccines} {t('client:records.vaccinationHistory.vaccine').toLowerCase()}s
             </Text>
           </div>
           <Text type="secondary" className="text-xs block">
-            {t('client:vaccinePassport.lastUpdated')}: {record.lastVaccination}
+            {t('client:records.vaccinePassport.lastUpdated')}: {record.lastVaccination}
           </Text>
         </div>
       ),
@@ -420,7 +420,7 @@ const FamilyManagerTab = () => {
                 { required: false },
                 {
                   pattern: /^[0-9]{9,12}$/,
-                  message: 'Please enter a valid identity number (9-12 digits)',
+                  message: t('client:family.identityInvalid'),
                 },
               ]}
             >
@@ -485,12 +485,20 @@ const FamilyManagerTab = () => {
               </Select>
             </Form.Item>
 
-            <Form.Item name="heightCm" label="Height (cm)">
-              <Input type="number" placeholder="Enter height" className="rounded-lg" />
+            <Form.Item name="heightCm" label={`${t('client:profile.height')} (cm)`}>
+              <Input
+                type="number"
+                placeholder={t('client:family.enterHeight')}
+                className="rounded-lg"
+              />
             </Form.Item>
 
-            <Form.Item name="weightKg" label="Weight (kg)">
-              <Input type="number" placeholder="Enter weight" className="rounded-lg" />
+            <Form.Item name="weightKg" label={`${t('client:profile.weight')} (kg)`}>
+              <Input
+                type="number"
+                placeholder={t('client:family.enterWeight')}
+                className="rounded-lg"
+              />
             </Form.Item>
           </div>
         </Form>
