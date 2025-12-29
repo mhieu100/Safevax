@@ -97,12 +97,7 @@ const DropdownUser = () => {
   ];
 
   return (
-    <Dropdown
-      menu={{ items: userItems }}
-      placement="bottomRight"
-      className="hidden md:block"
-      overlayStyle={{ zIndex: 10001 }}
-    >
+    <Dropdown menu={{ items: userItems }} placement="bottomRight" className="hidden md:block">
       <Avatar
         src={
           user?.avatar ||

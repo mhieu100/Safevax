@@ -1,11 +1,23 @@
 import {
   CalendarOutlined,
   CheckCircleFilled,
+  FilePdfOutlined,
   MedicineBoxOutlined,
   SafetyCertificateOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Alert, Button, Card, Descriptions, Empty, Skeleton, Table, Tag, Typography } from 'antd';
+import {
+  Alert,
+  Button,
+  Card,
+  Descriptions,
+  Empty,
+  message,
+  Skeleton,
+  Table,
+  Tag,
+  Typography,
+} from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import BlockchainBadge from '@/components/common/BlockchainBadge';
@@ -24,6 +36,43 @@ const VaccineRecordTab = ({ familyMemberId }) => {
   const [error, setError] = useState(null);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [verificationModalOpen, setVerificationModalOpen] = useState(false);
+
+  const handleDownloadPdf = async () => {
+    try {
+      // Determine the user ID to request (family member or current user)
+      // Note: The backend currently takes ?userId=.
+      // If familyMemberId is present, we should probably pass that ID if it's a user ID,
+      // but family members might not have a full User ID in the same way depending on schema.
+      // However, the backend PdfService expects a User ID to look up User.
+      // If family Member is just a dependent, they might not have a User entry.
+      // For now, let's stick to the current user's report or the generic report.
+      // Refined: We'll pass the current user's ID for now as requested.
+
+      const targetUserId = user?.id;
+
+      const response = await apiClient.get('/api/pdf/generate', {
+        params: { userId: targetUserId },
+        responseType: 'blob',
+        headers: {
+          Accept: 'application/pdf',
+        },
+      });
+
+      // apiClient interceptor returns response.data directly, which IS the blob
+      const blob = new Blob([response], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `vaxsafe_report_${targetUserId || 'user'}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to download PDF', err);
+      message.error(t('client:records.vaccinePassport.downloadError', 'Failed to download PDF'));
+    }
+  };
 
   useEffect(() => {
     const fetchVaccineRecords = async () => {
@@ -240,6 +289,17 @@ const VaccineRecordTab = ({ familyMemberId }) => {
             </div>
           </div>
         </Card>
+      </div>
+
+      <div className="flex justify-end mb-4">
+        <Button
+          type="primary"
+          icon={<FilePdfOutlined />}
+          onClick={handleDownloadPdf}
+          className="bg-red-500 hover:bg-red-600 border-red-500"
+        >
+          {t('client:records.vaccinePassport.downloadPdf', 'Download PDF Report')}
+        </Button>
       </div>
 
       <Card className="rounded-3xl shadow-sm border border-slate-100 overflow-hidden">

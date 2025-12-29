@@ -27,12 +27,7 @@ const LanguageSelect = () => {
   }));
 
   return (
-    <Dropdown
-      menu={{ items }}
-      placement="bottomRight"
-      trigger={['click']}
-      overlayStyle={{ zIndex: 10001 }}
-    >
+    <Dropdown menu={{ items }} placement="bottomRight" trigger={['click']}>
       <div className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-slate-100 cursor-pointer transition-colors border border-transparent hover:border-slate-200">
         <GlobalOutlined className="text-slate-500 text-lg" />
         <span className="text-sm font-semibold text-slate-700">{activeLang.code}</span>

@@ -2,7 +2,7 @@ package com.dapp.backend.util;
 
 import com.dapp.backend.annotation.ApiMessage;
 import com.dapp.backend.dto.response.ApiResponse;
-import jakarta.annotation.Resource;
+import org.springframework.core.io.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -19,7 +19,7 @@ public class FormatResponse implements ResponseBodyAdvice<Object> {
     public boolean supports(MethodParameter returnType, Class converterType) {
         return true;
     }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
     @Override
     public Object beforeBodyWrite(
             Object body,
