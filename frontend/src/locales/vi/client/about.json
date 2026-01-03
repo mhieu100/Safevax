@@ -1,0 +1,55 @@
+{
+  "stats": {
+    "vaccinesTracked": "Vắc xin đã theo dõi",
+    "partnerCenters": "Trung tâm đối tác",
+    "happyUsers": "Người dùng hài lòng",
+    "uptime": "Thời gian hoạt động"
+  },
+  "features": {
+    "blockchainSecurity": "Bảo mật Blockchain",
+    "blockchainSecurityDesc": "Mọi hồ sơ tiêm chủng đều bất biến và được bảo mật bởi công nghệ blockchain tiên tiến, đảm bảo tính toàn vẹn dữ liệu và ngăn chặn gian lận.",
+    "globalAccessibility": "Tiếp cận toàn cầu",
+    "globalAccessibilityDesc": "Truy cập lịch sử tiêm chủng của bạn từ bất cứ đâu trên thế giới. Hộ chiếu số của bạn được công nhận toàn cầu.",
+    "instantVerification": "Xác minh tức thì",
+    "instantVerificationDesc": "Người xác minh có thể kiểm tra ngay lập tức tính xác thực của hồ sơ mà không ảnh hưởng đến quyền riêng tư của bạn."
+  },
+  "hero": {
+    "revolutionizing": "Cách mạng hóa y tế",
+    "readMore": "Đọc thêm",
+    "trustTitle": "Niềm tin trong từng liều vắc xin, <br /> Bảo mật bởi Blockchain.",
+    "description": "VaxSafe là nền tảng quản lý tiêm chủng phi tập trung hàng đầu thế giới. Chúng tôi là cầu nối giữa các nhà cung cấp dịch vụ y tế và bệnh nhân với các hồ sơ bất biến, minh bạch và an toàn.",
+    "getStarted": "Bắt đầu ngay",
+    "contactSales": "Liên hệ kinh doanh"
+  },
+  "mission": {
+    "title": "Sứ mệnh của chúng tôi",
+    "heading": "Kiến tạo một tương lai minh bạch và an toàn cho y tế toàn cầu.",
+    "description": "Chúng tôi tin rằng dữ liệu sức khỏe thuộc về bệnh nhân. Bằng cách tận dụng công nghệ blockchain, chúng tôi trao quyền cho cá nhân sở hữu, quản lý và chia sẻ hồ sơ tiêm chủng của họ một cách an toàn mà không cần trung gian."
+  },
+  "journey": {
+    "title": "Hành trình của chúng tôi",
+    "milestones": "Những cột mốc định hình nên chúng tôi",
+    "2023": {
+      "title": "2023 - Khởi đầu",
+      "desc": "VaxSafe được thành lập với tầm nhìn bảo mật hồ sơ sức khỏe."
+    },
+    "2024": {
+      "title": "2024 - Ra mắt bản thử nghiệm",
+      "desc": "Ra mắt chương trình thí điểm với 10 trung tâm tiêm chủng lớn."
+    },
+    "2025": {
+      "title": "2025 - Mở rộng toàn cầu",
+      "desc": "Đạt 1 triệu người dùng và mở rộng sang 5 quốc gia."
+    },
+    "future": {
+      "title": "Tương lai",
+      "desc": "Tích hợp AI để phân tích dự báo sức khỏe."
+    }
+  },
+  "cta": {
+    "title": "Sẵn sàng bảo vệ sức khỏe của bạn? <br /> Hãy bắt đầu sử dụng VaxSafe ngay hôm nay.",
+    "description": "Tham gia cùng hàng ngàn người dùng tin tưởng VaxSafe để quản lý tiêm chủng. An toàn, nhanh chóng và luôn có thể truy cập.",
+    "createAccount": "Tạo tài khoản",
+    "viewVaccines": "Xem vắc xin"
+  }
+}

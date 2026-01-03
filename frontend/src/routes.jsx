@@ -42,7 +42,7 @@ import HomePage from '@/pages/client/home';
 import MyOrdersPage from '@/pages/client/my-orders';
 import ClientNewsPage from '@/pages/client/news';
 import ClientNewsDetailPage from '@/pages/client/news/detail';
-import WalletVaccinePassport from '@/pages/client/passport/WalletVaccinePassport';
+import WalletVaccinePassport from '@/pages/client/passport/VaccinePassport';
 import PaymentHistoryPage from '@/pages/client/payment-history';
 import UserProfilePage from '@/pages/client/profile';
 import SuccessPage from '@/pages/client/success';

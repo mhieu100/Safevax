@@ -38,7 +38,7 @@ public class GeminiEmbeddingModel implements EmbeddingModel {
                 "model", model);
 
 
-        Map response = restClient.post()
+        Map<String, Object> response = restClient.post()
                 .uri(baseUrl + "/embeddings")
                 .header("Authorization", "Bearer " + apiKey)
                 .header("Content-Type", "application/json")

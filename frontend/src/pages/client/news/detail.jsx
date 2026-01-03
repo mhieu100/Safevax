@@ -9,6 +9,7 @@ import { Breadcrumb, Button, Col, Modal, message, Row, Skeleton, Tag, Typography
 import dayjs from 'dayjs';
 import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import aiAvatar from '@/assets/model.png';
@@ -18,6 +19,7 @@ import ragService from '@/services/rag.service';
 const { Title, Text } = Typography;
 
 const ClientNewsDetailPage = () => {
+  const { t } = useTranslation(['client']);
   const { slug } = useParams();
   const navigate = useNavigate();
   const [news, setNews] = useState(null);
@@ -41,7 +43,7 @@ const ClientNewsDetailPage = () => {
         setNews(res.data);
         fetchTrendingNews(res.data.id);
       } else {
-        message.error('News article not found');
+        message.error(t('client:news.detail.newsNotFound'));
         navigate('/news');
       }
     } catch (error) {
@@ -69,7 +71,7 @@ const ClientNewsDetailPage = () => {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    message.success('Link copied to clipboard!');
+    message.success(t('client:news.detail.shareSuccess'));
   };
 
   const handleSummarize = async () => {
@@ -88,7 +90,7 @@ const ClientNewsDetailPage = () => {
       }
     } catch (error) {
       console.error('Failed to summarize:', error);
-      message.error('Không thể tóm tắt vào lúc này.');
+      message.error(t('client:news.detail.summaryError'));
       setIsModalOpen(false);
     } finally {
       setSummarizing(false);
@@ -113,7 +115,7 @@ const ClientNewsDetailPage = () => {
   };
 
   const formatCategory = (category) => {
-    return category ? category.replace(/_/g, ' ') : 'News';
+    return category ? t(`client:news.categories.${category}`) : t('client:news.newsDefault');
   };
 
   if (loading) {
@@ -121,16 +123,16 @@ const ClientNewsDetailPage = () => {
       <div className="flex flex-col min-h-screen bg-white">
         <section className="bg-blue-50 flex-1">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {}
+            {/* Breadcrumb Skeleton */}
             <div className="border-b border-gray-100 py-4">
               <Skeleton.Input active size="small" style={{ width: 200 }} />
             </div>
 
             <div className="container mx-auto px-4 py-8">
               <Row gutter={[48, 32]}>
-                {}
+                {/* Main Content Skeleton */}
                 <Col xs={24} lg={16}>
-                  {}
+                  {/* Header Skeleton */}
                   <div className="mb-6">
                     <Skeleton
                       active
@@ -141,7 +143,7 @@ const ClientNewsDetailPage = () => {
                       }}
                     />
 
-                    {}
+                    {/* Meta info & AI Button Skeleton */}
                     <div className="flex gap-4 mt-4">
                       <Skeleton.Button active size="small" shape="round" style={{ width: 100 }} />
                       <Skeleton.Button active size="small" shape="round" style={{ width: 120 }} />
@@ -149,24 +151,24 @@ const ClientNewsDetailPage = () => {
                     </div>
                   </div>
 
-                  {}
+                  {/* Image Skeleton */}
                   <div className="w-full aspect-video rounded-xl overflow-hidden mb-8 bg-gray-100">
                     <Skeleton.Image active className="!w-full !h-full" />
                   </div>
 
-                  {}
+                  {/* Content Skeleton */}
                   <Skeleton active paragraph={{ rows: 12 }} />
                 </Col>
 
-                {}
+                {/* Sidebar Skeleton */}
                 <Col xs={24} lg={8}>
                   <div className="space-y-8">
-                    {}
+                    {/* Promo Box Skeleton */}
                     <div className="rounded-xl overflow-hidden">
                       <Skeleton.Button active block style={{ height: 300 }} />
                     </div>
 
-                    {}
+                    {/* Trending News Skeleton */}
                     <div>
                       <Skeleton
                         active
@@ -200,16 +202,16 @@ const ClientNewsDetailPage = () => {
     <div className="flex flex-col ">
       <section className="bg-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {}
+          {/* Breadcrumb */}
           <div className="border-b border-gray-100">
             <div className="container mx-auto px-4 py-4">
               <Breadcrumb
                 items={[
                   {
-                    title: <Link to="/">Home</Link>,
+                    title: <Link to="/">{t('client:news.detail.homeBreadcrumb')}</Link>,
                   },
                   {
-                    title: <Link to="/news">News</Link>,
+                    title: <Link to="/news">{t('client:news.detail.newsBreadcrumb')}</Link>,
                   },
                   { title: news.title },
                 ]}
@@ -219,10 +221,10 @@ const ClientNewsDetailPage = () => {
 
           <div className="container mx-auto px-4 py-8">
             <Row gutter={[48, 32]}>
-              {}
+              {/* Main Content */}
               <Col xs={24} lg={16}>
                 <article>
-                  {}
+                  {/* Article Header */}
                   <div className="mb-6">
                     <Title
                       level={1}
@@ -255,11 +257,13 @@ const ClientNewsDetailPage = () => {
                       onClick={handleSummarize}
                       className="!bg-gradient-to-r from-violet-600 to-indigo-600 !text-white !border-0 hover:!opacity-90 shadow-md font-medium px-6 h-10 rounded-full"
                     >
-                      {summary ? 'Xem tóm tắt AI' : 'Tóm tắt nội dung bằng AI'}
+                      {summary
+                        ? t('client:news.detail.viewSummaryButton')
+                        : t('client:news.detail.aiSummaryButton')}
                     </Button>
                   </div>
 
-                  {}
+                  {/* Main Image */}
                   {news.coverImage && (
                     <div className="w-full aspect-video rounded-xl overflow-hidden mb-8 bg-gray-100">
                       <img
@@ -270,7 +274,7 @@ const ClientNewsDetailPage = () => {
                     </div>
                   )}
 
-                  {}
+                  {/* Content */}
                   <div className="prose prose-lg max-w-none text-gray-800">
                     {news.shortDescription && (
                       <p className="lead text-xl text-gray-600 font-medium mb-8">
@@ -284,7 +288,7 @@ const ClientNewsDetailPage = () => {
                     />
                   </div>
 
-                  {}
+                  {/* Tags & Share */}
                   <div className="mt-10 pt-6 border-t border-gray-100 flex flex-wrap justify-between items-center gap-4">
                     <div className="flex gap-2">
                       {news.tags?.split(',').map((tag) => (
@@ -297,32 +301,36 @@ const ClientNewsDetailPage = () => {
                       ))}
                     </div>
                     <Button icon={<ShareAltOutlined />} onClick={handleShare}>
-                      Share Article
+                      {t('client:news.detail.shareArticle')}
                     </Button>
                   </div>
                 </article>
               </Col>
 
-              {}
+              {/* Sidebar */}
               <Col xs={24} lg={8}>
                 <div className="sticky top-24 space-y-8">
-                  {}
+                  {/* Promo Box */}
                   <div className="bg-gradient-to-r from-emerald-800 to-teal-900 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
-                    <h3 className="font-bold text-lg mb-2">
-                      Every Shot. <br />
-                      Every Record.
-                    </h3>
-                    <p className="text-emerald-100 text-sm mb-4">Investigated 10x Faster.</p>
+                    <h3
+                      className="font-bold text-lg mb-2"
+                      dangerouslySetInnerHTML={{ __html: t('client:news.detail.promoTitle') }}
+                    />
+                    <p className="text-emerald-100 text-sm mb-4">
+                      {t('client:news.detail.promoDesc')}
+                    </p>
                     <Button className="bg-emerald-400 text-teal-900 border-0 font-bold rounded-full px-6 hover:!bg-emerald-300">
-                      Book a demo <ArrowRightOutlined />
+                      {t('client:news.detail.bookDemo')} <ArrowRightOutlined />
                     </Button>
                   </div>
 
-                  {}
+                  {/* Trending News */}
                   <div>
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-                      <h3 className="text-xl font-bold text-gray-900 m-0">Trending News</h3>
+                      <h3 className="text-xl font-bold text-gray-900 m-0">
+                        {t('client:news.detail.trending')}
+                      </h3>
                     </div>
 
                     <div className="flex flex-col gap-4">
@@ -385,8 +393,10 @@ const ClientNewsDetailPage = () => {
                   className="w-full h-full object-contain rounded-full"
                 />
               </div>
-              <h3 className="text-2xl font-bold text-white m-0">AI Summary Assistant</h3>
-              <p className="text-indigo-100 mt-2">Tóm tắt thông tin nhanh chóng & chính xác</p>
+              <h3 className="text-2xl font-bold text-white m-0">
+                {t('client:news.detail.aiModalTitle')}
+              </h3>
+              <p className="text-indigo-100 mt-2">{t('client:news.detail.aiModalDesc')}</p>
             </div>
           </div>
 
@@ -399,7 +409,9 @@ const ClientNewsDetailPage = () => {
                     <RobotOutlined className="text-xl text-indigo-500" />
                   </div>
                 </div>
-                <p className="text-gray-500 animate-pulse">AI đang đọc và tóm tắt bài viết...</p>
+                <p className="text-gray-500 animate-pulse">
+                  {t('client:news.detail.aiProcessing')}
+                </p>
               </div>
             ) : (
               <div className="prose prose-indigo max-w-none prose-headings:text-indigo-700 prose-p:text-gray-600 text-base leading-relaxed">
@@ -414,7 +426,7 @@ const ClientNewsDetailPage = () => {
                 onClick={() => setIsModalOpen(false)}
                 className="bg-indigo-600 hover:bg-indigo-700 rounded-full px-8"
               >
-                Đóng
+                {t('client:news.detail.close')}
               </Button>
             </div>
           </div>

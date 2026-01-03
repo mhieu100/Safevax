@@ -1,0 +1,55 @@
+{
+  "stats": {
+    "vaccinesTracked": "Vaccines Tracked",
+    "partnerCenters": "Partner Centers",
+    "happyUsers": "Happy Users",
+    "uptime": "Uptime"
+  },
+  "features": {
+    "blockchainSecurity": "Blockchain Security",
+    "blockchainSecurityDesc": "Every vaccination record is immutable and secured by advanced blockchain technology, ensuring data integrity and preventing fraud.",
+    "globalAccessibility": "Global Accessibility",
+    "globalAccessibilityDesc": "Access your vaccination history from anywhere in the world. Your digital passport is recognized globally.",
+    "instantVerification": "Instant Verification",
+    "instantVerificationDesc": "Verifiers can instantly check the authenticity of your records without compromising your privacy."
+  },
+  "hero": {
+    "revolutionizing": "Revolutionizing Healthcare",
+    "readMore": "Read more",
+    "trustTitle": "Trust in Every Dose, <br /> Secured by Blockchain.",
+    "description": "VaxSafe is the world's leading decentralized vaccination management platform. We bridge the gap between healthcare providers and patients with immutable, transparent, and secure records.",
+    "getStarted": "Get Started",
+    "contactSales": "Contact Sales"
+  },
+  "mission": {
+    "title": "Our Mission",
+    "heading": "To create a transparent and secure future for global healthcare.",
+    "description": "We believe that health data belongs to the patient. By leveraging blockchain technology, we empower individuals to own, manage, and share their vaccination records securely, without intermediaries."
+  },
+  "journey": {
+    "title": "Our Journey",
+    "milestones": "Milestones that define us",
+    "2023": {
+      "title": "2023 - Inception",
+      "desc": "VaxSafe was founded with a vision to secure health records."
+    },
+    "2024": {
+      "title": "2024 - Beta Launch",
+      "desc": "Launched pilot program with 10 major vaccination centers."
+    },
+    "2025": {
+      "title": "2025 - Global Expansion",
+      "desc": "Reached 1 million users and expanded to 5 countries."
+    },
+    "future": {
+      "title": "Future",
+      "desc": "Integrating AI for predictive health analytics."
+    }
+  },
+  "cta": {
+    "title": "Ready to secure your health? <br /> Start using VaxSafe today.",
+    "description": "Join thousands of users who trust VaxSafe for their vaccination management. Secure, fast, and always accessible.",
+    "createAccount": "Create Account",
+    "viewVaccines": "View Vaccines"
+  }
+}

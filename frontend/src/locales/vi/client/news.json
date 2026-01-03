@@ -1,0 +1,37 @@
+{
+  "searchPlaceholder": "Tìm kiếm tin tức...",
+  "searchButton": "Tìm kiếm",
+  "filterBy": "Lọc theo:",
+  "allCategories": "Tất cả danh mục",
+  "noNewsTitle": "Không tìm thấy tin tức",
+  "noNewsDesc": "Chúng tôi không tìm thấy tin tức nào phù hợp với tìm kiếm của bạn. Hãy thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm.",
+  "clearFilters": "Xóa bộ lọc",
+  "views": "lượt xem",
+  "by": "Bởi",
+  "newsDefault": "Tin tức",
+  "categories": {
+    "VACCINE_INFO": "Thông tin vắc xin",
+    "CHILDREN_HEALTH": "Sức khỏe trẻ em",
+    "DISEASE_PREVENTION": "Phòng ngừa dịch bệnh",
+    "HEALTH_GENERAL": "Sức khỏe chung",
+    "ANNOUNCEMENT": "Thông báo"
+  },
+  "detail": {
+    "homeBreadcrumb": "Trang chủ",
+    "newsBreadcrumb": "Tin tức",
+    "aiSummaryButton": "Tóm tắt nội dung bằng AI",
+    "viewSummaryButton": "Xem tóm tắt AI",
+    "shareArticle": "Chia sẻ bài viết",
+    "shareSuccess": "Đã sao chép liên kết!",
+    "newsNotFound": "Không tìm thấy bài viết",
+    "summaryError": "Không thể tóm tắt vào lúc này.",
+    "trending": "Tin tức nổi bật",
+    "promoTitle": "Mỗi mũi tiêm. <br /> Mỗi hồ sơ.",
+    "promoDesc": "Được điều tra nhanh hơn gấp 10 lần.",
+    "bookDemo": "Đặt lịch demo",
+    "aiModalTitle": "Trợ lý tóm tắt AI",
+    "aiModalDesc": "Tóm tắt thông tin nhanh chóng & chính xác",
+    "aiProcessing": "AI đang đọc và tóm tắt bài viết...",
+    "close": "Đóng"
+  }
+}

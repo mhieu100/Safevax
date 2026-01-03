@@ -1,0 +1,37 @@
+{
+  "searchPlaceholder": "Search news...",
+  "searchButton": "Search",
+  "filterBy": "Filter by:",
+  "allCategories": "All Categories",
+  "noNewsTitle": "No news found",
+  "noNewsDesc": "We couldn't find any news matching your search. Try adjusting your filters or search terms.",
+  "clearFilters": "Clear Filters",
+  "views": "views",
+  "by": "By",
+  "newsDefault": "News",
+  "categories": {
+    "VACCINE_INFO": "Vaccine Info",
+    "CHILDREN_HEALTH": "Children Health",
+    "DISEASE_PREVENTION": "Disease Prevention",
+    "HEALTH_GENERAL": "General Health",
+    "ANNOUNCEMENT": "Announcement"
+  },
+  "detail": {
+    "homeBreadcrumb": "Home",
+    "newsBreadcrumb": "News",
+    "aiSummaryButton": "Summarize with AI",
+    "viewSummaryButton": "View AI Summary",
+    "shareArticle": "Share Article",
+    "shareSuccess": "Link copied to clipboard!",
+    "newsNotFound": "News article not found",
+    "summaryError": "Unable to summarize at this time.",
+    "trending": "Trending News",
+    "promoTitle": "Every Shot. <br /> Every Record.",
+    "promoDesc": "Investigated 10x Faster.",
+    "bookDemo": "Book a demo",
+    "aiModalTitle": "AI Summary Assistant",
+    "aiModalDesc": "Quick & accurate information summary",
+    "aiProcessing": "AI is reading and summarizing the article...",
+    "close": "Close"
+  }
+}

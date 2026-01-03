@@ -9,7 +9,8 @@ import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "payments")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

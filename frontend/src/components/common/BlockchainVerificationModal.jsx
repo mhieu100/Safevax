@@ -2,7 +2,6 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   CloudOutlined,
-  CodeOutlined,
   CopyOutlined,
   LinkOutlined,
   SafetyCertificateOutlined,
@@ -236,60 +235,6 @@ const BlockchainVerificationModal = ({ open, onClose, record }) => {
               },
             ]}
           />
-        </div>
-      ),
-    },
-    {
-      key: 'technical',
-      label: (
-        <span>
-          <CodeOutlined /> {t('common:blockchain.technicalDetails')}
-        </span>
-      ),
-      children: (
-        <div className="space-y-4">
-          <Text type="secondary" className="text-xs">
-            {t('common:blockchain.forDevelopers')}
-          </Text>
-
-          {}
-          <div>
-            <Text className="font-semibold block mb-2">{t('common:blockchain.recordData')}</Text>
-            <div className="bg-slate-900 text-green-400 p-4 rounded-lg overflow-auto max-h-96 font-mono text-xs">
-              <pre>{JSON.stringify(record, null, 2)}</pre>
-            </div>
-            <Button
-              className="mt-2"
-              size="small"
-              icon={<CopyOutlined />}
-              onClick={() => copyToClipboard(JSON.stringify(record, null, 2), 'Record data')}
-            >
-              {t('common:blockchain.copyJson')}
-            </Button>
-          </div>
-
-          {}
-          <div>
-            <Text className="font-semibold block mb-2">{t('common:blockchain.apiEndpoints')}</Text>
-            <div className="space-y-2">
-              <div className="bg-slate-50 p-3 rounded-lg">
-                <Text className="text-xs text-slate-500 block mb-1">Blockchain Record:</Text>
-                <code className="text-xs">GET /api/vaccine-records/{record.id || '{id}'}</code>
-              </div>
-              <div className="bg-slate-50 p-3 rounded-lg">
-                <Text className="text-xs text-slate-500 block mb-1">FHIR Immunization:</Text>
-                <code className="text-xs">
-                  GET /api/fhir/Immunization?patient={record.patientId || '{patientId}'}
-                </code>
-              </div>
-              {record.ipfsHash && (
-                <div className="bg-slate-50 p-3 rounded-lg">
-                  <Text className="text-xs text-slate-500 block mb-1">IPFS Gateway:</Text>
-                  <code className="text-xs">https://ipfs.io/ipfs/{record.ipfsHash}</code>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       ),
     },

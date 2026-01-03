@@ -12,7 +12,8 @@ import java.time.LocalTime;
 @Table(name = "doctor_available_slots", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"doctor_id", "slot_date", "start_time"})
 })
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

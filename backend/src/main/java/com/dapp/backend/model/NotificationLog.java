@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
     @Index(name = "idx_appointment_channel", columnList = "appointment_id,channel"),
     @Index(name = "idx_sent_at", columnList = "sent_at")
 })
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

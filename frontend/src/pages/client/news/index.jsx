@@ -2,6 +2,7 @@ import { CalendarOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons
 import { Button, Card, Col, Input, Pagination, Row, Select, Skeleton, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { callFetchNews, callGetNewsCategories } from '@/services/news.service';
 
@@ -9,6 +10,7 @@ const { Title, Paragraph, Text } = Typography;
 const { Search } = Input;
 
 const ClientNewsPage = () => {
+  const { t } = useTranslation(['client']);
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -103,7 +105,7 @@ const ClientNewsPage = () => {
   };
 
   const formatCategory = (category) => {
-    return category ? category.replace(/_/g, ' ') : 'News';
+    return category ? t(`client:news.categories.${category}`) : t('client:news.newsDefault');
   };
 
   // Featured Logic
@@ -144,9 +146,11 @@ const ClientNewsPage = () => {
                         <CalendarOutlined /> {dayjs(news[0].publishedAt).format('MMM D, YYYY')}
                       </span>
                       <span className="flex items-center gap-2">
-                        <EyeOutlined /> {news[0].viewCount || 0} views
+                        <EyeOutlined /> {news[0].viewCount || 0} {t('client:news.views')}
                       </span>
-                      <span>By {news[0].author || 'VaxSafe Team'}</span>
+                      <span>
+                        {t('client:news.by')} {news[0].author || 'VaxSafe Team'}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -193,11 +197,11 @@ const ClientNewsPage = () => {
           <Row gutter={[16, 16]} align="middle">
             <Col xs={24} md={12}>
               <Search
-                placeholder="Search news..."
+                placeholder={t('client:news.searchPlaceholder')}
                 allowClear
                 enterButton={
                   <Button type="primary" icon={<SearchOutlined />}>
-                    Search
+                    {t('client:news.searchButton')}
                   </Button>
                 }
                 size="large"
@@ -207,10 +211,10 @@ const ClientNewsPage = () => {
             </Col>
             <Col xs={24} md={12} className="flex justify-end gap-4">
               <span className="self-center text-slate-500 font-medium whitespace-nowrap hidden sm:block">
-                Filter by:
+                {t('client:news.filterBy')}
               </span>
               <Select
-                placeholder="All Categories"
+                placeholder={t('client:news.allCategories')}
                 style={{ width: 220 }}
                 size="large"
                 allowClear
@@ -274,7 +278,7 @@ const ClientNewsPage = () => {
                             <CalendarOutlined /> {dayjs(item.publishedAt).format('MMM D, YYYY')}
                           </span>
                           <span className="flex items-center gap-1">
-                            <EyeOutlined /> {item.viewCount || 0} views
+                            <EyeOutlined /> {item.viewCount || 0} {t('client:news.views')}
                           </span>
                         </div>
 
@@ -294,7 +298,7 @@ const ClientNewsPage = () => {
                         <div className="mt-auto pt-4 border-t border-gray-100">
                           <div className="flex items-center gap-2">
                             <Text type="secondary" className="text-xs">
-                              By
+                              {t('client:news.by')}
                             </Text>
                             <Text strong className="text-xs">
                               {item.author || 'VaxSafe Team'}
@@ -310,11 +314,10 @@ const ClientNewsPage = () => {
               <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-slate-100">
                 <div className="text-6xl mb-4">📰</div>
                 <Title level={4} className="text-slate-600">
-                  No news found
+                  {t('client:news.noNewsTitle')}
                 </Title>
                 <Paragraph className="text-slate-500 max-w-md mx-auto">
-                  We couldn't find any news matching your search. Try adjusting your filters or
-                  search terms.
+                  {t('client:news.noNewsDesc')}
                 </Paragraph>
                 <Button
                   onClick={() => {
@@ -322,7 +325,7 @@ const ClientNewsPage = () => {
                     setPagination({ ...pagination, current: 1 });
                   }}
                 >
-                  Clear Filters
+                  {t('client:news.clearFilters')}
                 </Button>
               </div>
             )}

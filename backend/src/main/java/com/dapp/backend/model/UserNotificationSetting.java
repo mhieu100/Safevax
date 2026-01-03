@@ -7,7 +7,8 @@ import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "user_notification_settings")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

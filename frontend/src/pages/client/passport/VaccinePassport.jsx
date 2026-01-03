@@ -227,7 +227,7 @@ const WalletVaccinePassport = () => {
           </div>
           <div>
             <Title level={2} className="!mb-0">
-              Wallet Vaccine Passport
+              Vaccine Passport
             </Title>
             <Text type="secondary">Digital storage for your verified vaccination records</Text>
           </div>

@@ -99,12 +99,6 @@ const ProfileSidebar = ({ activeTab, onTabChange, setAvatarModalVisible }) => {
           }}
         />
       </div>
-
-      <div className="p-4 border-t border-slate-50">
-        <div className="text-center">
-          <Text className="text-[10px] text-slate-300">Ver 1.0.0</Text>
-        </div>
-      </div>
     </Card>
   );
 };

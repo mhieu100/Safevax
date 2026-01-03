@@ -9,6 +9,7 @@ import enAdminPermissions from './locales/en/admin/permissions.json';
 import enAdminRoles from './locales/en/admin/roles.json';
 import enAdminUsers from './locales/en/admin/users.json';
 import enAdminVaccines from './locales/en/admin/vaccines.json';
+import enClientAbout from './locales/en/client/about.json';
 import enClientAppointments from './locales/en/client/appointments.json';
 import enClientBooking from './locales/en/client/booking.json';
 import enClientCheckout from './locales/en/client/checkout.json';
@@ -17,6 +18,7 @@ import enClientDashboard from './locales/en/client/dashboard.json';
 import enClientFamily from './locales/en/client/family.json';
 import enClientHome from './locales/en/client/home.json';
 import enClientLayout from './locales/en/client/layout.json';
+import enClientNews from './locales/en/client/news.json';
 import enClientOrders from './locales/en/client/orders.json';
 import enClientPayment from './locales/en/client/payment.json';
 import enClientProfile from './locales/en/client/profile.json';
@@ -50,6 +52,7 @@ import viAdminPermissions from './locales/vi/admin/permissions.json';
 import viAdminRoles from './locales/vi/admin/roles.json';
 import viAdminUsers from './locales/vi/admin/users.json';
 import viAdminVaccines from './locales/vi/admin/vaccines.json';
+import viClientAbout from './locales/vi/client/about.json';
 import viClientAppointments from './locales/vi/client/appointments.json';
 import viClientBooking from './locales/vi/client/booking.json';
 import viClientCheckout from './locales/vi/client/checkout.json';
@@ -58,6 +61,7 @@ import viClientDashboard from './locales/vi/client/dashboard.json';
 import viClientFamily from './locales/vi/client/family.json';
 import viClientHome from './locales/vi/client/home.json';
 import viClientLayout from './locales/vi/client/layout.json';
+import viClientNews from './locales/vi/client/news.json';
 import viClientOrders from './locales/vi/client/orders.json';
 import viClientPayment from './locales/vi/client/payment.json';
 import viClientProfile from './locales/vi/client/profile.json';
@@ -122,7 +126,9 @@ i18n.use(initReactI18next).init({
         profile: enStaffProfile,
       },
       client: {
+        about: enClientAbout,
         layout: enClientLayout,
+        news: enClientNews,
         booking: enClientBooking,
         contact: enClientContact,
         checkout: enClientCheckout,
@@ -173,7 +179,9 @@ i18n.use(initReactI18next).init({
         profile: viStaffProfile,
       },
       client: {
+        about: viClientAbout,
         layout: viClientLayout,
+        news: viClientNews,
         booking: viClientBooking,
         checkout: viClientCheckout,
         records: viClientRecords,

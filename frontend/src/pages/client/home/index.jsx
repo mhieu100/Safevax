@@ -9,11 +9,11 @@ const HomePage = () => {
   return (
     <div className="flex flex-col ">
       <HeroSection />
-      <BookingStepsSection />
       <RecommendedVaccinesSection />
-      <ServiceSection />
-      <MobileAppSection />
       <NewsSection />
+      <BookingStepsSection />
+      <MobileAppSection />
+      <ServiceSection />
     </div>
   );
 };
