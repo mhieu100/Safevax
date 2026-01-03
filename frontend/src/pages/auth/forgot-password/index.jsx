@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const { Title, Text, Link } = Typography;
 
 import { notification } from 'antd';
-import { callForgotPassword } from '../../../services/auth.service';
+import { callForgotPassword } from '@/services/auth.service';
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();

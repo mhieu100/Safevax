@@ -8,7 +8,7 @@ import { Alert, Button, Card, Form, Input, notification, Progress, Typography } 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { callResetPassword } from '../../../services/auth.service';
+import { callResetPassword } from '@/services/auth.service';
 
 const { Title, Text } = Typography;
 
