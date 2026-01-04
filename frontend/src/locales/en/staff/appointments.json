@@ -33,7 +33,8 @@
     "approveReschedule": "Approve Reschedule",
     "rescheduleRequest": "Reschedule Request",
     "assignTooltip": "Assign appointment to doctor",
-    "assign": "Assign"
+    "assign": "Assign",
+    "detail": "View Detail"
   },
   "pagination": "Showing {{range0}}-{{range1}} of {{total}} appointments",
   "pending": "Pending Appointments",

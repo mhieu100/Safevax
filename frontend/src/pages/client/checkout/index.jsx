@@ -49,7 +49,7 @@ const CheckoutPage = () => {
 
       const res = await callCreateOrder(payload);
 
-      if (res && res.data.paymentURL) {
+      if (res?.data.paymentURL) {
         // Redirect to PayPal / VNPAY
         window.location.href = res.data.paymentURL;
       } else if (paymentMethod === 'CASH') {

@@ -15,22 +15,46 @@ const DescriptionVaccineSection = ({ vaccine }) => {
 
   const parseArrayField = (field) => {
     if (!field) return [];
-    if (Array.isArray(field)) return field;
-    if (typeof field === 'string') {
-      // Check for Postgres array format { "item1", "item2" }
-      if (field.trim().startsWith('{') && field.trim().endsWith('}')) {
-        try {
-          // Replace curly braces with square brackets to make it JSON compatible
-          const jsonStr = field.trim().replace(/^{/, '[').replace(/}$/, ']');
-          return JSON.parse(jsonStr);
-        } catch (e) {
-          console.warn('Failed to parse array string:', field, e);
-          // Fallback to newline split if parsing fails
-        }
+
+    // Case 1: Already an array
+    if (Array.isArray(field)) {
+      // Check if it's a single element array containing a Postgres array string like ['{"Item 1", "Item 2"}']
+      if (field.length === 1 && typeof field[0] === 'string' && field[0].trim().startsWith('{')) {
+        return parsePostgresArrayString(field[0]);
       }
-      return field.split('\n').filter((item) => item.trim());
+      return field;
     }
+
+    // Case 2: String format
+    if (typeof field === 'string') {
+      return parsePostgresArrayString(field);
+    }
+
     return [];
+  };
+
+  const parsePostgresArrayString = (str) => {
+    const trimmed = str.trim();
+    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+      // Remove braces
+      const content = trimmed.substring(1, trimmed.length - 1);
+      // Split by comba, but respect quotes.
+      // Simple regex split for "," might fail if content has commas.
+      // However, assuming standard postgres export format "item1","item2"
+
+      // Regex to match: "([^"]*)"
+      const matches = content.match(/"([^"]*)"/g);
+      if (matches) {
+        return matches.map((m) => m.replace(/^"|"$/g, ''));
+      } else {
+        // Fallback for non-quoted items {item1,item2}
+        return content
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+      }
+    }
+    return [str];
   };
 
   const injections = parseArrayField(vaccine.injection);

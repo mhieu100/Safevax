@@ -51,6 +51,7 @@ import VaccineListPage from '@/pages/client/vaccine-list';
 import VerifyLandingPage from '@/pages/public/verify/VerifyLandingPage';
 import VerifyResultPage from '@/pages/public/verify/VerifyResultPage';
 import VerifySearchResultPage from '@/pages/public/verify/VerifySearchResultPage';
+import AllAppointmentsPage from '@/pages/staff/all-appointments';
 import CalendarView from '@/pages/staff/calendar-view';
 import StaffDashboard from '@/pages/staff/dashboard';
 import DoctorDashboard from '@/pages/staff/doctor-dashboard';
@@ -274,6 +275,10 @@ const router = createBrowserRouter([
       {
         path: 'pending-appointments',
         element: <PendingAppointmentPage />,
+      },
+      {
+        path: 'all-appointments',
+        element: <AllAppointmentsPage />,
       },
       {
         path: 'walk-in-booking',

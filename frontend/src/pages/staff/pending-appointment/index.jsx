@@ -1,9 +1,9 @@
 import {
   CalendarOutlined,
-  CheckCircleOutlined,
   CheckSquareOutlined,
   ClockCircleOutlined,
   EditOutlined,
+  InfoCircleOutlined,
   PhoneOutlined,
   ReloadOutlined,
   UserOutlined,
@@ -16,17 +16,9 @@ import { useTranslation } from 'react-i18next';
 import { sfLike } from 'spring-filter-query-builder';
 import DataTable from '@/components/data-table';
 import { TIME_SLOT_LABELS } from '@/constants';
-import {
-  AppointmentStatus,
-  formatPaymentAmount,
-  getAppointmentStatusColor,
-  getAppointmentStatusDisplay,
-  getPaymentMethodDisplay,
-  getPaymentStatusColor,
-  PaymentStatus,
-} from '@/constants/enums';
 import { useAppointmentStore } from '@/stores/useAppointmentStore';
 import ProcessUrgentAppointmentModal from '../dashboard/components/ProcessUrgentAppointmentModal';
+import AppointmentDetailModal from './AppointmentDetailModal';
 
 const { Text } = Typography;
 
@@ -37,9 +29,13 @@ const PendingAppointmentPage = () => {
   const isFetching = useAppointmentStore((state) => state.isFetching);
   const meta = useAppointmentStore((state) => state.meta);
   const appointments = useAppointmentStore((state) => state.result);
-  const fetchAppointmentOfCenter = useAppointmentStore((state) => state.fetchAppointmentOfCenter);
+  const fetchPendingAppointmentOfCenter = useAppointmentStore(
+    (state) => state.fetchPendingAppointmentOfCenter
+  );
   const [openAssignModal, setOpenAssignModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [detailAppointmentId, setDetailAppointmentId] = useState(null);
 
   const [searchText] = useState('');
   const [vaccineFilter] = useState('');
@@ -56,8 +52,7 @@ const PendingAppointmentPage = () => {
     {
       title: t('staff:appointments.columns.code'),
       dataIndex: 'id',
-      width: 100,
-      fixed: 'left',
+      width: 80,
       render: (text) => (
         <Text strong style={{ color: '#1890ff' }}>
           #{text}
@@ -67,183 +62,75 @@ const PendingAppointmentPage = () => {
     {
       title: t('staff:appointments.columns.patient'),
       dataIndex: 'patientName',
-      width: 200,
+      width: 250,
       render: (text, record) => (
-        <Space direction="vertical" size={4}>
+        <Space direction="vertical" size={2}>
           <Space>
             <Avatar icon={<UserOutlined />} size="small" style={{ backgroundColor: '#1890ff' }} />
             <Text strong>{text}</Text>
           </Space>
-          {record.appointmentStatus === 'RESCHEDULE' && (
-            <Tag color="orange" icon={<EditOutlined />} style={{ fontSize: 11 }}>
-              {t('staff:appointments.tags.editSchedule')}
-            </Tag>
-          )}
-          <Text type="secondary" style={{ fontSize: 12 }}>
-            <PhoneOutlined /> {record.patientPhone || 'N/A'}
-          </Text>
+          <Space split={<div className="w-[1px] h-3 bg-slate-300 mx-1" />}>
+            <span className="text-xs text-slate-500 flex items-center gap-1">
+              <PhoneOutlined /> {record.patientPhone || 'N/A'}
+            </span>
+            {record.appointmentStatus === 'RESCHEDULE' && (
+              <Tag
+                color="orange"
+                icon={<EditOutlined />}
+                className="m-0 text-[10px] leading-4 h-5 px-1"
+              >
+                {t('staff:appointments.tags.editSchedule')}
+              </Tag>
+            )}
+          </Space>
         </Space>
       ),
     },
     {
       title: t('staff:appointments.columns.vaccine'),
       dataIndex: 'vaccineName',
-      width: 150,
-      render: (text) => <Tag color="blue">{text}</Tag>,
-    },
-    {
-      title: t('staff:appointments.columns.registerDate'),
-      dataIndex: 'desiredDate',
-      width: 160,
-      render: (_text, record) => {
-        const dateToShow = record.desiredDate || record.scheduledDate;
-        const timeSlotToShow = record.desiredTimeSlot || record.scheduledTimeSlot;
-        const isUrgent = dateToShow && dayjs(dateToShow).diff(dayjs(), 'day') <= 1;
-
-        return (
-          <Space direction="vertical" size={4}>
-            <Space>
-              <ClockCircleOutlined style={{ color: isUrgent ? '#ff4d4f' : '#1890ff' }} />
-              <Text strong style={{ color: isUrgent ? '#ff4d4f' : undefined }}>
-                {dateToShow ? dayjs(dateToShow).format('DD/MM/YYYY') : 'N/A'}
-              </Text>
-            </Space>
-            {timeSlotToShow && (
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {TIME_SLOT_LABELS[timeSlotToShow] || timeSlotToShow}
-              </Text>
-            )}
-            {isUrgent && (
-              <Tag color="red" icon={<ClockCircleOutlined />} style={{ fontSize: 11 }}>
-                {t('staff:appointments.tags.urgent')}
-              </Tag>
-            )}
-          </Space>
-        );
-      },
-    },
-    {
-      title: t('staff:appointments.columns.officialDate'),
-      dataIndex: 'scheduledDate',
-      width: 180,
-      render: (_text, record) => {
-        const scheduledDate = record.scheduledDate;
-        const actualTime = record.actualScheduledTime || record.actualDesiredTime;
-        const isReschedule = record.appointmentStatus === 'RESCHEDULE';
-        const isPending = record.appointmentStatus === AppointmentStatus.PENDING;
-
-        if (!scheduledDate || isPending) {
-          return (
-            <Space direction="vertical" size={4}>
-              <Text type="secondary" style={{ fontSize: 12, fontStyle: 'italic' }}>
-                {t('staff:appointments.tags.waitingSchedule')}
-              </Text>
-              {isReschedule && record.rescheduledAt && (
-                <Text type="warning" style={{ fontSize: 11 }}>
-                  {t('staff:appointments.tags.rescheduledAt')}{' '}
-                  {dayjs(record.rescheduledAt).format('DD/MM HH:mm')}
-                </Text>
-              )}
-            </Space>
-          );
-        }
-
-        return (
-          <Space direction="vertical" size={4}>
-            <Space>
-              <CalendarOutlined style={{ color: '#52c41a' }} />
-              <Text strong style={{ color: '#52c41a' }}>
-                {dayjs(scheduledDate).format('DD/MM/YYYY')}
-              </Text>
-            </Space>
-            {actualTime && (
-              <Text strong style={{ fontSize: 12, color: '#52c41a' }}>
-                {t('staff:appointments.tags.officialTime')} {actualTime.substring(0, 5)}
-              </Text>
-            )}
-            {isReschedule && record.rescheduledAt && (
-              <Text type="warning" style={{ fontSize: 11 }}>
-                {t('staff:appointments.tags.rescheduledAt')}{' '}
-                {dayjs(record.rescheduledAt).format('DD/MM HH:mm')}
-              </Text>
-            )}
-          </Space>
-        );
-      },
-    },
-    {
-      title: t('staff:appointments.columns.centerDoctor'),
-      dataIndex: 'centerName',
-      width: 220,
-      render: (text, record) => {
-        const doctorName = record.doctorName;
-        return (
-          <Space direction="vertical" size={4}>
-            <Text strong>{text}</Text>
-            {doctorName ? (
-              <Space>
-                <UserOutlined style={{ color: '#52c41a', fontSize: 12 }} />
-                <Text type="secondary" style={{ fontSize: 12 }}>
-                  {doctorName}
-                </Text>
-              </Space>
-            ) : (
-              <Text type="secondary" style={{ fontSize: 12, fontStyle: 'italic' }}>
-                {t('staff:appointments.tags.waitingDoctor')}
-              </Text>
-            )}
-          </Space>
-        );
-      },
-    },
-    {
-      title: t('staff:appointments.columns.status'),
-      dataIndex: 'appointmentStatus',
-      width: 150,
-      render: (appointmentStatus) => (
-        <Tag color={getAppointmentStatusColor(appointmentStatus)}>
-          {getAppointmentStatusDisplay(appointmentStatus)}
-        </Tag>
+      width: 200,
+      render: (text, record) => (
+        <Space direction="vertical" size={1}>
+          <Text strong className="text-slate-700">
+            {text}
+          </Text>
+          <Tag className="m-0 text-[10px] w-fit">
+            {t('staff:dashboard.urgentList.dose', { number: record.doseNumber || 1 })}
+          </Tag>
+        </Space>
       ),
     },
     {
-      title: t('staff:appointments.columns.payment'),
-      dataIndex: 'paymentStatus',
-      width: 180,
-      render: (paymentStatus, record) => {
-        const statusLabels = {
-          [PaymentStatus.SUCCESS]: t('staff:appointments.payment.success'),
-          [PaymentStatus.PROCESSING]: t('staff:appointments.payment.processing'),
-          [PaymentStatus.INITIATED]: t('staff:appointments.payment.cash'),
-          [PaymentStatus.FAILED]: t('staff:appointments.payment.failed'),
-        };
-
-        const paymentDisplay =
-          record.paymentAmount != null && record.paymentMethod
-            ? formatPaymentAmount(record.paymentAmount, record.paymentMethod)
-            : null;
+      title: t('staff:appointments.columns.registerDate'), // Target Schedule
+      dataIndex: 'desiredDate',
+      width: 200,
+      render: (_text, record) => {
+        const dateToShow = record.desiredDate || record.scheduledDate;
+        const timeSlotToShow = record.desiredTimeSlot || record.scheduledTimeSlot;
+        // Logic to highlight if it's close? content already handles logic but let's keep it simple
+        const isUrgent = dateToShow && dayjs(dateToShow).diff(dayjs(), 'day') <= 1;
 
         return (
-          <Space direction="vertical" size={4}>
-            <Tag color={getPaymentStatusColor(paymentStatus)} style={{ marginBottom: 4 }}>
-              {statusLabels[paymentStatus] || paymentStatus || 'Chưa có'}
-            </Tag>
-            {paymentDisplay ? (
-              <>
-                {record.paymentMethod && (
-                  <Text type="secondary" style={{ fontSize: 12 }}>
-                    {getPaymentMethodDisplay(record.paymentMethod)}
-                  </Text>
-                )}
-
-                <Text strong style={{ fontSize: 14, color: '#1890ff' }}>
-                  {paymentDisplay.display}
-                </Text>
-              </>
-            ) : (
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {t('staff:appointments.payment.unpaid')}
-              </Text>
+          <Space direction="vertical" size={2}>
+            <div
+              className={`flex items-center gap-2 ${isUrgent ? 'text-red-500' : 'text-slate-700'}`}
+            >
+              <CalendarOutlined />
+              <span className="font-medium">
+                {dateToShow ? dayjs(dateToShow).format('DD/MM/YYYY') : 'N/A'}
+              </span>
+            </div>
+            {timeSlotToShow && (
+              <div className="flex items-center gap-2 text-slate-500 text-xs pl-6">
+                <ClockCircleOutlined />
+                {TIME_SLOT_LABELS[timeSlotToShow] || timeSlotToShow}
+              </div>
+            )}
+            {isUrgent && (
+              <span className="text-[10px] text-red-500 font-medium pl-6">
+                {t('staff:appointments.tags.urgent')}
+              </span>
             )}
           </Space>
         );
@@ -252,55 +139,39 @@ const PendingAppointmentPage = () => {
     {
       title: t('staff:appointments.columns.actions'),
       key: 'actions',
-      width: 200,
-      fixed: 'right',
+      width: 150,
       render: (_, record) => {
-        const isPendingSchedule = record.appointmentStatus === AppointmentStatus.PENDING;
-        const isPendingApproval = record.appointmentStatus === AppointmentStatus.RESCHEDULE;
-        const needsAction = isPendingSchedule || isPendingApproval;
-
-        if (needsAction) {
-          return (
-            <Space direction="vertical" size={8} style={{ width: '100%' }}>
-              {isPendingApproval ? (
-                <>
-                  <Button
-                    type="primary"
-                    danger
-                    icon={<CheckSquareOutlined />}
-                    onClick={() => handleAssignAppointment(record)}
-                    block
-                    style={{
-                      background: '#ff7a45',
-                      borderColor: '#ff7a45',
-                    }}
-                  >
-                    {t('staff:appointments.actions.approveReschedule')}
-                  </Button>
-                  <Text type="warning" style={{ fontSize: 11, textAlign: 'center' }}>
-                    {t('staff:appointments.actions.rescheduleRequest')}
-                  </Text>
-                </>
-              ) : (
-                <Tooltip title={t('staff:appointments.actions.assignTooltip')}>
-                  <Button
-                    type="primary"
-                    icon={<CalendarOutlined />}
-                    onClick={() => handleAssignAppointment(record)}
-                    block
-                  >
-                    {t('staff:appointments.actions.assign')}
-                  </Button>
-                </Tooltip>
-              )}
-            </Space>
-          );
-        }
+        // Both Pending and Reschedule need assignment/processing
+        const isReschedule = record.appointmentStatus === 'RESCHEDULE';
 
         return (
-          <Tag color="success" icon={<CheckCircleOutlined />} style={{ padding: '4px 12px' }}>
-            {t('staff:appointments.tags.assigned')}
-          </Tag>
+          <Space>
+            <Tooltip
+              title={
+                isReschedule
+                  ? t('staff:appointments.actions.approveReschedule')
+                  : t('staff:appointments.actions.assign')
+              }
+            >
+              <Button
+                type="primary"
+                // Use distinct colors for Reschedule vs Initial
+                className={`${isReschedule ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-600 hover:bg-blue-700'} border-none shadow-sm`}
+                icon={isReschedule ? <CheckSquareOutlined /> : <CalendarOutlined />}
+                onClick={() => handleAssignAppointment(record)}
+              />
+            </Tooltip>
+            <Tooltip title={t('staff:appointments.actions.detail')}>
+              <Button
+                type="default"
+                icon={<InfoCircleOutlined />}
+                onClick={() => {
+                  setDetailAppointmentId(record.id);
+                  setOpenDetailModal(true);
+                }}
+              />
+            </Tooltip>
+          </Space>
         );
       },
     },
@@ -362,9 +233,8 @@ const PendingAppointmentPage = () => {
           dataSource={appointments}
           request={async (params, sort, filter) => {
             const query = buildQuery(params, sort, filter);
-            fetchAppointmentOfCenter(query);
+            fetchPendingAppointmentOfCenter(query);
           }}
-          scroll={{ x: 1500 }}
           pagination={{
             current: meta.page,
             pageSize: meta.pageSize,
@@ -398,6 +268,11 @@ const PendingAppointmentPage = () => {
             : null
         }
         onSuccess={reloadTable}
+      />
+      <AppointmentDetailModal
+        open={openDetailModal}
+        onClose={() => setOpenDetailModal(false)}
+        appointmentId={detailAppointmentId}
       />
     </div>
   );

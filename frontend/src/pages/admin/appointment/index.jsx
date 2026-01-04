@@ -8,6 +8,7 @@ import { Button, Card, Space, Table, Tag, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TIME_SLOT_LABELS } from '@/constants';
 import { callListAppointment } from '@/services/appointment.service';
 
 const AppointmentListPage = () => {
@@ -105,7 +106,7 @@ const AppointmentListPage = () => {
           </div>
           <div className="text-xs text-slate-500">
             <ClockCircleOutlined className="mr-1" />
-            {record.scheduledTimeSlot}
+            {TIME_SLOT_LABELS[record.scheduledTimeSlot] || record.scheduledTimeSlot}
           </div>
         </div>
       ),

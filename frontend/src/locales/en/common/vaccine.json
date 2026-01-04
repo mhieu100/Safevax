@@ -96,5 +96,6 @@
     "SCHOOL_AGE": "School Age",
     "ADULT_ROUTINE": "Adult Routine",
     "ELDERLY_CARE": "Elderly Care"
-  }
+  },
+  "relatedVaccines": "Related Vaccines"
 }

@@ -32,6 +32,7 @@ import {
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getTimeSlotRange, TIME_SLOT_LABELS } from '@/constants';
 import { callUpdateAppointment } from '@/services/appointment.service';
 import {
   callGetAvailableDoctorsByCenter,
@@ -79,7 +80,23 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
       const res = await callGetDoctorAvailableSlots(doctorId, formattedDate);
 
       if (res?.data) {
-        const slotsWithIds = res.data.map((slot, index) => ({
+        let availableList = res.data;
+
+        // Filter by time slot
+        const targetTimeSlot = isRescheduleRequest
+          ? appointment?.desiredTimeSlot
+          : appointment?.scheduledTimeSlot;
+
+        if (targetTimeSlot) {
+          const [rangeStart, rangeEnd] = getTimeSlotRange(targetTimeSlot);
+          availableList = availableList.filter((slot) => {
+            // slot.startTime string format is likely "HH:mm:ss" or "HH:mm"
+            const time = slot.startTime?.substring(0, 5);
+            return time >= rangeStart && time <= rangeEnd;
+          });
+        }
+
+        const slotsWithIds = availableList.map((slot, index) => ({
           ...slot,
           uiId: slot.slotId ? String(slot.slotId) : `virtual-${index}-${slot.startTime}`,
         }));
@@ -228,7 +245,9 @@ const ProcessUrgentAppointmentModal = ({ open, onClose, appointment, onSuccess }
             {dayjs(targetDate).format('dddd, DD/MM/YYYY')}
           </div>
           {appointment.scheduledTimeSlot && (
-            <Tag color="green">{appointment.scheduledTimeSlot}</Tag>
+            <Tag color="green">
+              {TIME_SLOT_LABELS[appointment.scheduledTimeSlot] || appointment.scheduledTimeSlot}
+            </Tag>
           )}
         </Card>
       );

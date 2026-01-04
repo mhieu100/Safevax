@@ -5,29 +5,23 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class VaccineSpecifications {
 
-    
     public static Specification<Vaccine> notDeleted() {
-        return (root, query, criteriaBuilder) -> 
-            criteriaBuilder.or(
+        return (root, query, criteriaBuilder) -> criteriaBuilder.or(
                 criteriaBuilder.isNull(root.get("isDeleted")),
-                criteriaBuilder.isFalse(root.get("isDeleted"))
-            );
+                criteriaBuilder.isFalse(root.get("isDeleted")));
     }
 
-    
     public static Specification<Vaccine> nameContains(String name) {
         return (root, query, criteriaBuilder) -> {
             if (name == null || name.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
             return criteriaBuilder.like(
-                criteriaBuilder.lower(root.get("name")), 
-                "%" + name.toLowerCase() + "%"
-            );
+                    criteriaBuilder.lower(root.get("name")),
+                    "%" + name.toLowerCase() + "%");
         };
     }
 
-    
     public static Specification<Vaccine> fromCountry(String country) {
         return (root, query, criteriaBuilder) -> {
             if (country == null || country.trim().isEmpty()) {
@@ -37,7 +31,6 @@ public class VaccineSpecifications {
         };
     }
 
-    
     public static Specification<Vaccine> hasSlug(String slug) {
         return (root, query, criteriaBuilder) -> {
             if (slug == null || slug.trim().isEmpty()) {
@@ -47,20 +40,17 @@ public class VaccineSpecifications {
         };
     }
 
-    
     public static Specification<Vaccine> manufacturerContains(String manufacturer) {
         return (root, query, criteriaBuilder) -> {
             if (manufacturer == null || manufacturer.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
             return criteriaBuilder.like(
-                criteriaBuilder.lower(root.get("manufacturer")), 
-                "%" + manufacturer.toLowerCase() + "%"
-            );
+                    criteriaBuilder.lower(root.get("manufacturer")),
+                    "%" + manufacturer.toLowerCase() + "%");
         };
     }
 
-    
     public static Specification<Vaccine> priceBetween(Integer minPrice, Integer maxPrice) {
         return (root, query, criteriaBuilder) -> {
             if (minPrice == null && maxPrice == null) {
@@ -76,7 +66,6 @@ public class VaccineSpecifications {
         };
     }
 
-    
     public static Specification<Vaccine> hasStockGreaterThan(Integer stock) {
         return (root, query, criteriaBuilder) -> {
             if (stock == null) {
@@ -86,9 +75,22 @@ public class VaccineSpecifications {
         };
     }
 
-    
     public static Specification<Vaccine> inStock() {
-        return (root, query, criteriaBuilder) -> 
-            criteriaBuilder.greaterThan(root.get("stock"), 0);
+        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThan(root.get("stock"), 0);
+    }
+
+    public static Specification<Vaccine> globalSearch(String keyword) {
+        return (root, query, criteriaBuilder) -> {
+            if (keyword == null || keyword.trim().isEmpty()) {
+                return criteriaBuilder.conjunction();
+            }
+            String likePattern = "%" + keyword.toLowerCase() + "%";
+            return criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), likePattern),
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("descriptionShort")), likePattern),
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("disease")), likePattern),
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("country")), likePattern),
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("manufacturer")), likePattern));
+        };
     }
 }

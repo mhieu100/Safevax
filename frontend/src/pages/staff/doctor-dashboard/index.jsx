@@ -5,7 +5,6 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   CloseCircleOutlined,
-  EnvironmentOutlined,
   EyeOutlined,
   MedicineBoxOutlined,
   PhoneOutlined,
@@ -18,11 +17,9 @@ import {
 } from '@ant-design/icons';
 import {
   Avatar,
-  Badge,
   Button,
   Card,
   Col,
-  Descriptions,
   Divider,
   Empty,
   Modal,
@@ -47,6 +44,7 @@ import dashboardService from '@/services/dashboard.service';
 import { useAccountStore } from '@/stores/useAccountStore';
 import { formatAppointmentTime } from '@/utils/appointment';
 import CompletionModal from '../dashboard/components/CompletionModal';
+import AppointmentDetailModal from '../pending-appointment/AppointmentDetailModal';
 
 const { Title, Text } = Typography;
 // Force HMR
@@ -597,110 +595,11 @@ const DoctorDashboard = () => {
           fetchData();
         }}
       />
-      <Modal
-        title={
-          <Space>
-            <MedicineBoxOutlined style={{ color: '#1890ff' }} />
-            <Text strong style={{ fontSize: 18 }}>
-              {t('staff:dashboard.doctor.modal.detailTitle', { id: selectedAppointment?.id })}
-            </Text>
-          </Space>
-        }
+      <AppointmentDetailModal
         open={detailModalOpen}
-        onCancel={() => setDetailModalOpen(false)}
-        footer={[
-          <Button key="close" onClick={() => setDetailModalOpen(false)}>
-            {t('staff:dashboard.doctor.modal.close')}
-          </Button>,
-          selectedAppointment?.status === 'SCHEDULED' && (
-            <Button
-              key="start"
-              type="primary"
-              icon={<PlayCircleOutlined />}
-              onClick={() => {
-                handleStartAppointment(selectedAppointment);
-                setDetailModalOpen(false);
-              }}
-            >
-              {t('staff:dashboard.doctor.modal.startInt')}
-            </Button>
-          ),
-          (selectedAppointment?.status === 'IN_PROGRESS' ||
-            selectedAppointment?.status === 'SCHEDULED') && (
-            <Button
-              key="complete"
-              type="primary"
-              style={{ background: '#52c41a' }}
-              icon={<CheckCircleOutlined />}
-              onClick={() => {
-                handleCompleteAppointment(selectedAppointment);
-                setDetailModalOpen(false);
-              }}
-            >
-              {t('staff:dashboard.doctor.modal.completeInt')}
-            </Button>
-          ),
-        ]}
-        width={700}
-      >
-        {selectedAppointment && (
-          <Row gutter={24}>
-            <Col span={24}>
-              <Descriptions bordered column={1} labelStyle={{ width: '150px', fontWeight: 'bold' }}>
-                <Descriptions.Item label={t('staff:dashboard.doctor.modal.time')}>
-                  <Tag icon={<ClockCircleOutlined />} color="blue">
-                    {selectedAppointment.time}
-                  </Tag>
-                  <Text type="secondary" style={{ marginLeft: 8 }}>
-                    {dayjs().format('DD/MM/YYYY')}
-                  </Text>
-                </Descriptions.Item>
-                <Descriptions.Item label={t('staff:dashboard.doctor.modal.patient')}>
-                  <Space>
-                    <Avatar icon={<UserOutlined />} />
-                    <Text strong>{selectedAppointment.patient}</Text>
-                  </Space>
-                </Descriptions.Item>
-                <Descriptions.Item label={t('staff:dashboard.doctor.modal.contact')}>
-                  <Space>
-                    <PhoneOutlined /> {selectedAppointment.phone}
-                  </Space>
-                </Descriptions.Item>
-                <Descriptions.Item label={t('staff:dashboard.doctor.modal.vaccine')}>
-                  <Space direction="vertical">
-                    <Tag color="cyan" style={{ fontSize: 14, padding: '4px 8px' }}>
-                      {selectedAppointment.vaccine}
-                    </Tag>
-                    {selectedAppointment.doseNumber && (
-                      <Text type="secondary">
-                        {t('staff:dashboard.doctor.modal.dose', {
-                          number: selectedAppointment.doseNumber,
-                        })}
-                      </Text>
-                    )}
-                  </Space>
-                </Descriptions.Item>
-                <Descriptions.Item label={t('staff:dashboard.doctor.modal.status')}>
-                  <Badge
-                    status={getStatusConfig(selectedAppointment.status).color}
-                    text={getStatusConfig(selectedAppointment.status).text}
-                  />
-                </Descriptions.Item>
-                <Descriptions.Item label={t('staff:dashboard.doctor.modal.notes')}>
-                  <Text>{selectedAppointment.notes}</Text>
-                </Descriptions.Item>
-                {selectedAppointment.urgent && (
-                  <Descriptions.Item label={t('staff:dashboard.doctor.modal.priority')}>
-                    <Tag color="red" icon={<EnvironmentOutlined />}>
-                      {t('staff:dashboard.doctor.modal.urgentAction')}
-                    </Tag>
-                  </Descriptions.Item>
-                )}
-              </Descriptions>
-            </Col>
-          </Row>
-        )}
-      </Modal>
+        onClose={() => setDetailModalOpen(false)}
+        appointmentId={selectedAppointment?.id}
+      />
     </div>
   );
 };

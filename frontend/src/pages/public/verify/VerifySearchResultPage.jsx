@@ -53,7 +53,7 @@ const VerifySearchResultPage = () => {
     let apiPromise;
     if (vaccineSlug && doseNumber) {
       setSearchType('specific-dose');
-      apiPromise = verifySpecificDose(vaccineSlug, parseInt(doseNumber), identityHash);
+      apiPromise = verifySpecificDose(vaccineSlug, parseInt(doseNumber, 10), identityHash);
     } else if (vaccineSlug) {
       setSearchType('vaccine-doses');
       apiPromise = getVaccineDosesByIdentity(vaccineSlug, identityHash);

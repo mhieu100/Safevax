@@ -72,6 +72,14 @@ export async function getVaccinesByCategory(category) {
 }
 
 /**
+ * Lấy vaccine theo loại bệnh
+ * @param {string} disease
+ */
+export async function getVaccinesByDisease(disease) {
+  return apiClient.get(`/api/vaccines/disease/${disease}`);
+}
+
+/**
  * Lấy danh sách tất cả categories
  */
 export async function getVaccineCategories() {

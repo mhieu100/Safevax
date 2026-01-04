@@ -1,9 +1,16 @@
-import { CheckCircleFilled, SyncOutlined } from '@ant-design/icons';
-import { Alert, Card, Skeleton, Table, Tag, Typography } from 'antd';
+import {
+  CalendarOutlined,
+  CheckCircleFilled,
+  ClockCircleOutlined,
+  CloseCircleFilled,
+  MedicineBoxOutlined,
+  SyncOutlined,
+} from '@ant-design/icons';
+import { Alert, Card, Empty, Skeleton, Table, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getGroupedBookingHistory } from '@/services/booking.service';
+import { getVaccinationHistory } from '@/services/booking.service';
 import { formatAppointmentTime } from '@/utils/appointment';
 
 const { Title, Text } = Typography;
@@ -12,22 +19,25 @@ const VaccinationHistoryTab = ({ customData }) => {
   const { t } = useTranslation(['client']);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [groupedHistory, setGroupedHistory] = useState([]);
-  const [stats, setStats] = useState({ total: 0, completed: 0, inProgress: 0 });
+  const [appointments, setAppointments] = useState([]);
+  const [stats, setStats] = useState({ total: 0, completed: 0, cancelled: 0, pending: 0 });
 
   const fetchHistory = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await getGroupedBookingHistory();
-      const routeList = response.data || [];
+      const response = await getVaccinationHistory();
+      const appointmentList = response.data || [];
 
-      setGroupedHistory(routeList);
+      setAppointments(appointmentList);
 
       setStats({
-        total: routeList.length,
-        completed: routeList.filter((r) => r.status === 'COMPLETED').length,
-        inProgress: routeList.filter((r) => r.status === 'IN_PROGRESS').length,
+        total: appointmentList.length,
+        completed: appointmentList.filter((a) => a.appointmentStatus === 'COMPLETED').length,
+        cancelled: appointmentList.filter((a) => a.appointmentStatus === 'CANCELLED').length,
+        pending: appointmentList.filter((a) =>
+          ['PENDING', 'SCHEDULED', 'RESCHEDULE'].includes(a.appointmentStatus)
+        ).length,
       });
     } catch (_err) {
       console.error(_err);
@@ -39,44 +49,59 @@ const VaccinationHistoryTab = ({ customData }) => {
 
   useEffect(() => {
     if (customData) {
-      setGroupedHistory(customData);
+      setAppointments(customData);
       setStats({
         total: customData.length,
-        completed: customData.filter((r) => r.status === 'COMPLETED').length,
-        inProgress: customData.filter((r) => r.status === 'IN_PROGRESS').length,
+        completed: customData.filter((a) => a.appointmentStatus === 'COMPLETED').length,
+        cancelled: customData.filter((a) => a.appointmentStatus === 'CANCELLED').length,
+        pending: customData.filter((a) =>
+          ['PENDING', 'SCHEDULED', 'RESCHEDULE'].includes(a.appointmentStatus)
+        ).length,
       });
     } else {
       fetchHistory();
     }
   }, [customData]);
 
-  const getStatusColor = (status) => {
+  const getStatusConfig = (status) => {
     switch (status) {
       case 'COMPLETED':
-        return 'success';
-      case 'IN_PROGRESS':
-        return 'processing';
+        return {
+          color: 'success',
+          icon: <CheckCircleFilled />,
+          text: t('client:records.vaccinationHistory.completed'),
+        };
       case 'CANCELLED':
-        return 'default';
+        return {
+          color: 'error',
+          icon: <CloseCircleFilled />,
+          text: t('client:appointments.cancelled'),
+        };
+      case 'SCHEDULED':
+        return {
+          color: 'processing',
+          icon: <CalendarOutlined />,
+          text: t('client:appointments.scheduled'),
+        };
+      case 'PENDING':
+        return {
+          color: 'warning',
+          icon: <ClockCircleOutlined />,
+          text: t('client:records.blockchain.pending'),
+        };
+      case 'RESCHEDULE':
+        return {
+          color: 'gold',
+          icon: <SyncOutlined spin />,
+          text: t('client:appointments.rescheduling'),
+        };
       default:
-        return 'default';
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case 'COMPLETED':
-        return t('client:records.vaccinationHistory.completed');
-      case 'IN_PROGRESS':
-        return t('client:records.vaccinationHistory.inProgress');
-      case 'CANCELLED':
-        return t('client:appointments.cancelled');
-      default:
-        return status;
+        return { color: 'default', icon: null, text: status };
     }
   };
 
   const formatPrice = (price) => {
+    if (!price) return '—';
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
       currency: 'VND',
@@ -91,26 +116,23 @@ const VaccinationHistoryTab = ({ customData }) => {
     return <Alert message={error} type="error" showIcon />;
   }
 
-  const routeColumns = [
+  const columns = [
     {
-      title: t('client:records.vaccinationHistory.vaccine'), // "Route/Vaccine"
+      title: t('client:records.vaccinationHistory.vaccine'),
       key: 'vaccine',
       render: (_, record) => (
-        <div>
-          <Text strong className="text-lg text-blue-900">
-            {record.vaccineName}
-          </Text>
-          <div className="text-xs text-slate-500">
-            {t('client:records.myRecords.progress')}: {record.completedCount}/{record.requiredDoses}{' '}
-            {t('client:records.vaccinationHistory.doses')}
-            {record.cycleIndex > 0 && (
-              <Tag className="ml-2">
-                {t('client:records.vaccinationHistory.cycle', {
-                  count: record.cycleIndex + 1,
-                  defaultValue: `Cycle ${record.cycleIndex + 1}`,
-                })}
-              </Tag>
-            )}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 flex items-center justify-center text-blue-600">
+            <MedicineBoxOutlined className="text-lg" />
+          </div>
+          <div>
+            <Text strong className="text-slate-800 block">
+              {record.vaccineName}
+            </Text>
+            <Text className="text-xs text-slate-500">
+              {t('client:records.vaccinationHistory.dose')} {record.doseNumber || 1}
+              {record.vaccineTotalDoses && ` / ${record.vaccineTotalDoses}`}
+            </Text>
           </div>
         </div>
       ),
@@ -133,83 +155,43 @@ const VaccinationHistoryTab = ({ customData }) => {
       ),
     },
     {
+      title: t('client:records.vaccinationHistory.scheduledDate'),
+      key: 'date',
+      render: (_, record) => (
+        <div>
+          <div className="font-medium text-slate-700">
+            {record.scheduledDate ? dayjs(record.scheduledDate).format('DD/MM/YYYY') : '—'}
+          </div>
+          <div className="text-xs text-slate-400">{formatAppointmentTime(record)}</div>
+        </div>
+      ),
+    },
+    {
+      title: t('client:records.vaccinationHistory.center'),
+      dataIndex: 'centerName',
+      key: 'center',
+      render: (v) => <span className="text-slate-600">{v || 'N/A'}</span>,
+    },
+    {
       title: t('client:records.vaccinationHistory.totalAmount'),
-      dataIndex: 'totalAmount',
       key: 'amount',
-      render: (val) => <span className="font-bold text-slate-700">{formatPrice(val)}</span>,
+      render: (_, record) => (
+        <span className="font-semibold text-slate-700">{formatPrice(record.paymentAmount)}</span>
+      ),
     },
     {
       title: t('client:records.vaccinationHistory.status'),
       key: 'status',
-      render: (_, record) => (
-        <Tag
-          color={getStatusColor(record.status)}
-          icon={record.status === 'COMPLETED' ? <CheckCircleFilled /> : <SyncOutlined spin />}
-        >
-          {getStatusText(record.status)}
-        </Tag>
-      ),
+      render: (_, record) => {
+        const config = getStatusConfig(record.appointmentStatus);
+        return (
+          <Tag color={config.color} icon={config.icon} className="rounded-lg px-2 py-0.5">
+            {config.text}
+          </Tag>
+        );
+      },
     },
   ];
-
-  const expandedRowRender = (route) => {
-    // Show appointments
-    const columns = [
-      {
-        title: t('client:records.vaccinationHistory.dose'),
-        dataIndex: 'doseNumber',
-        key: 'dose',
-        width: 80,
-        render: (d) => (
-          <Tag color="blue">
-            {t('client:records.vaccinationHistory.dose')} {d}
-          </Tag>
-        ),
-      },
-      {
-        title: t('client:records.vaccinationHistory.scheduledDate'),
-        dataIndex: 'scheduledDate',
-        key: 'date',
-        render: (d, r) => (
-          <div>
-            <div>{dayjs(d).format('DD/MM/YYYY')}</div>
-            <div className="text-xs text-slate-400">{formatAppointmentTime(r)}</div>
-          </div>
-        ),
-      },
-      {
-        title: t('client:records.vaccinationHistory.center'),
-        dataIndex: 'centerName', // Need to ensure mapped correctly
-        key: 'center',
-        render: (v) => <span className="text-slate-600">{v || 'N/A'}</span>,
-      },
-      {
-        title: t('client:records.vaccinationHistory.status'),
-        dataIndex: 'appointmentStatus',
-        key: 'appointmentStatus',
-        render: (s) => (
-          <Tag color={s === 'COMPLETED' ? 'success' : s === 'CANCELLED' ? 'error' : 'warning'}>
-            {s}
-          </Tag>
-        ),
-      },
-    ];
-
-    return (
-      <div className="p-4 bg-slate-50 rounded-xl">
-        <Text strong className="mb-2 block">
-          {t('client:records.vaccinationHistory.appointmentDetails')}
-        </Text>
-        <Table
-          columns={columns}
-          dataSource={route.appointments}
-          pagination={false}
-          size="small"
-          rowKey="id"
-        />
-      </div>
-    );
-  };
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -223,12 +205,12 @@ const VaccinationHistoryTab = ({ customData }) => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <Card className="rounded-2xl shadow-sm border border-slate-100 bg-gradient-to-br from-blue-50 to-white">
           <div className="text-center">
             <div className="text-3xl font-bold text-blue-600 mb-1">{stats.total}</div>
             <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-              {t('client:records.vaccinationHistory.totalBookings')} (Routes)
+              {t('client:records.vaccinationHistory.totalBookings')}
             </Text>
           </div>
         </Card>
@@ -242,25 +224,41 @@ const VaccinationHistoryTab = ({ customData }) => {
         </Card>
         <Card className="rounded-2xl shadow-sm border border-slate-100 bg-gradient-to-br from-orange-50 to-white">
           <div className="text-center">
-            <div className="text-3xl font-bold text-orange-600 mb-1">{stats.inProgress}</div>
+            <div className="text-3xl font-bold text-orange-600 mb-1">{stats.pending}</div>
             <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-              {t('client:records.vaccinationHistory.inProgress')}
+              {t('client:records.blockchain.pending')}
+            </Text>
+          </div>
+        </Card>
+        <Card className="rounded-2xl shadow-sm border border-slate-100 bg-gradient-to-br from-red-50 to-white">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-red-500 mb-1">{stats.cancelled}</div>
+            <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
+              {t('client:appointments.cancelled')}
             </Text>
           </div>
         </Card>
       </div>
 
       <Card className="rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-        <Table
-          dataSource={groupedHistory}
-          columns={routeColumns}
-          rowKey="routeId"
-          expandable={{
-            expandedRowRender,
-            expandRowByClick: true,
-          }}
-          pagination={{ pageSize: 5 }}
-        />
+        {appointments.length === 0 ? (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={
+              <span className="text-slate-500">
+                {t('client:records.vaccinationHistory.noHistory')}
+              </span>
+            }
+          />
+        ) : (
+          <Table
+            dataSource={appointments}
+            columns={columns}
+            rowKey="id"
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 800 }}
+          />
+        )}
       </Card>
     </div>
   );

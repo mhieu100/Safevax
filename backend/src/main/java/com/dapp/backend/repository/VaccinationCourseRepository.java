@@ -20,5 +20,7 @@ public interface VaccinationCourseRepository extends JpaRepository<VaccinationCo
 
         java.util.List<VaccinationCourse> findByPatientAndFamilyMemberIsNull(User patient);
 
+        java.util.List<VaccinationCourse> findByPatient(User patient);
+
         java.util.List<VaccinationCourse> findByFamilyMember(FamilyMember familyMember);
 }

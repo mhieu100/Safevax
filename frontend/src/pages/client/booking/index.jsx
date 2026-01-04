@@ -234,7 +234,9 @@ const BookingPage = () => {
       });
 
       message.success(t('booking.paymentSuccess'));
-      navigate(`/success?id=${result?.referenceId || paymentData.referenceId || ''}`);
+      navigate(
+        `/success?id=${result?.referenceId || paymentData.referenceId || ''}&txHash=${tx.hash}`
+      );
     } catch (error) {
       console.error(error);
       message.error(error.message || t('booking.paymentFailed'));

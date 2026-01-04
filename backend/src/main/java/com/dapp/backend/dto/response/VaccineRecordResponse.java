@@ -52,7 +52,6 @@ public class VaccineRecordResponse {
     String transactionHash;
     Long blockNumber;
     String ipfsHash;
-    String digitalSignature;
     boolean isVerified;
     LocalDateTime verifiedAt;
 

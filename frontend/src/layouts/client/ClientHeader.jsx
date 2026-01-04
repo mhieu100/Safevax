@@ -7,6 +7,7 @@ import {
   MenuOutlined,
   PhoneOutlined,
   SafetyCertificateOutlined,
+  SearchOutlined,
   ShoppingCartOutlined,
   ShoppingOutlined,
   UserOutlined,
@@ -16,6 +17,7 @@ import { Avatar, Badge, Button, Drawer, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import GlobalSearch from '@/components/common/GlobalSearch';
 import LanguageSelect from '@/components/common/ui/LanguageSwitcher';
 import DropdownUser from '@/components/dropdown/DropdownUser';
 import { callLogout } from '@/services/auth.service';
@@ -34,6 +36,18 @@ const Navbar = () => {
 
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -149,6 +163,16 @@ const Navbar = () => {
             <LanguageSelect />
 
             <Button
+              icon={<SearchOutlined className="text-lg" />}
+              size="large"
+              onClick={() => setSearchOpen(true)}
+              type="text"
+              shape="circle"
+              className="flex items-center justify-center text-slate-600 hover:bg-slate-100 hover:text-blue-600"
+              title={t('common.search', 'Tìm kiếm')}
+            />
+
+            <Button
               icon={<WalletOutlined className="text-lg" />}
               size="large"
               onClick={() => navigate('/vaccine-passport')}
@@ -244,10 +268,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <div className="flex items-center gap-3">
                 <Avatar
-                  src={
-                    user?.avatar ||
-                    'https://imgs.search.brave.com/kRzOEK2P26KHgRlY94E5DGE517Q4IJTULPg_lFWXLSU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90aHlw/aXguY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIxLzEwL2Fu/aW1lLWF2YXRhci1w/cm9maWxlLXBpY3R1/cmUtdGh5cGl4LTI0/LTcwMHg3MDAuanBn'
-                  }
+                  src={user?.avatar}
                   icon={<UserOutlined />}
                   size="large"
                   className="border-2 border-white shadow-sm"
@@ -387,6 +408,7 @@ const Navbar = () => {
           </div>
         </div>
       </Drawer>
+      <GlobalSearch open={searchOpen} onCancel={() => setSearchOpen(false)} />
     </>
   );
 };

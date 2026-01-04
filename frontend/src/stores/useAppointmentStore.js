@@ -1,5 +1,9 @@
 import { create } from 'zustand';
-import { callFetchAppointmentOfCenter, callMySchedule } from '../services/appointment.service';
+import {
+  callFetchAppointmentOfCenter,
+  callGetPendingAppointmentsOfCenter,
+  callMySchedule,
+} from '../services/appointment.service';
 
 const useAppointmentStore = create((set) => ({
   isFetching: true,
@@ -15,6 +19,22 @@ const useAppointmentStore = create((set) => ({
     set({ isFetching: true });
     try {
       const response = await callFetchAppointmentOfCenter(query);
+      if (response?.data) {
+        set({
+          isFetching: false,
+          meta: response.data.meta,
+          result: response.data.result,
+        });
+      }
+    } catch {
+      set({ isFetching: false });
+    }
+  },
+
+  fetchPendingAppointmentOfCenter: async (query) => {
+    set({ isFetching: true });
+    try {
+      const response = await callGetPendingAppointmentsOfCenter(query);
       if (response?.data) {
         set({
           isFetching: false,

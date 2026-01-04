@@ -6,8 +6,10 @@ import {
   GlobalOutlined,
   HeartOutlined,
   MedicineBoxOutlined,
+  SafetyCertificateOutlined,
   ShareAltOutlined,
   ShoppingCartOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 import { Badge, Button, Col, Image, InputNumber, message, Row, Typography } from 'antd';
 import { useState } from 'react';
@@ -19,15 +21,15 @@ import { formatPrice } from '@/utils/formatPrice';
 
 const { Title, Text, Paragraph } = Typography;
 
-const InfoCard = ({ icon, label, value }) => (
-  <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center h-full hover:shadow-md transition-shadow">
-    <div className="text-blue-500 text-xl mb-2 bg-white p-2 rounded-full shadow-sm">{icon}</div>
-    <Text type="secondary" className="text-xs uppercase tracking-wider mb-1">
-      {label}
-    </Text>
-    <Text strong className="text-sm line-clamp-2 leading-tight">
-      {value || 'N/A'}
-    </Text>
+const InfoItem = ({ icon, label, value }) => (
+  <div className="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors">
+    <div className="text-blue-600 text-lg mt-0.5 min-w-[24px]">{icon}</div>
+    <div className="flex flex-col">
+      <Text type="secondary" className="text-[11px] uppercase tracking-wider font-semibold mb-0.5">
+        {label}
+      </Text>
+      <Text className="text-sm font-medium text-slate-800 leading-snug">{value || 'N/A'}</Text>
+    </div>
   </div>
 );
 
@@ -141,41 +143,55 @@ const VaccineInfoSection = ({ vaccine }) => {
               {vaccine.name}
             </Title>
 
-            <div className="flex items-baseline gap-2 mb-6">
-              <span className="text-3xl font-bold text-blue-600">
-                {formatPrice(vaccine.price || 0)}
-              </span>
-              <span className="text-slate-400 text-lg">/ {t('vaccine.dose')}</span>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-bold text-blue-600">
+                  {formatPrice(vaccine.price || 0)}
+                </span>
+                <span className="text-slate-400 text-lg">/ {t('vaccine.dose')}</span>
+              </div>
             </div>
 
-            <Paragraph className="text-slate-600 text-lg leading-relaxed mb-6">
+            <Paragraph className="text-slate-600 text-base leading-relaxed mb-8 border-l-4 border-slate-200 pl-4 py-1">
               {vaccine.descriptionShort}
             </Paragraph>
+
+            {/* Info List Section - Redesigned */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 mb-8 border-t border-b border-slate-100 py-6">
+              <InfoItem
+                icon={<SafetyCertificateOutlined />}
+                label={t('vaccine.disease') || 'Phòng bệnh'}
+                value={vaccine.disease || 'N/A'}
+              />
+              <InfoItem
+                icon={<UserOutlined />}
+                label={t('vaccine.targetGroup') || 'Đối tượng'}
+                value={`${t(`vaccine.targetGroups.${vaccine.targetGroup}`)} (${vaccine.minAgeMonths ? `> ${vaccine.minAgeMonths} ${t('vaccine.months')}` : t('vaccine.targetGroups.ALL')})`}
+              />
+              <InfoItem
+                icon={<BankOutlined />}
+                label={t('vaccine.manufacturer')}
+                value={vaccine.manufacturer}
+              />
+              <InfoItem
+                icon={<GlobalOutlined />}
+                label={t('vaccine.origin')}
+                value={vaccine.country}
+              />
+              <InfoItem
+                icon={<MedicineBoxOutlined />}
+                label={t('vaccine.dosesRequired')}
+                value={`${vaccine.dosesRequired || 1} ${t('vaccine.doses')}`}
+              />
+              <InfoItem
+                icon={<CalendarOutlined />}
+                label={t('vaccine.daysForNextDose')}
+                value={vaccine.duration ? `${vaccine.duration} ${t('days')}` : 'N/A'}
+              />
+            </div>
           </div>
 
-          {/* Info Grid Section */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-            <InfoCard
-              icon={<BankOutlined />}
-              label={t('vaccine.manufacturer')}
-              value={vaccine.manufacturer}
-            />
-            <InfoCard
-              icon={<GlobalOutlined />}
-              label={t('vaccine.origin')}
-              value={vaccine.country}
-            />
-            <InfoCard
-              icon={<MedicineBoxOutlined />}
-              label={t('vaccine.dosesRequired')}
-              value={`${vaccine.dosesRequired || 1} ${t('vaccine.doses')}`}
-            />
-            <InfoCard
-              icon={<CalendarOutlined />}
-              label={t('vaccine.daysForNextDose')}
-              value={vaccine.duration ? `${vaccine.duration} ${t('days')}` : 'N/A'}
-            />
-          </div>
+          {/* Action Section covers the rest ... */}
 
           {/* Action Section */}
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm mb-6">

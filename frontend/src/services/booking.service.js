@@ -16,6 +16,14 @@ export async function getGroupedBookingHistory() {
   return apiClient.get('/api/auth/booking-history-grouped');
 }
 
+export async function getVaccinationHistory() {
+  return apiClient.get('/api/auth/vaccination-history');
+}
+
+export async function getActiveGroupedBookings() {
+  return apiClient.get('/api/auth/active-bookings-grouped');
+}
+
 export async function rescheduleAppointment(payload) {
   return apiClient.put('/api/appointments/reschedule', payload);
 }

@@ -42,5 +42,12 @@
   "requireTimeSlot": "Vui lòng chọn khung giờ tiêm",
   "reasonPlaceholder": "Nhập lý do bạn muốn thay đổi lịch hẹn...",
   "rescheduleRule1": "• Chỉ có thể đổi lịch sang ngày trong tương lai",
-  "rescheduleRule2": "• Lịch hẹn sẽ được giữ nguyên tại trung tâm: "
+  "rescheduleRule2": "• Lịch hẹn sẽ được giữ nguyên tại trung tâm: ",
+  "confirm": "Xác nhận",
+  "cancel": "Hủy bỏ",
+  "reason": "Lý do đổi lịch",
+  "errorPaidPending": "Bạn có một lịch hẹn đã thanh toán đang chờ xử lý. Vui lòng đợi xác nhận.",
+  "errorCashPending": "Bạn có một lịch hẹn tiền mặt đang chờ xử lý. Vui lòng đợi xác nhận.",
+  "errorActiveExists": "Bạn đã có lịch hẹn đang hoạt động cho loại vắc-xin này.",
+  "bookingFailed": "Đặt lịch thất bại. Vui lòng thử lại."
 }

@@ -115,7 +115,7 @@ public class AuthService {
 
         User user = User.builder()
                 .avatar(request.getAvatar() != null ? request.getAvatar()
-                        : "https://res-console.cloudinary.com/dcwzhi4tp/thumbnails/v1/image/upload/v1763975729/dmgxY3h1aWtkYmh5aXFqeGJnaG0=/drilldown")
+                        : "https://cdn.vectorstock.com/i/500p/86/70/default-avatar-social-media-display-picture-icon-vector-56808670.jpg")
                 .fullName(request.getFullName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))

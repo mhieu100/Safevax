@@ -104,8 +104,14 @@ const LayoutStaff = () => {
     },
     {
       key: '/staff/pending-appointments',
-      label: t('staff:appointments.title'),
+      label: t('staff:appointments.pending'),
       icon: <EditOutlined />,
+      roles: ['CASHIER'],
+    },
+    {
+      key: '/staff/all-appointments',
+      label: t('staff:appointments.title'),
+      icon: <CalendarOutlined />,
       roles: ['CASHIER'],
     },
     {

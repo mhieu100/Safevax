@@ -4,7 +4,6 @@ import {
   ClockCircleOutlined,
   EnvironmentOutlined,
   MedicineBoxOutlined,
-  SafetyCertificateFilled,
   UserOutlined,
 } from '@ant-design/icons';
 import { Button, Checkbox, Divider, Tag } from 'antd';
@@ -224,11 +223,6 @@ const ReviewSection = ({ bookingData, vaccine, setCurrentStep, handleBookingSubm
                   <div className="flex justify-between items-center">
                     <span className="text-slate-500">{t('booking.doses')}</span>
                     <span className="font-medium text-slate-900">{t('review.firstDose')}</span>
-                  </div>
-                  <Divider className="my-2" />
-                  <div className="bg-emerald-50 p-3 rounded-xl flex items-center gap-2 text-emerald-700 text-sm font-medium">
-                    <SafetyCertificateFilled />
-                    {t('review.blockchainVerified')}
                   </div>
                 </div>
 

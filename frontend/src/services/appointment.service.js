@@ -82,6 +82,19 @@ export const callFetchAppointmentOfCenter = (queryOrFilter) => {
   });
 };
 
+export const callGetPendingAppointmentsOfCenter = (queryOrFilter) => {
+  if (
+    typeof queryOrFilter === 'string' &&
+    (queryOrFilter.includes('=') || queryOrFilter.includes('&'))
+  ) {
+    return apiClient.get(`/api/appointments/center/pending?${queryOrFilter}`);
+  }
+
+  return apiClient.get('/api/appointments/center/pending', {
+    params: queryOrFilter ? { filter: queryOrFilter } : {},
+  });
+};
+
 export const callMySchedule = () => {
   return apiClient.get('/api/appointments/my-schedules');
 };

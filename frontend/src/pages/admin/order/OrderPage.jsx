@@ -107,7 +107,7 @@ const AdminOrderPage = () => {
   const filteredOrders = orders.filter(
     (order) =>
       order.orderId.toString().includes(searchText) ||
-      (order.customerName && order.customerName.toLowerCase().includes(searchText.toLowerCase()))
+      order.customerName?.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const getStatusConfig = (status) => {

@@ -2,7 +2,7 @@ import {
   ClockCircleOutlined,
   EyeOutlined,
   HeartOutlined,
-  SafetyCertificateFilled,
+  MedicineBoxOutlined,
   ShoppingCartOutlined,
 } from '@ant-design/icons';
 import { Button, Image, message, Tooltip } from 'antd';
@@ -104,12 +104,10 @@ const VaccineCard = ({ vaccine }) => {
           {vaccine.name}
         </h3>
 
-        {}
-        <div className="mb-4 flex items-center gap-1.5 text-xs text-slate-500">
-          <SafetyCertificateFilled className="text-emerald-500" />
-          <span>Blockchain Verified</span>
+        <div className="mb-4 flex items-center gap-1.5 text-xs text-slate-500 line-clamp-1">
+          <MedicineBoxOutlined className="text-emerald-500" />
+          <span>{vaccine.disease || 'Phòng bệnh truyền nhiễm'}</span>
         </div>
-
         {}
         <div className="mt-auto pt-4 border-t border-slate-100">
           <div className="flex items-end justify-between mb-4">

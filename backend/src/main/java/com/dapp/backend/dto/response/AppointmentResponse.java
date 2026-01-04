@@ -36,6 +36,8 @@ public class AppointmentResponse {
     Double paymentAmount;
     String paymentCurrency;
     Long familyMemberId;
+    String familyMemberName;
+    Boolean isFamily;
     Long vaccinationCourseId;
     Integer vaccineTotalDoses;
     LocalDateTime createdAt;

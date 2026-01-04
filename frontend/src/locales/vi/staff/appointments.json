@@ -33,7 +33,8 @@
     "approveReschedule": "Duyệt Đổi Lịch",
     "rescheduleRequest": "Yêu cầu đổi lịch",
     "assignTooltip": "Phân công lịch hẹn cho bác sĩ",
-    "assign": "Phân Công"
+    "assign": "Phân Công",
+    "detail": "Xem chi tiết"
   },
   "pagination": "Hiển thị {{range0}}-{{range1}} trong tổng số {{total}} lịch hẹn",
   "pending": "Lịch hẹn chờ xử lý",

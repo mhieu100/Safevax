@@ -49,6 +49,20 @@ public class AuthController {
         return ResponseEntity.ok(appointmentService.getGroupedHistoryBooking());
     }
 
+    @GetMapping("/vaccination-history")
+    @ApiMessage("Get all appointments history (flat list)")
+    public ResponseEntity<List<AppointmentResponse>> getAllVaccinationHistory()
+            throws Exception {
+        return ResponseEntity.ok(appointmentService.getAllAppointmentsHistory());
+    }
+
+    @GetMapping("/active-bookings-grouped")
+    @ApiMessage("Get active bookings grouped (only PENDING, SCHEDULED, RESCHEDULE)")
+    public ResponseEntity<List<VaccinationRouteResponse>> getActiveGroupedBookings()
+            throws Exception {
+        return ResponseEntity.ok(appointmentService.getActiveGroupedBooking());
+    }
+
     @PostMapping("/login/password")
     @ApiMessage("Login patient")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) throws AppException {

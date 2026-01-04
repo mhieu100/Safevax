@@ -165,49 +165,19 @@ public class FhirImmunizationMapper {
             bundle.addEntry().setResource(obs).setFullUrl("Observation/" + UUID.randomUUID());
         }
 
-        // 5. Create Provenance Resource for Digital Signatures
+        // 5. Create Provenance Resource
         Provenance provenance = new Provenance();
         provenance.setRecorded(new Date());
         provenance.addTarget(new Reference("Immunization/" + immunization.getId()));
 
-        // Doctor Signature (Author/Verifier)
-        if (record.getDoctorSignature() != null) {
-            Provenance.ProvenanceAgentComponent doctorAgent = new Provenance.ProvenanceAgentComponent();
-            doctorAgent.setType(new CodeableConcept().addCoding(new Coding(
-                    "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
-                    "author",
-                    "Author")));
-            doctorAgent.setWho(new Reference("Practitioner/" + record.getDoctor().getId()));
-            provenance.addAgent(doctorAgent);
-
-            Signature doctorSig = new Signature();
-            doctorSig.addType(new Coding("urn:iso-astm:E1762-95:2013", "1.2.840.10065.1.12.1.1", "Author's Signature"));
-            doctorSig.setWhen(new Date());
-            doctorSig.setWho(new Reference("Practitioner/" + record.getDoctor().getId()));
-            doctorSig.setSigFormat("application/jose");
-            doctorSig.setData(record.getDoctorSignature().getBytes());
-            provenance.addSignature(doctorSig);
-        }
-
-        // Patient Consent Signature (Witness)
-        if (record.getPatientConsentSignature() != null) {
-            Provenance.ProvenanceAgentComponent patientAgent = new Provenance.ProvenanceAgentComponent();
-            patientAgent.setType(new CodeableConcept().addCoding(new Coding(
-                    "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
-                    "witness",
-                    "Witness")));
-            patientAgent.setWho(patientRef);
-            provenance.addAgent(patientAgent);
-
-            Signature patientSig = new Signature();
-            patientSig
-                    .addType(new Coding("urn:iso-astm:E1762-95:2013", "1.2.840.10065.1.12.1.14", "Consent Signature"));
-            patientSig.setWhen(new Date());
-            patientSig.setWho(patientRef);
-            patientSig.setSigFormat("application/jose");
-            patientSig.setData(record.getPatientConsentSignature().getBytes());
-            provenance.addSignature(patientSig);
-        }
+        // Doctor as Author/Verifier
+        Provenance.ProvenanceAgentComponent doctorAgent = new Provenance.ProvenanceAgentComponent();
+        doctorAgent.setType(new CodeableConcept().addCoding(new Coding(
+                "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                "author",
+                "Author")));
+        doctorAgent.setWho(new Reference("Practitioner/" + record.getDoctor().getId()));
+        provenance.addAgent(doctorAgent);
 
         bundle.addEntry().setResource(provenance).setFullUrl("Provenance/" + UUID.randomUUID());
 

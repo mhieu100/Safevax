@@ -215,6 +215,14 @@ public class VaccineService {
     }
 
     /**
+     * Lấy vaccine theo loại bệnh
+     */
+    public List<VaccineResponse> getVaccinesByDisease(String disease) {
+        List<Vaccine> vaccines = vaccineRepository.findByDisease(disease);
+        return vaccines.stream().map(VaccineMapper::toResponse).toList();
+    }
+
+    /**
      * Lấy vaccine thiết yếu theo độ tuổi
      */
     public List<VaccineResponse> getEssentialVaccinesByAge(Integer ageInMonths) {

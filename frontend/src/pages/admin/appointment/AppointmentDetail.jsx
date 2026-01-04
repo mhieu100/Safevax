@@ -11,6 +11,7 @@ import { Badge, Button, Card, Col, Descriptions, Row, Space, Spin, Tag, Typograp
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { TIME_SLOT_LABELS } from '@/constants';
 import { callGetAppointmentById } from '@/services/appointment.service';
 
 const AppointmentDetailPage = () => {
@@ -87,7 +88,7 @@ const AppointmentDetailPage = () => {
                 {dayjs(data.scheduledDate).format('DD/MM/YYYY')}
               </Descriptions.Item>
               <Descriptions.Item label="Time Slot">
-                {data.scheduledTimeSlot}
+                {TIME_SLOT_LABELS[data.scheduledTimeSlot] || data.scheduledTimeSlot}
                 {data.actualScheduledTime && ` (Actual: ${data.actualScheduledTime})`}
               </Descriptions.Item>
               <Descriptions.Item label="Vaccine">

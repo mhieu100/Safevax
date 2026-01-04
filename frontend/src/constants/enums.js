@@ -106,7 +106,7 @@ export const SlotStatus = {
 
 export const EXCHANGE_RATES = {
   USD_TO_VND: 25000,
-  ETH_TO_VND: 75000000,
+  ETH_TO_VND: 5000000, // 1 ETH = 5,000,000 VND (synchronized with backend)
 };
 
 export const getPaymentStatusColor = (status) => {
@@ -123,8 +123,13 @@ export const getPaymentStatusColor = (status) => {
   }
 };
 
-export const convertToVND = (amount, method) => {
+export const convertToVND = (amount, method, currency) => {
   if (!amount) return 0;
+
+  // If currency is already VND, no conversion needed
+  if (currency === 'VND') {
+    return amount;
+  }
 
   switch (method) {
     case PaymentMethod.PAYPAL:
@@ -136,28 +141,25 @@ export const convertToVND = (amount, method) => {
   }
 };
 
-export const formatPaymentAmount = (amount, method) => {
+export const formatPaymentAmount = (amount, method, currency) => {
   if (!amount) return { display: '0 đ', vnd: 0 };
 
-  const currency = PaymentMethodCurrency[method] || 'VND';
-  const vndAmount = Math.round(convertToVND(amount, method));
-
-  if (currency === 'VND') {
-    return {
-      display: `${vndAmount.toLocaleString('vi-VN')} đ`,
-      vnd: vndAmount,
-      original: null,
-    };
-  }
+  // If backend already converted to VND, use amount directly
+  const isAlreadyVND = currency === 'VND';
+  const vndAmount = isAlreadyVND
+    ? Math.round(amount)
+    : Math.round(convertToVND(amount, method, currency));
 
   return {
     display: `${vndAmount.toLocaleString('vi-VN')} đ`,
     vnd: vndAmount,
-    original: {
-      amount: amount,
-      currency: currency,
-      formatted: `${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${currency}`,
-    },
+    original: isAlreadyVND
+      ? null
+      : {
+          amount: amount,
+          currency: PaymentMethodCurrency[method] || 'VND',
+          formatted: `${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${PaymentMethodCurrency[method] || 'VND'}`,
+        },
   };
 };
 

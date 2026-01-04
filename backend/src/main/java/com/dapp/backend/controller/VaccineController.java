@@ -131,6 +131,17 @@ public class VaccineController {
     }
 
     /**
+     * Lấy vaccine theo loại bệnh
+     * GET /api/vaccines/disease/Cúm
+     */
+    @GetMapping("/disease/{disease}")
+    @ApiMessage("Get vaccines by disease")
+    public ResponseEntity<List<VaccineResponse>> getVaccinesByDisease(
+            @PathVariable String disease) {
+        return ResponseEntity.ok(vaccineService.getVaccinesByDisease(disease));
+    }
+
+    /**
      * Lấy danh sách tất cả categories
      * GET /api/vaccines/categories
      */

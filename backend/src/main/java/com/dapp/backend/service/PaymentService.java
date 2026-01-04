@@ -19,9 +19,14 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 
+import static com.dapp.backend.service.PaypalService.EXCHANGE_RATE_TO_USD;
+
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
+
+        // Exchange rate: 1 ETH = 5,000,000 VND (synchronized with OrderService/AppointmentService)
+        private static final double ETH_TO_VND_RATE = 5_000_000.0;
 
         private final AppointmentRepository appointmentRepository;
         private final OrderRepository orderRepository;
@@ -48,13 +53,15 @@ public class PaymentService {
 
                 return payments.stream().map(payment -> {
                         Appointment appointment = appointmentMap.get(payment.getReferenceId());
+                        // Quy đổi amount về VNĐ
+                        Double amountInVnd = convertToVnd(payment.getAmount(), payment.getCurrency());
                         return TransactionResultResponse.builder()
                                         .status(payment.getStatus().name())
                                         .referenceType(payment.getReferenceType().name())
-                                        .amount(payment.getAmount())
+                                        .amount(amountInVnd)
                                         .transactionId(String.valueOf(payment.getId()))
                                         .method(payment.getMethod() != null ? payment.getMethod().name() : null)
-                                        .currency(payment.getCurrency() != null ? payment.getCurrency() : "VND")
+                                        .currency("VND")
                                         .vaccineName(appointment.getVaccine() != null
                                                         ? appointment.getVaccine().getName()
                                                         : "N/A")
@@ -211,14 +218,17 @@ public class PaymentService {
                 Payment payment = paymentRepository.findById(paymentId)
                                 .orElseThrow(() -> new AppException("Payment not found!"));
 
+                // Quy đổi amount về VNĐ
+                Double amountInVnd = convertToVnd(payment.getAmount(), payment.getCurrency());
+
                 TransactionResultResponse.TransactionResultResponseBuilder builder = TransactionResultResponse
                                 .builder()
                                 .status(payment.getStatus().name())
                                 .referenceType(payment.getReferenceType().name())
-                                .amount(payment.getAmount())
+                                .amount(amountInVnd)
                                 .transactionId(String.valueOf(payment.getId()))
                                 .method(payment.getMethod() != null ? payment.getMethod().name() : null)
-                                .currency(payment.getCurrency() != null ? payment.getCurrency() : "VND");
+                                .currency("VND");
 
                 if (payment.getReferenceType() == TypeTransactionEnum.APPOINTMENT) {
                         Appointment appointment = appointmentRepository.findById(payment.getReferenceId())
@@ -246,5 +256,28 @@ public class PaymentService {
                 }
 
                 return builder.build();
+        }
+
+        /**
+         * Quy đổi amount về VNĐ dựa trên currency
+         * @param amount Số tiền gốc
+         * @param currency Đơn vị tiền tệ (ETH, USD, VND)
+         * @return Số tiền đã quy đổi sang VNĐ
+         */
+        private Double convertToVnd(Double amount, String currency) {
+                if (amount == null) {
+                        return 0.0;
+                }
+                if (currency == null || "VND".equals(currency)) {
+                        return amount;
+                }
+                if ("ETH".equals(currency)) {
+                        return amount * ETH_TO_VND_RATE;
+                }
+                if ("USD".equals(currency)) {
+                        // Quy đổi ngược từ USD về VND (1 VND = EXCHANGE_RATE_TO_USD USD)
+                        return amount / EXCHANGE_RATE_TO_USD;
+                }
+                return amount;
         }
 }

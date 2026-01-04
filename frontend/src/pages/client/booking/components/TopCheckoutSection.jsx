@@ -3,7 +3,6 @@ import {
   CalendarOutlined,
   CheckCircleOutlined,
   CreditCardOutlined,
-  SafetyCertificateFilled,
 } from '@ant-design/icons';
 import { Button, Steps } from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -19,12 +18,6 @@ const TopCheckoutSection = ({ currentStep, doseNumber }) => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">{t('booking.title')}</h1>
-          <div className="flex items-center gap-2 text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full w-fit">
-            <SafetyCertificateFilled />
-            <span className="text-xs font-bold uppercase tracking-wider">
-              {t('booking.secureBlockchainTransaction')}
-            </span>
-          </div>
         </div>
         <Button
           icon={<ArrowLeftOutlined />}

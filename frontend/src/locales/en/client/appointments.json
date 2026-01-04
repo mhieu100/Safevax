@@ -42,5 +42,12 @@
   "requireTimeSlot": "Please select a time slot",
   "reasonPlaceholder": "Reason for rescheduling...",
   "rescheduleRule1": "• Only future dates are allowed",
-  "rescheduleRule2": "• Appointment remains at center: "
+  "rescheduleRule2": "• Appointment remains at center: ",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "reason": "Reason for rescheduling",
+  "errorPaidPending": "You have a paid pending appointment. Please wait for confirmation.",
+  "errorCashPending": "You have a pending cash appointment. Please wait for confirmation.",
+  "errorActiveExists": "You already have an active appointment for this vaccination course.",
+  "bookingFailed": "Booking failed. Please try again."
 }

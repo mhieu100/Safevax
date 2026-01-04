@@ -1,0 +1,77 @@
+Về phần demo thì đây là : 
+- phân trang chủ của nhóm em thì nó cũng sẽ có 
+header footer banner như mọi website khác
+
+Tính năng Tìm kiếm Thông minh Smart Search
+
+Đây là tính năng Global Search Hub tích hợp AI, được thiết kế để trở thành trợ lý y tế đắc lực cho người dùng.
+Hệ thống tìm kiếm song song từ 3 nguồn dữ liệu khác nhau (Vắc xin, Tin tức, AI Knowledge) mà không làm chậm trải nghiệm, trả kết quả gần như tức thì.
+Tích hợp RAG AI (Retrieval-Augmented Generation): Sử dụng mô hình AI (qua RagService) để hiểu ngôn ngữ tự nhiên, cho phép người dùng đặt câu hỏi y tế phức tạp (VD: "Bé 2 tháng tiêm gì?") thay vì chỉ tìm từ khóa cứng nhắc.
+
+Ví dụ khi người dùng nhập vào 1 đoạn thông tin bất ký thì nó sẽ trả về các thông tin như vaccine, tin tức liên quan cho người dùng trường hợp người dùng 
+trường hợp người dùng nhập vào 1 đoạn dạng câu hỏi thì nó sẽ tự động sẽ đưa 
+
+======================================================================
+# Phần tiếp theo sẽ hiển thị 1 số loại vaccine gợi ý cho người dùng như vaccine dành cho trẻ em , phụ nữ mang thai, ....
+nhưng phần này khi mà người dùng đăng nhập sẽ nó sẽ hiển thị ra các loại vaccine phù hợp cho mỗi user khác nhau dựa trên thông tin của user
+
+Các phần như tin tức về sức khỏe người dùng có thể đọc để biết thêm các thông tin
+
+Các phần tĩnh trang website như là: 
+- hướng dẫn các bước đặt lịch tiêm chủng trên website
+- tính năng ứng dụng nổi bật của blochchain 
+- phần giới thiệu về nền tảng ứng dụng tiêm chủng trên mobile để người dùng có thể cải và sử dụng ngay trên thiết bị di dộng
+
+
+- về phân trang vaccine thì em sẽ lấy ra 12 loại vaccine trên 1 page em có 1 cái pagination để phân trang , người dùng có click để xem thêm các loại vaccine khác trong hệ thống
+Bên này thì em có phần filter, em chọn lọc ra các thuộc tính của vaccine thì :
+có tìm kiếm tên , hoặc quốc gia 
+xắp xếp thì có sắp xếp theo bảng chữ cái, hoặc giá tăng và giảm dần
+lọc thì lọc theo quốc gia sản xuất, loại bệnh, đối tượng tiêm, và khoảng giá
+
+ví dụ lọc các loại vaccine của mỹ hay hàn quốc chẳng hạn sẽ trả về các loại vaccine của mỹ hay hàn quốc
+
+=======================================================================
+
+Tiếp đến là phần đăng ký đăng nhập thì em có làm 2 phương thức là email password và login với google 
+khi đăng ký người dùng sẽ cần cung cấp thông tin cơ bản và chỉ số của súc khỏe để hệ thống có thẻ đưa ra các loại vaccine phù hợp với ngưới dùng 
+Sau khi đăng ký hoặc đăng nhập hệ thống sẽ có hướng dẫn người dùng đặt lịch ,ta có thể bỏ qua nếu muốn 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Cơ chế hoạt động (Technical Flow):
+
+1. **Kích hoạt & Gửi yêu cầu:**
+   - Khi người dùng nhập từ khóa (ví dụ "Cúm"), Frontend sẽ chờ người dùng ngừng gõ (debounce 500ms) rồi gửi 1 request duy nhất đến API `/api/search/global`.
+
+2. **Xử lý Đa luồng tại Backend (Parallel Processing):**
+   Thay vì tìm lần lượt, Server sẽ khởi chạy **3 luồng xử lý song song** cùng lúc để tối ưu thời gian phản hồi:
+   - **Luồng 1 (Vaccine Service):** Quét toàn bộ CSDL Vắc xin để tìm các sản phẩm khớp với tên, mô tả, bệnh lý, hoặc quốc gia xuất xứ.
+   - **Luồng 2 (News Service):** Quét CSDL Tin tức để tìm các bài viết, hướng dẫn y tế liên quan.
+   - **Luồng 3 (AI Service):** Hệ thống phân tích chuỗi tìm kiếm. Nếu phát hiện đây là một câu hỏi (ví dụ: có dấu "?", từ khóa "là gì", "tiêm gì"), nó sẽ kích hoạt **RAG (Retrieval-Augmented Generation)**:
+     - *Bước 3.1:* Tìm kiếm các văn bản y khoa liên quan trong Vector Database.
+     - *Bước 3.2:* Gửi câu hỏi kèm thông tin tìm được cho AI (LLM) để tổng hợp câu trả lời chính xác, ngắn gọn.
+
+3. **Trả về kết quả (Aggregation):**
+   - Server chờ cả 3 luồng hoàn tất, gộp chung vào một gói dữ liệu JSON duy nhất và gửi về Frontend.
+
+4. **Hiển thị (Rendering):**
+   - Frontend hiển thị kết quả phân tách rõ ràng:
+     - **VaxSafe AI:** Hiển thị câu trả lời tư vấn (nếu có).
+     - **Vắc xin:** Hiển thị danh sách sản phẩm kèm giá và tình trạng kho.
+     - **Tin tức:** Các bài viết liên quan.
+=> Giúp người dùng có cái nhìn toàn diện chỉ trong 1 lần tìm kiếm.

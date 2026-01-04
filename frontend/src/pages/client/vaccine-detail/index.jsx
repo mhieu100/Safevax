@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { callGetBySlug } from '@/services/vaccine.service';
 import DescriptionVaccineSection from './components/DescriptionVaccineSection';
+import RelatedVaccineSection from './components/RelatedVaccineSection';
 import VaccineInfoSection from './components/VaccineInfoSection';
 
 const VaccineDetailPage = () => {
@@ -119,6 +120,7 @@ const VaccineDetailPage = () => {
               <>
                 <VaccineInfoSection vaccine={vaccine} />
                 <DescriptionVaccineSection vaccine={vaccine} />
+                <RelatedVaccineSection currentVaccine={vaccine} />
               </>
             )}
           </div>

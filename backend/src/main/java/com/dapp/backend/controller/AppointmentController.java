@@ -36,6 +36,13 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.getAllAppointmentOfCenter(specification, pageable));
     }
 
+    @GetMapping("/center/pending")
+    @ApiMessage("Get pending appointments of center")
+    public ResponseEntity<Pagination> getPendingAppointmentsOfCenter(@Filter Specification<Appointment> specification,
+            Pageable pageable) throws AppException {
+        return ResponseEntity.ok(appointmentService.getPendingAppointmentsOfCenter(specification, pageable));
+    }
+
     @GetMapping
     @ApiMessage("Get all appointments")
     public ResponseEntity<Pagination> getAllAppointments(@Filter Specification<Appointment> specification,

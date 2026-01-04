@@ -89,11 +89,8 @@ public class VaccineRecordService {
                 .temperature(request.getTemperature())
                 .pulse(request.getPulse())
                 .adverseReactions(request.getAdverseReactions())
-                .doctorSignature(request.getDoctorSignature())
-                .patientConsentSignature(request.getPatientConsentSignature())
                 .isVerified(true)
                 .verifiedAt(LocalDateTime.now())
-                .digitalSignature(request.getDoctorSignature()) // Using doctor's signature as the main record signature
                 .nextDoseDate(nextDoseDate)
                 .nextDoseNumber(nextDoseDate != null ? appointment.getDoseNumber() + 1 : null)
                 .build();
@@ -298,7 +295,6 @@ public class VaccineRecordService {
                 .transactionHash(record.getTransactionHash())
                 .blockNumber(record.getBlockNumber())
                 .ipfsHash(record.getIpfsHash())
-                .digitalSignature(record.getDigitalSignature())
                 .isVerified(record.isVerified())
                 .verifiedAt(record.getVerifiedAt())
                 .nextDoseDate(record.getNextDoseDate())

@@ -18,7 +18,4 @@ public class CompleteAppointmentRequest {
     Integer pulse;
 
     String adverseReactions;
-
-    String doctorSignature;
-    String patientConsentSignature;
 }

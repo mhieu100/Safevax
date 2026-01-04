@@ -68,6 +68,12 @@ public interface VaccineRepository extends JpaRepository<Vaccine, Long>, JpaSpec
        List<Vaccine> findByCategory(@Param("category") String category);
 
        /**
+        * Tìm vaccine theo loại bệnh
+        */
+       @Query("SELECT v FROM Vaccine v WHERE v.isDeleted = false AND v.disease = :disease")
+       List<Vaccine> findByDisease(@Param("disease") String disease);
+
+       /**
         * Tìm vaccine theo giới tính
         */
        @Query("SELECT v FROM Vaccine v WHERE v.isDeleted = false " +

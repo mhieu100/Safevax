@@ -41,6 +41,8 @@ import static com.dapp.backend.service.PaypalService.EXCHANGE_RATE_TO_USD;
 @Slf4j
 public class AppointmentService {
 
+    private static final double ETH_TO_VND_RATE = 5_000_000.0; // 1 ETH = 5,000,000 VND
+
     private final AuthService authService;
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
@@ -92,9 +94,54 @@ public class AppointmentService {
                                         payment.getStatus() != null ? payment.getStatus().name() : null);
                                 response.setPaymentMethod(
                                         payment.getMethod() != null ? payment.getMethod().name() : null);
-                                response.setPaymentAmount(payment.getAmount());
-                                response.setPaymentCurrency(
-                                        payment.getCurrency() != null ? payment.getCurrency() : "VND");
+                                response.setPaymentAmount(convertToVnd(payment.getAmount(), payment.getCurrency()));
+                                response.setPaymentCurrency("VND");
+                            });
+                    return response;
+                })
+                .toList();
+        pagination.setResult(result);
+        return pagination;
+    }
+
+    public Pagination getPendingAppointmentsOfCenter(Specification<Appointment> specification, Pageable pageable)
+            throws AppException {
+        User user = authService.getCurrentUserLogin();
+        Center center = UserMapper.getCenter(user);
+
+        if (center == null) {
+            throw new AppException("User is not associated with any center.");
+        }
+
+        Specification<Appointment> centerSpec = AppointmentSpecifications.findByCenter(center.getName());
+        Specification<Appointment> statusSpec = (root, query, cb) -> root.get("status").in(AppointmentStatus.PENDING,
+                AppointmentStatus.RESCHEDULE);
+
+        specification = Specification.where(specification).and(centerSpec).and(statusSpec);
+
+        Page<Appointment> page = appointmentRepository.findAll(specification, pageable);
+        Pagination pagination = new Pagination();
+        Pagination.Meta meta = new Pagination.Meta();
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
+        meta.setPages(page.getTotalPages());
+        meta.setTotal(page.getTotalElements());
+
+        pagination.setMeta(meta);
+        List<Appointment> list = page.getContent();
+        List<AppointmentResponse> result = list.stream()
+                .map(apt -> {
+                    AppointmentResponse response = AppointmentMapper.toResponse(apt);
+
+                    paymentRepository.findByAppointmentId(apt.getId(), TypeTransactionEnum.APPOINTMENT)
+                            .ifPresent(payment -> {
+                                response.setPaymentId(payment.getId());
+                                response.setPaymentStatus(
+                                        payment.getStatus() != null ? payment.getStatus().name() : null);
+                                response.setPaymentMethod(
+                                        payment.getMethod() != null ? payment.getMethod().name() : null);
+                                response.setPaymentAmount(convertToVnd(payment.getAmount(), payment.getCurrency()));
+                                response.setPaymentCurrency("VND");
                             });
                     return response;
                 })
@@ -128,9 +175,8 @@ public class AppointmentService {
                                         payment.getStatus() != null ? payment.getStatus().name() : null);
                                 response.setPaymentMethod(
                                         payment.getMethod() != null ? payment.getMethod().name() : null);
-                                response.setPaymentAmount(payment.getAmount());
-                                response.setPaymentCurrency(
-                                        payment.getCurrency() != null ? payment.getCurrency() : "VND");
+                                response.setPaymentAmount(convertToVnd(payment.getAmount(), payment.getCurrency()));
+                                response.setPaymentCurrency("VND");
                             });
                     return response;
                 })
@@ -161,9 +207,8 @@ public class AppointmentService {
                                         payment.getStatus() != null ? payment.getStatus().name() : null);
                                 response.setPaymentMethod(
                                         payment.getMethod() != null ? payment.getMethod().name() : null);
-                                response.setPaymentAmount(payment.getAmount());
-                                response.setPaymentCurrency(
-                                        payment.getCurrency() != null ? payment.getCurrency() : "VND");
+                                response.setPaymentAmount(convertToVnd(payment.getAmount(), payment.getCurrency()));
+                                response.setPaymentCurrency("VND");
                             });
                     return response;
                 })
@@ -183,8 +228,8 @@ public class AppointmentService {
                     response.setPaymentId(payment.getId());
                     response.setPaymentStatus(payment.getStatus() != null ? payment.getStatus().name() : null);
                     response.setPaymentMethod(payment.getMethod() != null ? payment.getMethod().name() : null);
-                    response.setPaymentAmount(payment.getAmount());
-                    response.setPaymentCurrency(payment.getCurrency() != null ? payment.getCurrency() : "VND");
+                    response.setPaymentAmount(convertToVnd(payment.getAmount(), payment.getCurrency()));
+                    response.setPaymentCurrency("VND");
                 });
 
         return response;
@@ -332,8 +377,8 @@ public class AppointmentService {
                     response.setPaymentId(payment.getId());
                     response.setPaymentStatus(payment.getStatus() != null ? payment.getStatus().name() : null);
                     response.setPaymentMethod(payment.getMethod() != null ? payment.getMethod().name() : null);
-                    response.setPaymentAmount(payment.getAmount());
-                    response.setPaymentCurrency(payment.getCurrency() != null ? payment.getCurrency() : "VND");
+                    response.setPaymentAmount(convertToVnd(payment.getAmount(), payment.getCurrency()));
+                    response.setPaymentCurrency("VND");
                 });
         return response;
     }
@@ -909,7 +954,7 @@ public class AppointmentService {
 
         switch (bookingRequest.getPaymentMethod().toString()) {
             case "PAYPAL" -> payment.setAmount(bookingRequest.getAmount() * EXCHANGE_RATE_TO_USD);
-            case "METAMASK" -> payment.setAmount((double) Math.round(bookingRequest.getAmount() / 200000.0));
+            case "METAMASK" -> payment.setAmount(bookingRequest.getAmount() / 5000000.0);
             default -> payment.setAmount(bookingRequest.getAmount());
         }
         payment.setCurrency(bookingRequest.getPaymentMethod().getCurrency());
@@ -937,7 +982,7 @@ public class AppointmentService {
                 paymentResponse.setPaymentURL(paypalUrl);
                 break;
             case METAMASK:
-                paymentResponse.setAmount(bookingRequest.getAmount() / 200000.0);
+                paymentResponse.setAmount(bookingRequest.getAmount() / 5000000.0);
                 break;
             case CASH:
                 payment.setStatus(PaymentEnum.PROCESSING);
@@ -1099,11 +1144,9 @@ public class AppointmentService {
         return AppointmentMapper.toResponse(savedAppointment);
     }
 
-    // ...
 
     public List<AppointmentResponse> getBooking() throws AppException {
         User user = authService.getCurrentUserLogin();
-        // Exclude INITIAL appointments from the view
         List<Appointment> appointments = appointmentRepository
                 .findByPatientAndStatusIn(user,
                         List.of(AppointmentStatus.PENDING, AppointmentStatus.SCHEDULED, AppointmentStatus.RESCHEDULE));
@@ -1203,7 +1246,7 @@ public class AppointmentService {
 
             for (Appointment apt : activeAppointments) {
                 if (apt.getStatus() == AppointmentStatus.SCHEDULED || apt.getStatus() == AppointmentStatus.RESCHEDULE) {
-                    throw new AppException("You already have an active appointment for this vaccination course.");
+                    throw new AppException("ACTIVE_APPOINTMENT_EXISTS");
                 }
 
                 if (apt.getStatus() == AppointmentStatus.PENDING || apt.getStatus() == AppointmentStatus.INITIAL) {
@@ -1214,11 +1257,11 @@ public class AppointmentService {
                         Payment p = paymentOpt.get();
                         if (p.getStatus() == PaymentEnum.SUCCESS) {
                             throw new AppException(
-                                    "You have a paid pending appointment. Please wait for confirmation.");
+                                    "PAID_PENDING_APPOINTMENT");
                         }
                         if (p.getMethod() == PaymentMethod.CASH && p.getStatus() == PaymentEnum.PROCESSING) {
                             throw new AppException(
-                                    "You have a pending cash appointment. Please wait for confirmation.");
+                                    "CASH_PENDING_APPOINTMENT");
                         }
                         // Cancel stale payment
                         p.setStatus(PaymentEnum.CANCELLED);
@@ -1296,6 +1339,48 @@ public class AppointmentService {
                 .toList();
     }
 
+    /**
+     * Get all appointments for the current user (including family members)
+     * This returns a flat list of all appointments without grouping by course
+     * Used for vaccination history tab to show all appointments including CANCELLED
+     */
+    public List<AppointmentResponse> getAllAppointmentsHistory() throws AppException {
+        User user = authService.getCurrentUserLogin();
+        
+        // Get all appointments for this user (including family members)
+        List<Appointment> appointments = appointmentRepository.findByPatient(user);
+        
+        return appointments.stream()
+                .sorted((a, b) -> {
+                    // Sort by created date descending (newest first)
+                    if (b.getCreatedAt() == null) return -1;
+                    if (a.getCreatedAt() == null) return 1;
+                    return b.getCreatedAt().compareTo(a.getCreatedAt());
+                })
+                .map(apt -> {
+                    AppointmentResponse response = AppointmentMapper.toResponse(apt);
+                    // Add family member name if applicable
+                    if (apt.getFamilyMember() != null) {
+                        response.setPatientName(apt.getFamilyMember().getFullName());
+                        response.setIsFamily(true);
+                    } else {
+                        response.setPatientName(apt.getPatient().getFullName());
+                        response.setIsFamily(false);
+                    }
+                    // Add payment info with VND conversion
+                    paymentRepository.findByAppointmentId(apt.getId(), TypeTransactionEnum.APPOINTMENT)
+                            .ifPresent(payment -> {
+                                response.setPaymentId(payment.getId());
+                                response.setPaymentStatus(payment.getStatus() != null ? payment.getStatus().name() : null);
+                                response.setPaymentMethod(payment.getMethod() != null ? payment.getMethod().name() : null);
+                                response.setPaymentAmount(convertToVnd(payment.getAmount(), payment.getCurrency()));
+                                response.setPaymentCurrency("VND");
+                            });
+                    return response;
+                })
+                .toList();
+    }
+
     private List<VaccinationRouteResponse> mapCoursesToRoutes(List<VaccinationCourse> courses) {
         if (courses.isEmpty())
             return new ArrayList<>();
@@ -1316,7 +1401,13 @@ public class AppointmentService {
             List<AppointmentResponse> appResponses = courseApps.stream().map(apt -> {
                 AppointmentResponse res = AppointmentMapper.toResponse(apt);
                 paymentRepository.findByAppointmentId(apt.getId(), TypeTransactionEnum.APPOINTMENT)
-                        .ifPresent(p -> AppointmentMapper.mapPaymentToResponse(res, p));
+                        .ifPresent(p -> {
+                            res.setPaymentId(p.getId());
+                            res.setPaymentStatus(p.getStatus() != null ? p.getStatus().name() : null);
+                            res.setPaymentMethod(p.getMethod() != null ? p.getMethod().name() : null);
+                            res.setPaymentAmount(convertToVnd(p.getAmount(), p.getCurrency()));
+                            res.setPaymentCurrency("VND");
+                        });
                 return res;
             }).toList();
 
@@ -1354,8 +1445,31 @@ public class AppointmentService {
 
     public List<VaccinationRouteResponse> getGroupedHistoryBooking() throws AppException {
         User user = authService.getCurrentUserLogin();
-        List<VaccinationCourse> courses = vaccinationCourseRepository.findByPatientAndFamilyMemberIsNull(user);
+        List<VaccinationCourse> courses = vaccinationCourseRepository.findByPatient(user);
         return mapCoursesToRoutes(courses);
+    }
+
+    /**
+     * Get only active bookings (PENDING, SCHEDULED, RESCHEDULE) for appointments page
+     * Filter out courses that are fully COMPLETED or have no active appointments
+     */
+    public List<VaccinationRouteResponse> getActiveGroupedBooking() throws AppException {
+        User user = authService.getCurrentUserLogin();
+        List<VaccinationCourse> courses = vaccinationCourseRepository.findByPatient(user);
+        List<VaccinationRouteResponse> allRoutes = mapCoursesToRoutes(courses);
+        
+        // Filter: only routes that have at least one active appointment (PENDING, SCHEDULED, RESCHEDULE)
+        // and the course itself is not COMPLETED
+        return allRoutes.stream()
+                .filter(route -> !"COMPLETED".equals(route.getStatus()))
+                .filter(route -> route.getAppointments().stream()
+                        .anyMatch(apt -> {
+                            AppointmentStatus status = apt.getAppointmentStatus();
+                            return status == AppointmentStatus.PENDING 
+                                    || status == AppointmentStatus.SCHEDULED 
+                                    || status == AppointmentStatus.RESCHEDULE;
+                        }))
+                .collect(java.util.stream.Collectors.toList());
     }
 
     public List<VaccinationRouteResponse> getGroupedHistoryBookingForFamilyMember(Long familyMemberId)
@@ -1367,5 +1481,24 @@ public class AppointmentService {
 
         List<VaccinationCourse> courses = vaccinationCourseRepository.findByFamilyMember(fm);
         return mapCoursesToRoutes(courses);
+    }
+
+    /**
+     * Convert payment amount to VND based on currency
+     * ETH: 1 ETH = 5,000,000 VND
+     * USD: Use exchange rate from PaypalService
+     * VND: No conversion needed
+     */
+    private double convertToVnd(double amount, String currency) {
+        if (currency == null || "VND".equalsIgnoreCase(currency)) {
+            return amount;
+        }
+        if ("ETH".equalsIgnoreCase(currency)) {
+            return amount * ETH_TO_VND_RATE;
+        }
+        if ("USD".equalsIgnoreCase(currency)) {
+            return amount * EXCHANGE_RATE_TO_USD;
+        }
+        return amount;
     }
 }

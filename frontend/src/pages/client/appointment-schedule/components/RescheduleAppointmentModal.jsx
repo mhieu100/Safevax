@@ -39,7 +39,18 @@ const RescheduleAppointmentModal = ({ open, onClose, appointment, onSuccess }) =
       onSuccess();
       onClose();
     } catch (error) {
-      message.error(error?.message || t('client:appointments.rescheduleFailed'));
+      const ERROR_MAPPING = {
+        PAID_PENDING_APPOINTMENT: 'client:appointments.errorPaidPending',
+        CASH_PENDING_APPOINTMENT: 'client:appointments.errorCashPending',
+        ACTIVE_APPOINTMENT_EXISTS: 'client:appointments.errorActiveExists',
+      };
+
+      const errorKey = ERROR_MAPPING[error?.message];
+      const errorMessage = errorKey
+        ? t(errorKey)
+        : error?.message || t('client:appointments.rescheduleFailed');
+
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -61,34 +72,23 @@ const RescheduleAppointmentModal = ({ open, onClose, appointment, onSuccess }) =
       onOk={handleSubmit}
       onCancel={handleCancel}
       confirmLoading={loading}
-      okText={t('client:common.confirm')}
-      cancelText={t('client:common.cancel')}
-      width={600}
+      okText={t('client:appointments.confirm')}
+      cancelText={t('client:appointments.cancel')}
+      width={500}
+      centered
     >
-      <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-        <div className="text-sm space-y-2">
-          <div className="font-semibold text-yellow-800 mb-2">
-            {t('client:appointments.rescheduleWarning')}
-          </div>
-          <div>
-            <span className="text-gray-600">{t('client:appointments.oldSchedule')}:</span>
-            <div className="font-medium text-red-600">
-              {dayjs(appointment.scheduledDate).format('DD/MM/YYYY')} lúc{' '}
+      <div className="mb-6 p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-between items-center border-b border-slate-200 pb-3">
+            <span className="text-slate-500 text-sm">{t('client:appointments.oldSchedule')}</span>
+            <span className="font-semibold text-slate-700">
+              {dayjs(appointment.scheduledDate).format('DD/MM/YYYY')}{' '}
               {formatAppointmentTime(appointment)}
-            </div>
+            </span>
           </div>
-          <div>
-            <span className="text-gray-600">{t('client:appointments.newSchedule')}:</span>
-            <div className="font-medium text-green-600">
-              {dayjs(appointment.desiredDate || appointment.scheduledDate).format('DD/MM/YYYY')} lúc{' '}
-              {appointment.desiredTimeSlot
-                ? timeSlots.find((slot) => slot.value === appointment.desiredTimeSlot)?.label ||
-                  appointment.desiredTimeSlot
-                : formatAppointmentTime(appointment)}
-            </div>
-          </div>
-          <div className="text-gray-600 pt-1 border-t border-yellow-200">
-            📍 {appointment.centerName}
+          <div className="flex justify-between items-center">
+            <span className="text-slate-500 text-sm">Trung tâm</span>
+            <span className="font-medium text-slate-700">{appointment.centerName}</span>
           </div>
         </div>
       </div>
@@ -100,44 +100,56 @@ const RescheduleAppointmentModal = ({ open, onClose, appointment, onSuccess }) =
           date: dayjs(appointment.scheduledDate),
           time: appointment.scheduledTimeSlot,
         }}
+        className="space-y-4"
       >
-        <Form.Item
-          label={t('client:appointments.newDate')}
-          name="date"
-          rules={[{ required: true, message: t('client:appointments.requireDate') }]}
-        >
-          <DatePicker
-            className="w-full"
-            format="DD/MM/YYYY"
-            disabledDate={disabledDate}
-            placeholder={t('client:appointments.selectDate')}
-          />
-        </Form.Item>
+        <div className="grid grid-cols-2 gap-4">
+          <Form.Item
+            label={t('client:appointments.newDate')}
+            name="date"
+            rules={[{ required: true, message: t('client:appointments.requireDate') }]}
+            className="mb-0"
+          >
+            <DatePicker
+              className="w-full rounded-xl"
+              format="DD/MM/YYYY"
+              disabledDate={disabledDate}
+              placeholder={t('client:appointments.selectDate')}
+            />
+          </Form.Item>
 
-        <Form.Item
-          label={t('client:appointments.newTimeSlot')}
-          name="time"
-          rules={[{ required: true, message: t('client:appointments.requireTimeSlot') }]}
-        >
-          <Select placeholder={t('client:appointments.selectTimeSlot')} options={timeSlots} />
-        </Form.Item>
+          <Form.Item
+            label={t('client:appointments.newTimeSlot')}
+            name="time"
+            rules={[{ required: true, message: t('client:appointments.requireTimeSlot') }]}
+            className="mb-0"
+          >
+            <Select
+              placeholder={t('client:appointments.selectTimeSlot')}
+              options={timeSlots}
+              className="rounded-xl"
+            />
+          </Form.Item>
+        </div>
 
-        <Form.Item label={t('client:appointments.reason') || 'Reason'} name="reason">
+        <Form.Item label={t('client:appointments.reason')} name="reason" className="mb-0">
           <TextArea
             rows={3}
             placeholder={t('client:appointments.reasonPlaceholder')}
             maxLength={500}
             showCount
+            className="rounded-xl"
           />
         </Form.Item>
       </Form>
 
-      <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-        <div className="text-xs text-gray-600 space-y-1">
-          <div className="font-medium text-gray-800 mb-2">📌 {t('client:common.note')}:</div>
-          <div>{t('client:appointments.rescheduleRule1')}</div>
+      <div className="mt-6 pt-4 border-t border-slate-100">
+        <div className="flex items-start gap-2 text-xs text-slate-500">
+          <div className="mt-0.5">📌</div>
           <div>
-            {t('client:appointments.rescheduleRule2')} <strong>{appointment.centerName}</strong>
+            <div>{t('client:appointments.rescheduleRule1')}</div>
+            <div>
+              {t('client:appointments.rescheduleRule2')} <strong>{appointment.centerName}</strong>
+            </div>
           </div>
         </div>
       </div>
