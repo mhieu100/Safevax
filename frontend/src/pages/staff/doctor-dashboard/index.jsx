@@ -10,9 +10,7 @@ import {
   PhoneOutlined,
   PlayCircleOutlined,
   RightOutlined,
-  StarFilled,
   TeamOutlined,
-  TrophyOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import {
@@ -20,6 +18,7 @@ import {
   Button,
   Card,
   Col,
+  ConfigProvider,
   Divider,
   Empty,
   Modal,
@@ -44,6 +43,7 @@ import dashboardService from '@/services/dashboard.service';
 import { useAccountStore } from '@/stores/useAccountStore';
 import { formatAppointmentTime } from '@/utils/appointment';
 import CompletionModal from '../dashboard/components/CompletionModal';
+import DashboardCharts from '../dashboard/components/DashboardCharts';
 import AppointmentDetailModal from '../pending-appointment/AppointmentDetailModal';
 
 const { Title, Text } = Typography;
@@ -96,28 +96,10 @@ const DoctorDashboard = () => {
     (a) => a.appointmentStatus === 'COMPLETED'
   ).length;
 
-  const weeklyStats = {
-    completed: {
-      value: stats?.weekCompleted || 0,
-      total: stats?.weekAppointments || 0,
-      percentage: stats?.weekAppointments
-        ? Math.round((stats.weekCompleted / stats.weekAppointments) * 100)
-        : 0,
-    },
-    inProgress: {
-      value: stats?.weekInProgress || 0,
-      total: stats?.weekAppointments || 0,
-      percentage: stats?.weekAppointments
-        ? Math.round((stats.weekInProgress / stats.weekAppointments) * 100)
-        : 0,
-    },
-    cancelled: {
-      value: stats?.weekCancelled || 0,
-      total: stats?.weekAppointments || 0,
-      percentage: stats?.weekAppointments
-        ? Math.round((stats.weekCancelled / stats.weekAppointments) * 100)
-        : 0,
-    },
+  const displayStats = {
+    todayAppointments: stats?.todayAppointments || todayAppointments.length || 0,
+    weekCompleted: stats?.weekCompleted || 0,
+    weekCancelled: stats?.weekCancelled || 0,
   };
 
   const getStatusConfig = (status) => {
@@ -264,343 +246,326 @@ const DoctorDashboard = () => {
   };
 
   return (
-    <div style={{ padding: '24px', minHeight: '100vh', background: '#f5f7fa' }}>
-      {}
-      <div style={{ marginBottom: 24 }}>
-        <Row justify="space-between" align="middle">
-          <Col>
-            <Title level={2} style={{ margin: 0 }}>
+    <ConfigProvider
+      theme={{
+        token: {
+          fontFamily: 'Inter, sans-serif',
+          colorBgContainer: '#ffffff',
+        },
+      }}
+    >
+      <div style={{ padding: '24px', minHeight: '100vh', background: '#f8fafc' }}>
+        {/* Header */}
+        <div className="mb-8 flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+          <div>
+            <Title level={3} style={{ margin: 0, color: '#1e293b' }}>
               {t('staff:dashboard.doctor.greeting', { name: user?.fullName })}
             </Title>
             <Text type="secondary">
               {t('staff:dashboard.doctor.greetingSub', { count: todayAppointments.length })}
             </Text>
+          </div>
+          <Space>
+            <Tag color="blue" className="px-3 py-1 text-sm rounded-full">
+              {dayjs().format('DD/MM/YYYY')}
+            </Tag>
+            <Button icon={<ClockCircleOutlined />} onClick={fetchData} loading={loading}>
+              {t('staff:dashboard.refresh')}
+            </Button>
+          </Space>
+        </div>
+
+        {/* Stats Row */}
+        <Row gutter={[24, 24]} className="mb-8">
+          <Col xs={24} sm={12} lg={6}>
+            <Card
+              bordered={false}
+              className="rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <Statistic
+                title={t('staff:dashboard.doctor.todaySchedule')}
+                value={stats?.todayAppointments || 0}
+                prefix={<TeamOutlined style={{ color: '#1890ff' }} />}
+                suffix={t('staff:dashboard.doctor.patients')}
+                valueStyle={{ color: '#1890ff' }}
+              />
+              <Progress
+                percent={
+                  todayAppointments.length > 0
+                    ? Math.round((completedCount / todayAppointments.length) * 100)
+                    : 0
+                }
+                size="small"
+                status="active"
+                strokeColor="#1890ff"
+                style={{ marginTop: 8 }}
+              />
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                {t('staff:dashboard.doctor.completedRatio', {
+                  completed: completedCount,
+                  total: todayAppointments.length,
+                })}
+              </Text>
+            </Card>
           </Col>
-          <Col>
-            <Space>
-              <Card size="small" style={{ borderRadius: 8 }}>
-                <Space>
-                  <CalendarOutlined style={{ color: '#1890ff' }} />
-                  <Text strong>{dayjs().format('DD/MM/YYYY')}</Text>
-                </Space>
-              </Card>
-              <Button icon={<ClockCircleOutlined />} onClick={fetchData} loading={loading}>
-                {t('staff:dashboard.refresh')}
-              </Button>
-            </Space>
+
+          <Col xs={24} sm={12} lg={6}>
+            <Card
+              bordered={false}
+              className="rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <Statistic
+                title={t('staff:dashboard.doctor.thisWeek')}
+                value={stats?.weekAppointments || 0}
+                prefix={<CalendarOutlined style={{ color: '#722ed1' }} />}
+                suffix={t('staff:dashboard.stats.today.suffix')}
+                valueStyle={{ color: '#722ed1' }}
+              />
+            </Card>
+          </Col>
+
+          <Col xs={24} sm={12} lg={6}>
+            <Card
+              bordered={false}
+              className="rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <Statistic
+                title={t('staff:dashboard.doctor.completedMonth')}
+                value={stats?.monthCompleted || 0}
+                prefix={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
+                suffix={t('staff:dashboard.doctor.inMonth')}
+                valueStyle={{ color: '#52c41a' }}
+              />
+            </Card>
+          </Col>
+
+          <Col xs={24} sm={12} lg={6}>
+            <Card
+              bordered={false}
+              className="rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <Statistic
+                title={t('staff:dashboard.doctor.nextSchedule')}
+                value={
+                  stats?.nextAppointment?.actualScheduledTime
+                    ? stats.nextAppointment.actualScheduledTime.substring(0, 5)
+                    : formatTimeSlot(stats?.nextAppointment?.time) || '--:--'
+                }
+                prefix={<BellOutlined style={{ color: '#faad14' }} />}
+                valueStyle={{ color: '#faad14' }}
+              />
+              <div
+                style={{
+                  marginTop: 16,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                <Text type="secondary" style={{ fontSize: 12 }}>
+                  {stats?.nextAppointment
+                    ? `${stats.nextAppointment.patientName}`
+                    : t('staff:dashboard.doctor.noUpcoming')}
+                </Text>
+              </div>
+            </Card>
           </Col>
         </Row>
-      </div>
 
-      {}
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={12} lg={6}>
-          <Card hoverable style={{ borderRadius: 12 }}>
-            <Statistic
-              title={t('staff:dashboard.doctor.todaySchedule')}
-              value={stats?.todayAppointments || 0}
-              prefix={<TeamOutlined style={{ color: '#1890ff' }} />}
-              suffix={t('staff:dashboard.doctor.patients')}
-              valueStyle={{ color: '#1890ff' }}
-            />
-            <Progress
-              percent={
-                todayAppointments.length > 0
-                  ? Math.round((completedCount / todayAppointments.length) * 100)
-                  : 0
+        {/* Charts Section */}
+        <DashboardCharts stats={displayStats} />
+
+        <Row gutter={[24, 24]}>
+          {/* Main Content: Timeline/List */}
+          <Col xs={24} lg={16}>
+            <Card
+              title={
+                <Space>
+                  <ClockCircleOutlined style={{ color: '#1890ff' }} />
+                  <Text strong style={{ fontSize: 16 }}>
+                    {t('staff:dashboard.doctor.todaysTimeline')}
+                  </Text>
+                  <Tag color="blue">
+                    {t('staff:dashboard.doctor.appointmentsCount', {
+                      count: todayAppointments.length,
+                    })}
+                  </Tag>
+                </Space>
               }
-              size="small"
-              status="active"
-              strokeColor="#1890ff"
-              style={{ marginTop: 8 }}
-            />
-            <Text type="secondary" style={{ fontSize: 12 }}>
-              {t('staff:dashboard.doctor.completedRatio', {
-                completed: completedCount,
-                total: todayAppointments.length,
-              })}
-            </Text>
-          </Card>
-        </Col>
-
-        <Col xs={24} sm={12} lg={6}>
-          <Card hoverable style={{ borderRadius: 12 }}>
-            <Statistic
-              title={t('staff:dashboard.doctor.thisWeek')}
-              value={stats?.weekAppointments || 0}
-              prefix={<CalendarOutlined style={{ color: '#722ed1' }} />}
-              suffix={t('staff:dashboard.stats.today.suffix')}
-              valueStyle={{ color: '#722ed1' }}
-            />
-            <div style={{ marginTop: 16 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                <TrophyOutlined /> {t('staff:dashboard.doctor.stablePerformance')}
-              </Text>
-            </div>
-          </Card>
-        </Col>
-
-        <Col xs={24} sm={12} lg={6}>
-          <Card hoverable style={{ borderRadius: 12 }}>
-            <Statistic
-              title={t('staff:dashboard.doctor.completedMonth')}
-              value={stats?.monthCompleted || 0}
-              prefix={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
-              suffix={t('staff:dashboard.doctor.inMonth')}
-              valueStyle={{ color: '#52c41a' }}
-            />
-            <div style={{ marginTop: 16 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                <StarFilled style={{ color: '#faad14' }} />{' '}
-                {t('staff:dashboard.doctor.rating', { rating: stats?.rating || 4.8 })}
-              </Text>
-            </div>
-          </Card>
-        </Col>
-
-        <Col xs={24} sm={12} lg={6}>
-          <Card hoverable style={{ borderRadius: 12 }}>
-            <Statistic
-              title={t('staff:dashboard.doctor.nextSchedule')}
-              value={
-                stats?.nextAppointment?.actualScheduledTime
-                  ? stats.nextAppointment.actualScheduledTime.substring(0, 5)
-                  : formatTimeSlot(stats?.nextAppointment?.time) || '--:--'
+              extra={
+                <Segmented
+                  value={viewMode}
+                  onChange={setViewMode}
+                  options={[
+                    {
+                      label: t('staff:dashboard.doctor.viewMode.timeline'),
+                      value: 'timeline',
+                      icon: <ClockCircleOutlined />,
+                    },
+                    {
+                      label: t('staff:dashboard.doctor.viewMode.grid'),
+                      value: 'grid',
+                      icon: <CalendarTwoTone />,
+                    },
+                  ]}
+                />
               }
-              prefix={<BellOutlined style={{ color: '#faad14' }} />}
-              valueStyle={{ color: '#faad14' }}
-            />
-            <div
-              style={{
-                marginTop: 16,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
+              style={{ borderRadius: 12, minHeight: 500 }}
+              bordered={false}
+              className="rounded-xl shadow-sm"
             >
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {stats?.nextAppointment
-                  ? `${stats.nextAppointment.patientName}`
-                  : t('staff:dashboard.doctor.noUpcoming')}
-              </Text>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-
-      <Row gutter={[24, 24]}>
-        {}
-        <Col xs={24} lg={16}>
-          <Card
-            title={
-              <Space>
-                <ClockCircleOutlined style={{ color: '#1890ff' }} />
-                <Text strong style={{ fontSize: 16 }}>
-                  {t('staff:dashboard.doctor.todaysTimeline')}
-                </Text>
-                <Tag color="blue">
-                  {t('staff:dashboard.doctor.appointmentsCount', {
-                    count: todayAppointments.length,
-                  })}
-                </Tag>
-              </Space>
-            }
-            extra={
-              <Segmented
-                value={viewMode}
-                onChange={setViewMode}
-                options={[
-                  {
-                    label: t('staff:dashboard.doctor.viewMode.timeline'),
-                    value: 'timeline',
-                    icon: <ClockCircleOutlined />,
-                  },
-                  {
-                    label: t('staff:dashboard.doctor.viewMode.grid'),
-                    value: 'grid',
-                    icon: <CalendarTwoTone />,
-                  },
-                ]}
-              />
-            }
-            style={{ borderRadius: 12, minHeight: 500 }}
-          >
-            {loading ? (
-              <div style={{ textAlign: 'center', padding: '60px 0' }}>
-                <Spin size="large" />
-              </div>
-            ) : todayAppointments.length === 0 ? (
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description={t('staff:dashboard.doctor.noAppointments')}
-              />
-            ) : viewMode === 'timeline' ? (
-              <div style={{ padding: '0 12px' }}>
-                <Timeline mode="left">
-                  {todayAppointments.map((apt) => renderTimelineItem(apt))}
-                </Timeline>
-              </div>
-            ) : (
-              <Row gutter={[16, 16]}>
-                {todayAppointments.map((apt) => {
-                  const appointment = mapAppointment(apt);
-                  const statusConfig = getStatusConfig(appointment.status);
-                  return (
-                    <Col xs={24} md={12} key={apt.id}>
-                      <Card
-                        hoverable
-                        size="small"
-                        style={{
-                          borderTop: `3px solid ${statusConfig.tagColor === 'green' ? '#52c41a' : statusConfig.tagColor === 'blue' ? '#1890ff' : '#d9d9d9'}`,
-                          borderRadius: 8,
-                        }}
-                        actions={[
-                          <Tooltip
-                            key="view"
-                            title={t('staff:dashboard.urgentList.actions.detail')}
-                          >
-                            <EyeOutlined onClick={() => handleViewAppointment(appointment)} />
-                          </Tooltip>,
-                          appointment.status === 'SCHEDULED' && (
-                            <Tooltip key="start" title={t('staff:dashboard.doctor.modal.startInt')}>
-                              <PlayCircleOutlined
-                                key="start"
-                                style={{ color: '#1890ff' }}
-                                onClick={() => handleStartAppointment(appointment)}
-                              />
-                            </Tooltip>
-                          ),
-                          appointment.status === 'IN_PROGRESS' && (
+              {loading ? (
+                <div style={{ textAlign: 'center', padding: '60px 0' }}>
+                  <Spin size="large" />
+                </div>
+              ) : todayAppointments.length === 0 ? (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description={t('staff:dashboard.doctor.noAppointments')}
+                />
+              ) : viewMode === 'timeline' ? (
+                <div style={{ padding: '0 12px' }}>
+                  <Timeline mode="left">
+                    {todayAppointments.map((apt) => renderTimelineItem(apt))}
+                  </Timeline>
+                </div>
+              ) : (
+                <Row gutter={[16, 16]}>
+                  {todayAppointments.map((apt) => {
+                    const appointment = mapAppointment(apt);
+                    const statusConfig = getStatusConfig(appointment.status);
+                    return (
+                      <Col xs={24} md={12} key={apt.id}>
+                        <Card
+                          hoverable
+                          size="small"
+                          style={{
+                            borderTop: `3px solid ${statusConfig.tagColor === 'green' ? '#52c41a' : statusConfig.tagColor === 'blue' ? '#1890ff' : '#d9d9d9'}`,
+                            borderRadius: 8,
+                          }}
+                          actions={[
                             <Tooltip
-                              key="complete"
-                              title={t('staff:dashboard.doctor.modal.completeInt')}
+                              key="view"
+                              title={t('staff:dashboard.urgentList.actions.detail')}
                             >
-                              <CheckCircleOutlined
+                              <EyeOutlined onClick={() => handleViewAppointment(appointment)} />
+                            </Tooltip>,
+                            appointment.status === 'SCHEDULED' && (
+                              <Tooltip
+                                key="start"
+                                title={t('staff:dashboard.doctor.modal.startInt')}
+                              >
+                                <PlayCircleOutlined
+                                  key="start"
+                                  style={{ color: '#1890ff' }}
+                                  onClick={() => handleStartAppointment(appointment)}
+                                />
+                              </Tooltip>
+                            ),
+                            appointment.status === 'IN_PROGRESS' && (
+                              <Tooltip
                                 key="complete"
-                                style={{ color: '#52c41a' }}
-                                onClick={() => handleCompleteAppointment(appointment)}
+                                title={t('staff:dashboard.doctor.modal.completeInt')}
+                              >
+                                <CheckCircleOutlined
+                                  key="complete"
+                                  style={{ color: '#52c41a' }}
+                                  onClick={() => handleCompleteAppointment(appointment)}
+                                />
+                              </Tooltip>
+                            ),
+                          ].filter(Boolean)}
+                        >
+                          <Card.Meta
+                            avatar={
+                              <Avatar
+                                style={{
+                                  backgroundColor:
+                                    statusConfig.tagColor === 'default'
+                                      ? '#ccc'
+                                      : statusConfig.tagColor,
+                                }}
+                                icon={<UserOutlined />}
                               />
-                            </Tooltip>
-                          ),
-                        ].filter(Boolean)}
-                      >
-                        <Card.Meta
-                          avatar={
-                            <Avatar
-                              style={{
-                                backgroundColor:
-                                  statusConfig.tagColor === 'default'
-                                    ? '#ccc'
-                                    : statusConfig.tagColor,
-                              }}
-                              icon={<UserOutlined />}
-                            />
-                          }
-                          title={
-                            <Space>
-                              <Text strong>{appointment.patient}</Text>
-                              <Tag color={statusConfig.tagColor}>{statusConfig.text}</Tag>
-                            </Space>
-                          }
-                          description={
-                            <Space direction="vertical" size={2}>
-                              <Text type="secondary">
-                                <ClockCircleOutlined /> {appointment.time}
-                              </Text>
-                              <Text type="secondary">
-                                <MedicineBoxOutlined /> {appointment.vaccine}
-                              </Text>
-                            </Space>
-                          }
-                        />
-                      </Card>
-                    </Col>
-                  );
-                })}
-              </Row>
-            )}
-          </Card>
-        </Col>
-
-        {}
-        <Col xs={24} lg={8}>
-          {}
-          <Card
-            title={
-              <Space>
-                <TrophyOutlined style={{ color: '#722ed1' }} />
-                <Text strong>{t('staff:dashboard.doctor.weeklyOverview')}</Text>
-              </Space>
-            }
-            style={{ borderRadius: 12, marginBottom: 24 }}
-          >
-            <Space direction="vertical" size="large" style={{ width: '100%' }}>
-              <div>
-                <Row justify="space-between" style={{ marginBottom: 4 }}>
-                  <Text>{t('staff:dashboard.doctor.completed')}</Text>
-                  <Text strong>
-                    {weeklyStats.completed.value}/{weeklyStats.completed.total}
-                  </Text>
+                            }
+                            title={
+                              <Space>
+                                <Text strong>{appointment.patient}</Text>
+                                <Tag color={statusConfig.tagColor}>{statusConfig.text}</Tag>
+                              </Space>
+                            }
+                            description={
+                              <Space direction="vertical" size={2}>
+                                <Text type="secondary">
+                                  <ClockCircleOutlined /> {appointment.time}
+                                </Text>
+                                <Text type="secondary">
+                                  <MedicineBoxOutlined /> {appointment.vaccine}
+                                </Text>
+                              </Space>
+                            }
+                          />
+                        </Card>
+                      </Col>
+                    );
+                  })}
                 </Row>
-                <Progress percent={weeklyStats.completed.percentage} strokeColor="#52c41a" />
+              )}
+            </Card>
+          </Col>
+          <Col xs={24} lg={8}>
+            <Card
+              bordered={false}
+              className="rounded-xl shadow-sm mb-6"
+              title={
+                <span className="font-semibold text-slate-700">
+                  {t('staff:dashboard.quickActions.title')}
+                </span>
+              }
+            >
+              <div className="flex flex-col gap-3">
+                <Button
+                  block
+                  className="rounded-lg h-10 text-left justify-start"
+                  icon={<CalendarOutlined />}
+                  // onClick={() => navigate('/staff/calendar-view')}
+                >
+                  {t('staff:common.menu.viewSchedule')}
+                </Button>
+                <Button
+                  block
+                  className="rounded-lg h-10 text-left justify-start"
+                  icon={<ClockCircleOutlined />}
+                >
+                  {t('staff:common.menu.pendingList')}
+                </Button>
+                <Button
+                  block
+                  className="rounded-lg h-10 text-left justify-start"
+                  icon={<CheckCircleOutlined />}
+                >
+                  {t('staff:dashboard.quickActions.assigned')}
+                </Button>
               </div>
-              <div>
-                <Row justify="space-between" style={{ marginBottom: 4 }}>
-                  <Text>{t('staff:dashboard.doctor.processing')}</Text>
-                  <Text strong>
-                    {weeklyStats.inProgress.value}/{weeklyStats.inProgress.total}
-                  </Text>
-                </Row>
-                <Progress percent={weeklyStats.inProgress.percentage} strokeColor="#faad14" />
-              </div>
-              <div>
-                <Row justify="space-between" style={{ marginBottom: 4 }}>
-                  <Text>{t('staff:dashboard.doctor.cancelled')}</Text>
-                  <Text strong>
-                    {weeklyStats.cancelled.value}/{weeklyStats.cancelled.total}
-                  </Text>
-                </Row>
-                <Progress percent={weeklyStats.cancelled.percentage} strokeColor="#ff4d4f" />
-              </div>
-            </Space>
-          </Card>
+            </Card>
+          </Col>
+        </Row>
 
-          {}
-          <Card
-            title={
-              <Space>
-                <StarFilled style={{ color: '#faad14' }} />
-                <Text strong>{t('staff:dashboard.doctor.quickNotes')}</Text>
-              </Space>
-            }
-            style={{ borderRadius: 12 }}
-          >
-            <Empty
-              description={t('staff:dashboard.doctor.noNotes')}
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-            />
-            <Button type="dashed" block style={{ marginTop: 16 }}>
-              {t('staff:dashboard.doctor.addNote')}
-            </Button>
-          </Card>
-        </Col>
-      </Row>
-
-      {}
-      <CompletionModal
-        open={completionModalOpen}
-        onCancel={() => setCompletionModalOpen(false)}
-        appointment={selectedAppointment}
-        onSuccess={() => {
-          fetchData();
-        }}
-      />
-      <AppointmentDetailModal
-        open={detailModalOpen}
-        onClose={() => setDetailModalOpen(false)}
-        appointmentId={selectedAppointment?.id}
-      />
-    </div>
+        <CompletionModal
+          open={completionModalOpen}
+          onCancel={() => setCompletionModalOpen(false)}
+          appointment={selectedAppointment}
+          onSuccess={() => {
+            fetchData();
+          }}
+        />
+        <AppointmentDetailModal
+          open={detailModalOpen}
+          onClose={() => setDetailModalOpen(false)}
+          appointmentId={selectedAppointment?.id}
+        />
+      </div>
+    </ConfigProvider>
   );
 };
 

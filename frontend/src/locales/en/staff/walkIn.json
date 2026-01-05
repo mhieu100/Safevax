@@ -1,0 +1,94 @@
+{
+  "title": "Walk-in Booking - Select Patient",
+  "error": {
+    "title": "Error",
+    "loadPatients": "Cannot load patient list"
+  },
+  "columns": {
+    "index": "No.",
+    "fullName": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "dob": "Date of Birth",
+    "actions": "Actions"
+  },
+  "actions": {
+    "book": "Book Vaccination"
+  },
+  "pagination": {
+    "range": "{{range0}}-{{range1}} of {{total}} items"
+  },
+  "modal": {
+    "title": "Walk-in Vaccination Booking",
+    "okText": "Confirm Booking",
+    "cancelText": "Cancel"
+  },
+  "patientInfo": {
+    "patient": "Patient",
+    "email": "Email",
+    "phone": "Phone"
+  },
+  "form": {
+    "appointmentFor": {
+      "label": "Book for",
+      "self": "Self",
+      "family": "Family Member"
+    },
+    "familyMember": {
+      "label": "Select Member",
+      "placeholder": "Select family member",
+      "required": "Please select a family member"
+    },
+    "vaccine": {
+      "label": "Select Vaccine",
+      "placeholder": "Select vaccine",
+      "required": "Please select a vaccine"
+    },
+    "center": {
+      "label": "Center",
+      "placeholder": "Select center",
+      "required": "Please select a center"
+    },
+    "date": {
+      "label": "Appointment Date",
+      "placeholder": "Select date",
+      "required": "Please select a date"
+    },
+    "time": {
+      "label": "Time Slot",
+      "placeholder": "Select time slot",
+      "required": "Please select a time slot"
+    },
+    "doctor": {
+      "label": "Select Doctor",
+      "hint": "(Select time slot above to see doctor schedule)",
+      "required": "Please select a doctor",
+      "tooltip": "After selecting center, date and time, available doctors will be shown"
+    },
+    "notes": {
+      "label": "Notes (Optional)",
+      "placeholder": "Additional notes..."
+    },
+    "payment": "Payment Method: Cash (CASH)"
+  },
+  "messages": {
+    "noPatient": "No patient information",
+    "selectDoctor": "Please select a doctor",
+    "successTitle": "Success",
+    "successDesc": "Booking successful for patient {{patientName}} with Dr. {{doctorName}}",
+    "errorTitle": "Error",
+    "bookingFailed": "Cannot create booking",
+    "loadVaccines": "Cannot load vaccines",
+    "loadCenters": "Cannot load centers",
+    "loadSlots": "Cannot load available slots"
+  },
+  "slots": {
+    "loading": "Loading doctor schedule...",
+    "empty": "No doctor available in slot {{slot}}",
+    "emptyHint": "Select center, date and time to view schedule",
+    "emptyDetail": "No doctors have available slots in this time",
+    "available": "Available",
+    "booked": "Booked"
+  }
+}

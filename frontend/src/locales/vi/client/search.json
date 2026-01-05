@@ -1,0 +1,24 @@
+{
+  "placeholder": "Tìm kiếm vắc xin, tin tức hoặc hỏi AI...",
+  "loading": "Đang tìm kiếm thông tin...",
+  "emptyState": "Nhập từ khóa để tìm kiếm",
+  "noResults": "Không tìm thấy kết quả phù hợp",
+  "tags": {
+    "flu": "Cúm mùa",
+    "schedule": "Lịch tiêm cho bé",
+    "covid": "Vắc xin Covid",
+    "baby": "Bé 2 tháng tuổi cần tiêm gì?"
+  },
+  "ai": {
+    "title": "VaxSafe AI Assistant",
+    "beta": "Beta"
+  },
+  "sections": {
+    "vaccines": "Vắc xin",
+    "news": "Tin tức & Bài viết"
+  },
+  "footer": {
+    "hint": "Kết quả tìm kiếm được tổng hợp từ dữ liệu y khoa VaxSafe",
+    "esc": "để đóng"
+  }
+}

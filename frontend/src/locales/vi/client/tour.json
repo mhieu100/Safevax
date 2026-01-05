@@ -1,0 +1,38 @@
+{
+  "welcome": {
+    "title": "Trợ lý ảo VaxSafe xin chào!",
+    "cardTitle": "Chào mừng bạn mới!",
+    "description": "Mình sẽ hướng dẫn bạn cách đặt lịch tiêm chủng nhanh chóng nhất nhé."
+  },
+  "step1": {
+    "title": "Bước 1: Chọn Vắc xin",
+    "cardTitle": "Danh mục vắc xin",
+    "description": "Đầu tiên, hãy truy cập vào trang danh sách vắc xin của chúng tôi."
+  },
+  "step2": {
+    "title": "Bước 2: Tìm kiếm & Lọc",
+    "cardTitle": "Bộ lọc thông minh",
+    "description": "Sử dụng bộ lọc để tìm nhanh vắc xin theo giá, quốc gia hoặc tên gọi."
+  },
+  "step3": {
+    "title": "Bước 3: Đặt lịch",
+    "cardTitle": "Đặt lịch ngay",
+    "description": "Nhấn nút 'Book' trên vắc xin bạn muốn để tiến hành đặt lịch hẹn."
+  },
+  "step4": {
+    "title": "Bước 4: Lịch hẹn",
+    "cardTitle": "Quản lý lịch hẹn",
+    "description": "Theo dõi trạng thái và chi tiết các lịch hẹn tiêm chủng của bạn tại đây."
+  },
+  "step5": {
+    "title": "Bước 5: Chi tiết",
+    "cardTitle": "Thông tin chi tiết",
+    "description": "Xem lại thông tin lịch hẹn, thanh toán và mã QR xác nhận."
+  },
+  "chatbot": {
+    "title": "Tư vấn sức khỏe AI",
+    "cardTitle": "Hỏi đáp mọi lúc",
+    "description": "Nếu bạn cần tư vấn về loại vắc xin phù hợp hoặc thắc mắc về sức khỏe, hãy chat ngay với mình nhé!"
+  },
+  "skip": "Bỏ qua hướng dẫn"
+}

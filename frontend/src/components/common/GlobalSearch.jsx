@@ -96,7 +96,7 @@ const GlobalSearch = ({ open, onCancel }) => {
       onCancel={handleClose}
       footer={null}
       closable={false}
-      destroyOnClose
+      destroyOnHidden
       width={700}
       className="global-search-modal top-20"
       styles={{
@@ -108,10 +108,10 @@ const GlobalSearch = ({ open, onCancel }) => {
           backdropFilter: 'blur(10px)',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
         },
-      }}
-      maskStyle={{
-        backdropFilter: 'blur(4px)',
-        backgroundColor: 'rgba(15, 23, 42, 0.4)',
+        mask: {
+          backdropFilter: 'blur(4px)',
+          backgroundColor: 'rgba(15, 23, 42, 0.4)',
+        },
       }}
     >
       <div className="flex flex-col max-h-[80vh]">
@@ -119,7 +119,7 @@ const GlobalSearch = ({ open, onCancel }) => {
         <div className="p-4 border-b border-slate-100">
           <Input
             prefix={<SearchOutlined className="text-slate-400 text-xl mr-3" />}
-            placeholder={t('search.placeholder', 'Tìm kiếm vắc xin, tin tức hoặc hỏi AI...')}
+            placeholder={t('search.placeholder')}
             size="large"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -134,43 +134,43 @@ const GlobalSearch = ({ open, onCancel }) => {
           {loading ? (
             <div className="flex flex-col items-center justify-center h-60 gap-4">
               <Spin size="large" />
-              <p className="text-slate-500 animate-pulse">Đang tìm kiếm thông tin...</p>
+              <p className="text-slate-500 animate-pulse">{t('search.loading')}</p>
             </div>
           ) : !searchTerm ? (
             <div className="flex flex-col items-center justify-center h-60 text-slate-400">
               <SearchOutlined className="text-5xl mb-4 opacity-20" />
-              <p>Nhập từ khóa để tìm kiếm</p>
+              <p>{t('search.emptyState')}</p>
               <div className="flex gap-2 mt-4">
                 <Tag
                   className="cursor-pointer hover:border-blue-500"
-                  onClick={() => setSearchTerm('Cúm mùa')}
+                  onClick={() => setSearchTerm(t('search.tags.flu'))}
                 >
-                  Cúm mùa
+                  {t('search.tags.flu')}
                 </Tag>
                 <Tag
                   className="cursor-pointer hover:border-blue-500"
-                  onClick={() => setSearchTerm('Lịch tiêm cho bé')}
+                  onClick={() => setSearchTerm(t('search.tags.schedule'))}
                 >
-                  Lịch tiêm cho bé
+                  {t('search.tags.schedule')}
                 </Tag>
                 <Tag
                   className="cursor-pointer hover:border-blue-500"
-                  onClick={() => setSearchTerm('Vắc xin Covid')}
+                  onClick={() => setSearchTerm(t('search.tags.covid'))}
                 >
-                  Vắc xin Covid
+                  {t('search.tags.covid')}
                 </Tag>
                 <Tag
                   className="cursor-pointer hover:border-blue-500"
-                  onClick={() => setSearchTerm('Bé 2 tháng tuổi cần tiêm gì?')}
+                  onClick={() => setSearchTerm(t('search.tags.baby'))}
                 >
-                  Bé 2 tháng tuổi cần tiêm gì?
+                  {t('search.tags.baby')}
                 </Tag>
               </div>
             </div>
           ) : !hasResults ? (
             <Empty
               image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description="Không tìm thấy kết quả phù hợp"
+              description={t('search.noResults')}
               className="my-10"
             />
           ) : (
@@ -183,9 +183,9 @@ const GlobalSearch = ({ open, onCancel }) => {
                     <div className="p-2 bg-white rounded-lg shadow-sm text-indigo-600">
                       <RobotOutlined className="text-xl" />
                     </div>
-                    <span className="font-bold text-indigo-900">VaxSafe AI Assistant</span>
+                    <span className="font-bold text-indigo-900">{t('search.ai.title')}</span>
                     <Tag color="blue" className="ml-auto border-none bg-white/50">
-                      Beta
+                      {t('search.ai.beta')}
                     </Tag>
                   </div>
                   <div className="prose prose-sm prose-indigo max-w-none text-slate-700 bg-transparent">
@@ -222,7 +222,7 @@ const GlobalSearch = ({ open, onCancel }) => {
               {results.vaccines?.length > 0 && (
                 <div>
                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-3">
-                    Vắc xin ({results.vaccines.length})
+                    {t('search.sections.vaccines')} ({results.vaccines.length})
                   </h3>
                   <div className="space-y-1">
                     {results.vaccines.map((item) => (
@@ -247,7 +247,7 @@ const GlobalSearch = ({ open, onCancel }) => {
               {results.news?.length > 0 && (
                 <div>
                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-3">
-                    Tin tức & Bài viết ({results.news.length})
+                    {t('search.sections.news')} ({results.news.length})
                   </h3>
                   <div className="space-y-1">
                     {results.news.map((item) => (
@@ -272,13 +272,13 @@ const GlobalSearch = ({ open, onCancel }) => {
 
         {/* Footer Hint */}
         <div className="p-3 bg-slate-50 border-t border-slate-100 text-xs text-slate-400 flex justify-between items-center px-5">
-          <span>Kết quả tìm kiếm được tổng hợp từ dữ liệu y khoa VaxSafe</span>
+          <span>{t('search.footer.hint')}</span>
           <div className="flex gap-4">
             <span className="flex items-center gap-1">
               <kbd className="font-sans bg-white border border-slate-200 rounded px-1 min-w-[20px] text-center shadow-sm">
                 esc
               </kbd>{' '}
-              để đóng
+              {t('search.footer.esc')}
             </span>
           </div>
         </div>

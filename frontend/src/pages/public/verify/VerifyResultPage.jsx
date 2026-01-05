@@ -88,7 +88,7 @@ const VerifyResultPage = () => {
 
     try {
       const records = await getRecordsByIdentity(data.patientIdentityHash);
-      if (records && records.data) {
+      if (records?.data) {
         // Sort by date desc
         const sorted = records.data.sort(
           (a, b) => new Date(b.vaccinationDate) - new Date(a.vaccinationDate)

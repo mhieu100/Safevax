@@ -1,20 +1,19 @@
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Badge, Button, message, notification, Space, Tag } from 'antd';
+import { CheckOutlined, CloseOutlined, EyeOutlined } from '@ant-design/icons';
+import { Badge, Button, message, notification, Space, Tag, Tooltip } from 'antd';
 import queryString from 'query-string';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { sfLike } from 'spring-filter-query-builder';
 import DataTable from '@/components/data-table';
-import {
-  AppointmentStatus,
-  getAppointmentStatusColor,
-  getAppointmentStatusDisplay,
-} from '@/constants/enums';
+import { AppointmentStatus, getAppointmentStatusColor } from '@/constants/enums';
 import { callCancelAppointment } from '@/services/appointment.service';
 import { useAppointmentStore } from '@/stores/useAppointmentStore';
 import { formatAppointmentTime } from '@/utils/appointment';
 import CompletionModal from '../dashboard/components/CompletionModal';
+import AppointmentDetailModal from '../pending-appointment/AppointmentDetailModal';
 
 const MySchedulePage = () => {
+  const { t } = useTranslation(['staff']);
   const tableRef = useRef();
 
   const isFetching = useAppointmentStore((state) => state.isFetching);
@@ -23,6 +22,7 @@ const MySchedulePage = () => {
   const fetchAppointmentOfDoctor = useAppointmentStore((state) => state.fetchAppointmentOfDoctor);
 
   const [completionModalOpen, setCompletionModalOpen] = useState(false);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   const reloadTable = () => {
@@ -39,11 +39,16 @@ const MySchedulePage = () => {
     setCompletionModalOpen(true);
   };
 
+  const handleView = (record) => {
+    setSelectedAppointment(record);
+    setDetailModalOpen(true);
+  };
+
   const handleCancel = async (id) => {
     if (id) {
       const res = await callCancelAppointment(id);
       if (res) {
-        message.success('Hủy lịch hẹn thành công');
+        message.success(t('staff:appointments.cancelSuccess'));
         reloadTable();
       } else {
         notification.error({
@@ -56,7 +61,7 @@ const MySchedulePage = () => {
 
   const columns = [
     {
-      title: 'STT',
+      title: t('staff:appointments.columns.index'),
       key: 'index',
       width: 50,
       align: 'center',
@@ -64,66 +69,84 @@ const MySchedulePage = () => {
       hideInSearch: true,
     },
     {
-      title: 'Vaccine',
+      title: t('staff:appointments.columns.vaccine'),
       dataIndex: 'vaccineName',
     },
     {
-      title: 'Bệnh nhân',
+      title: t('staff:appointments.columns.patient'),
       dataIndex: 'patientName',
     },
     {
-      title: 'Trung tâm',
+      title: t('staff:appointments.columns.center'),
       dataIndex: 'centerName',
     },
     {
-      title: 'Ngày tiêm',
+      title: t('staff:appointments.columns.injectionDate'),
       dataIndex: 'scheduledDate',
     },
     {
-      title: 'Giờ tiêm',
+      title: t('staff:appointments.columns.injectionTime'),
       dataIndex: 'scheduledTime',
       render: (_, record) => formatAppointmentTime(record),
     },
     {
-      title: 'Bác sĩ',
+      title: t('staff:appointments.columns.doctor'),
       dataIndex: 'doctorName',
       render: (text) => {
-        return text ? <Badge color="green" text={text} /> : <Badge color="red" text="Cập nhật" />;
+        return text ? (
+          <Badge color="green" text={text} />
+        ) : (
+          <Badge color="red" text={t('staff:appointments.tags.update')} />
+        );
       },
     },
     {
-      title: 'Thu Ngân',
+      title: t('staff:appointments.columns.cashier'),
       dataIndex: 'cashierName',
       render: (text) => {
-        return text ? <Badge color="green" text={text} /> : <Badge color="red" text="Cập nhật" />;
+        return text ? (
+          <Badge color="green" text={text} />
+        ) : (
+          <Badge color="red" text={t('staff:appointments.tags.update')} />
+        );
       },
     },
     {
-      title: 'Trạng thái',
+      title: t('staff:appointments.columns.status'),
       dataIndex: 'appointmentStatus',
       render: (appointmentStatus) => {
         return (
           <Tag color={getAppointmentStatusColor(appointmentStatus)}>
-            {getAppointmentStatusDisplay(appointmentStatus)}
+            {t(`staff:appointments.status.${appointmentStatus}`)}
           </Tag>
         );
       },
     },
     {
-      title: 'Thao tác',
-      render: (_value, entity) =>
-        entity.appointmentStatus === AppointmentStatus.SCHEDULED ? (
-          <Space>
-            <Button type="primary" onClick={() => handleComplete(entity)}>
-              <CheckOutlined />
-              Xác nhận
-            </Button>
-            <Button type="error" onClick={() => handleCancel(entity.id)}>
-              <CloseOutlined />
-              Hủy lịch hẹn
-            </Button>
-          </Space>
-        ) : null,
+      title: t('staff:appointments.columns.actions'),
+      width: 150,
+      render: (_value, entity) => (
+        <Space>
+          <Tooltip title={t('staff:common.view')}>
+            <Button icon={<EyeOutlined />} onClick={() => handleView(entity)} />
+          </Tooltip>
+          {entity.appointmentStatus === AppointmentStatus.SCHEDULED && (
+            <>
+              <Tooltip title={t('staff:appointments.actions.confirm')}>
+                <Button
+                  type="primary"
+                  icon={<CheckOutlined />}
+                  onClick={() => handleComplete(entity)}
+                  style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
+                />
+              </Tooltip>
+              <Tooltip title={t('staff:appointments.actions.cancelAppointment')}>
+                <Button danger icon={<CloseOutlined />} onClick={() => handleCancel(entity.id)} />
+              </Tooltip>
+            </>
+          )}
+        </Space>
+      ),
     },
   ];
 
@@ -170,7 +193,7 @@ const MySchedulePage = () => {
     <>
       <DataTable
         actionRef={tableRef}
-        headerTitle="Danh sách lịch hẹn hôm nay"
+        headerTitle={t('staff:appointments.todayList')}
         rowKey="id"
         loading={isFetching}
         columns={columns}
@@ -188,7 +211,11 @@ const MySchedulePage = () => {
           showTotal: (total, range) => {
             return (
               <div>
-                {range[0]}-{range[1]} trên tổng số {total} dòng
+                {t('staff:appointments.pagination', {
+                  range0: range[0],
+                  range1: range[1],
+                  total: total,
+                })}
               </div>
             );
           },
@@ -202,6 +229,11 @@ const MySchedulePage = () => {
         onSuccess={() => {
           reloadTable();
         }}
+      />
+      <AppointmentDetailModal
+        open={detailModalOpen}
+        onClose={() => setDetailModalOpen(false)}
+        appointmentId={selectedAppointment?.id}
       />
     </>
   );

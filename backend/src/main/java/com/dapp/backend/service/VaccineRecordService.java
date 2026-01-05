@@ -489,6 +489,21 @@ public class VaccineRecordService {
             }
         }
 
+        String transactionHash = null;
+        Long blockNumber = null;
+
+        if (data.getRecordId() != null) {
+            try {
+                var localRecordOpt = vaccineRecordRepository.findByBlockchainRecordId(data.getRecordId());
+                if (localRecordOpt.isPresent()) {
+                    transactionHash = localRecordOpt.get().getTransactionHash();
+                    blockNumber = localRecordOpt.get().getBlockNumber();
+                }
+            } catch (Exception e) {
+                log.warn("Failed to fetch local record for blockchain ID: {}", data.getRecordId());
+            }
+        }
+
         return VaccineRecordResponse.builder()
                 .id(data.getRecordId() != null ? Long.parseLong(data.getRecordId()) : null)
                 .blockchainRecordId(data.getRecordId())
@@ -503,6 +518,8 @@ public class VaccineRecordService {
                 .notes(data.getNotes())
                 .ipfsHash(data.getIpfsHash())
                 .patientName(patientName)
+                .transactionHash(transactionHash)
+                .blockNumber(blockNumber)
                 .isVerified(true) // Coming from blockchain, so implicitly verified
                 .build();
     }

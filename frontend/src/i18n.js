@@ -24,7 +24,9 @@ import enClientPayment from './locales/en/client/payment.json';
 import enClientProfile from './locales/en/client/profile.json';
 import enClientRecords from './locales/en/client/records.json';
 import enClientReview from './locales/en/client/review.json';
+import enClientSearch from './locales/en/client/search.json';
 import enClientSettings from './locales/en/client/settings.json';
+import enClientTour from './locales/en/client/tour.json';
 import enCommonAuth from './locales/en/common/auth.json';
 import enCommonBlockchain from './locales/en/common/blockchain.json';
 import enCommonCart from './locales/en/common/cart.json';
@@ -43,6 +45,7 @@ import enStaffCommon from './locales/en/staff/common.json';
 import enStaffDashboard from './locales/en/staff/dashboard.json';
 import enStaffDoctorSchedule from './locales/en/staff/doctorSchedule.json';
 import enStaffProfile from './locales/en/staff/profile.json';
+import enStaffWalkIn from './locales/en/staff/walkIn.json';
 import viAdminDashboard from './locales/vi/admin/adminDashboard.json';
 import viAdminCenters from './locales/vi/admin/centers.json';
 import viAdminCommon from './locales/vi/admin/common.json';
@@ -67,7 +70,9 @@ import viClientPayment from './locales/vi/client/payment.json';
 import viClientProfile from './locales/vi/client/profile.json';
 import viClientRecords from './locales/vi/client/records.json';
 import viClientReview from './locales/vi/client/review.json';
+import viClientSearch from './locales/vi/client/search.json';
 import viClientSettings from './locales/vi/client/settings.json';
+import viClientTour from './locales/vi/client/tour.json';
 import viCommonAuth from './locales/vi/common/auth.json';
 import viCommonBlockchain from './locales/vi/common/blockchain.json';
 import viCommonCart from './locales/vi/common/cart.json';
@@ -86,6 +91,7 @@ import viStaffCommon from './locales/vi/staff/common.json';
 import viStaffDashboard from './locales/vi/staff/dashboard.json';
 import viStaffDoctorSchedule from './locales/vi/staff/doctorSchedule.json';
 import viStaffProfile from './locales/vi/staff/profile.json';
+import viStaffWalkIn from './locales/vi/staff/walkIn.json';
 
 const LANGUAGE_KEY = 'lang';
 
@@ -124,6 +130,7 @@ i18n.use(initReactI18next).init({
         dashboard: enStaffDashboard,
         doctorSchedule: enStaffDoctorSchedule,
         profile: enStaffProfile,
+        walkIn: enStaffWalkIn,
       },
       client: {
         about: enClientAbout,
@@ -139,6 +146,8 @@ i18n.use(initReactI18next).init({
         family: enClientFamily,
         appointments: enClientAppointments,
         settings: enClientSettings,
+        search: enClientSearch,
+        tour: enClientTour,
         home: enClientHome,
         orders: enClientOrders,
         payment: enClientPayment,
@@ -177,6 +186,7 @@ i18n.use(initReactI18next).init({
         dashboard: viStaffDashboard,
         doctorSchedule: viStaffDoctorSchedule,
         profile: viStaffProfile,
+        walkIn: viStaffWalkIn,
       },
       client: {
         about: viClientAbout,
@@ -191,6 +201,8 @@ i18n.use(initReactI18next).init({
         family: viClientFamily,
         appointments: viClientAppointments,
         settings: viClientSettings,
+        search: viClientSearch,
+        tour: viClientTour,
         home: viClientHome,
         orders: viClientOrders,
         payment: viClientPayment,

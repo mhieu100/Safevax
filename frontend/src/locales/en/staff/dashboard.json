@@ -7,7 +7,29 @@
   "error": {
     "load": "Failed to load Dashboard data"
   },
+  "charts": {
+    "noDoctor": "No Doctor",
+    "reschedulePending": "Reschedule Request",
+    "overdue": "Overdue",
+    "comingSoon": "Coming Soon",
+    "caseCount": "Case Count",
+    "processed": "Processed",
+    "cases": "cases",
+    "weeklyPerformance": "Weekly Performance",
+    "totalProcessed": "Total Processed",
+    "focusAreas": "Focus Areas",
+    "noIssues": "No issues pending",
+    "appointmentStatus": "Appointment Status",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "noData": "No Data"
+  },
   "stats": {
+    "urgentCount": "Urgent Tasks",
+    "todayCount": "Today's",
+    "completedCount": "Completed",
+    "cancelledCount": "Cancelled",
+    "appointments": "appointments",
     "urgent": {
       "title": "Urgent Tasks",
       "suffix": "appointments",
@@ -44,10 +66,8 @@
     "dose": "Dose {{number}}",
     "urgencyMessage": "Action Needed",
     "changeTo": "Change to:",
-    "empty": {
-      "title": "No urgent tasks!",
-      "desc": "System is running smoothly."
-    },
+    "empty": "No urgent tasks.",
+    "process": "Process",
     "actions": {
       "process": "Process",
       "detail": "Detail"
@@ -57,7 +77,8 @@
     "title": "Quick Actions",
     "viewDoctorSchedule": "View Doctor Schedule",
     "pendingList": "Waiting List",
-    "assignedList": "Assigned List"
+    "assignedList": "Assigned List",
+    "assigned": "Assigned"
   },
   "urgencyGuide": {
     "title": "Priority Guide",

@@ -104,21 +104,32 @@ const WalletVaccinePassport = () => {
     }
   };
 
-  const handleDownloadRecordPdf = async (recordId) => {
+  const handleDownloadRecordPdf = async (record) => {
     try {
-      const response = await apiClient.get('/api/pdf/generate/record', {
-        params: { recordId },
-        responseType: 'blob',
-        headers: {
-          Accept: 'application/pdf',
-        },
-      });
+      let response;
+      let filename;
+
+      if (record.transactionHash) {
+        response = await apiClient.get('/api/pdf/generate/blockchain', {
+          params: { txHash: record.transactionHash },
+          responseType: 'blob',
+          headers: { Accept: 'application/pdf' },
+        });
+        filename = `blockchain_record_${record.transactionHash.substring(0, 10)}.pdf`;
+      } else {
+        response = await apiClient.get('/api/pdf/generate/record', {
+          params: { recordId: record.id },
+          responseType: 'blob',
+          headers: { Accept: 'application/pdf' },
+        });
+        filename = `vaccine_passport_${record.id}.pdf`;
+      }
 
       const blob = new Blob([response], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `vaccine_passport_${recordId}.pdf`);
+      link.setAttribute('download', filename);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -139,6 +150,42 @@ const WalletVaccinePassport = () => {
     if (record.ipfsHash) {
       navigator.clipboard.writeText(`https://safevax.mhieu100.space/verify/${record.ipfsHash}`);
       message.success('Verification link copied to clipboard');
+    }
+  };
+
+  const handleExportFullHistory = async () => {
+    const identityHash =
+      records.length > 0
+        ? records[0].patientIdentityHash
+        : activeTab === 'me'
+          ? user?.blockchainIdentityHash
+          : familyMembers.find((f) => f.id === activeTab)?.blockchainIdentityHash;
+
+    if (!identityHash) {
+      message.error('No blockchain identity found for this user.');
+      return;
+    }
+
+    try {
+      const response = await apiClient.get('/api/pdf/generate/identity-hash', {
+        params: { identityHash },
+        responseType: 'blob',
+        headers: { Accept: 'application/pdf' },
+      });
+
+      const blob = new Blob([response], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `vaccine_passport_full_${identityHash.substring(0, 8)}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      message.success('Full history exported successfully');
+    } catch (err) {
+      console.error(err);
+      message.error('Failed to export history');
     }
   };
 
@@ -235,7 +282,7 @@ const WalletVaccinePassport = () => {
               type="primary"
               size="small"
               icon={<DownloadOutlined />}
-              onClick={() => handleDownloadRecordPdf(record.id)}
+              onClick={() => handleDownloadRecordPdf(record)}
               className="bg-gradient-to-r from-blue-500 to-indigo-500 border-0 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
             />
           </Tooltip>
@@ -359,6 +406,17 @@ const WalletVaccinePassport = () => {
                 Scan this QR code to verify your complete vaccination history on the blockchain.
               </Text>
             </div>
+            <div className="mt-4">
+              <Button
+                type="dashed"
+                block
+                icon={<DownloadOutlined />}
+                onClick={handleExportFullHistory}
+                className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300 h-10 font-medium"
+              >
+                Export Vaccine Passport (PDF)
+              </Button>
+            </div>
           </div>
 
           {/* Right: Stats & Records */}
@@ -475,16 +533,6 @@ const WalletVaccinePassport = () => {
                             <div className="grid grid-cols-2 gap-4">
                               <div>
                                 <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
-                                  Appointment ID
-                                </Text>
-                                <div className="mt-1 p-3 bg-white rounded-lg border border-slate-100">
-                                  <Text className="font-mono text-sm font-semibold text-slate-700">
-                                    {record.appointmentId}
-                                  </Text>
-                                </div>
-                              </div>
-                              <div>
-                                <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
                                   Record ID
                                 </Text>
                                 <div className="mt-1 p-3 bg-white rounded-lg border border-slate-100">
@@ -504,8 +552,7 @@ const WalletVaccinePassport = () => {
                                 </Text>
                                 <div className="mt-1 p-3 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-100">
                                   <Text className="font-mono text-xs text-emerald-600 break-all">
-                                    {record.transactionHash ||
-                                      `Block Record #${record.blockchainRecordId}`}
+                                    {record.transactionHash}
                                   </Text>
                                 </div>
                               </div>
@@ -630,7 +677,7 @@ const WalletVaccinePassport = () => {
                 type="primary"
                 block
                 icon={<DownloadOutlined />}
-                onClick={() => selectedRecord && handleDownloadRecordPdf(selectedRecord.id)}
+                onClick={() => selectedRecord && handleDownloadRecordPdf(selectedRecord)}
                 className="bg-gradient-to-r from-blue-500 to-indigo-500 border-0"
               >
                 Download PDF

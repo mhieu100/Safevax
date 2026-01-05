@@ -8,6 +8,7 @@ import {
 import { Button, Image, message, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import useAccountStore from '@/stores/useAccountStore';
 import useCartStore from '@/stores/useCartStore';
 import { formatPrice } from '@/utils/formatPrice';
 import { getImageProps } from '@/utils/imageUtils';
@@ -16,6 +17,7 @@ const VaccineCard = ({ vaccine }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { addItem } = useCartStore();
+  const { isActive, isAuthenticated } = useAccountStore();
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
@@ -25,6 +27,19 @@ const VaccineCard = ({ vaccine }) => {
 
   const handleBooking = (e) => {
     e.stopPropagation();
+
+    if (!isAuthenticated) {
+      message.warning(t('auth.loginRequired'));
+      navigate('/login');
+      return;
+    }
+
+    if (!isActive) {
+      message.warning(t('auth.completeProfileRequired'));
+      navigate('/complete-profile');
+      return;
+    }
+
     navigate(`/booking?slug=${vaccine.slug}`);
   };
 

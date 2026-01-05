@@ -219,7 +219,7 @@ const FamilyManagerTab = () => {
       render: (status, record) => (
         <div>
           <Tag color={getStatusColor(status)} className="mb-2 rounded-md border-0">
-            {t(`client:blockchainAppointmentStatus.${status}`)}
+            {t(`client:records.blockchainAppointmentStatus.${status}`)}
           </Tag>
           <br />
           <div className="flex items-center gap-2 text-slate-600">

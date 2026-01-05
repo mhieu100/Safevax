@@ -1,9 +1,54 @@
 {
-  "title": "Xem lịch",
+  "title": "Lịch Tiêm Chủng",
+  "subtitle": "Xem lịch theo ngày, tuần, tháng",
   "today": "Hôm nay",
   "week": "Tuần",
   "month": "Tháng",
   "day": "Ngày",
-  "noAppointments": "Không có lịch hẹn nào được lên lịch",
-  "viewDetails": "Xem chi tiết"
+  "prev": "Trước",
+  "next": "Sau",
+  "filters": {
+    "allDoctors": "Tất cả bác sĩ",
+    "placeholder": "Chọn bác sĩ"
+  },
+  "weekView": {
+    "hour": "Giờ",
+    "appointments": "lịch"
+  },
+  "dayView": {
+    "noAppointments": "Không có lịch hẹn nào trong ngày này"
+  },
+  "monthView": {
+    "events": "lịch"
+  },
+  "headers": {
+    "dateSelector": "Chọn ngày"
+  },
+  "modal": {
+    "title": "Chi Tiết Lịch Hẹn",
+    "close": "Đóng",
+    "edit": "Chỉnh sửa",
+    "editNotImpl": "Chức năng chỉnh sửa đang phát triển",
+    "labels": {
+      "code": "Mã lịch hẹn",
+      "patient": "Bệnh nhân",
+      "phone": "Số điện thoại",
+      "vaccine": "Loại vắc-xin",
+      "time": "Thời gian",
+      "doctor": "Bác sĩ",
+      "status": "Trạng thái",
+      "notes": "Ghi chú",
+      "none": "Không có"
+    }
+  },
+  "status": {
+    "PENDING": "Chờ phân công",
+    "RESCHEDULE": "Chờ duyệt đổi lịch",
+    "SCHEDULED": "Đã phân công",
+    "COMPLETED": "Hoàn thành",
+    "CANCELLED": "Đã hủy"
+  },
+  "error": {
+    "fetch": "Không thể tải danh sách lịch hẹn"
+  }
 }

@@ -1,0 +1,24 @@
+{
+  "placeholder": "Search vaccines, news or ask AI...",
+  "loading": "Searching...",
+  "emptyState": "Type to search",
+  "noResults": "No results found",
+  "tags": {
+    "flu": "Seasonal Flu",
+    "schedule": "Vaccination Schedule",
+    "covid": "Covid-19 Vaccine",
+    "baby": "What vaccines for 2-month-old?"
+  },
+  "ai": {
+    "title": "VaxSafe AI Assistant",
+    "beta": "Beta"
+  },
+  "sections": {
+    "vaccines": "Vaccines",
+    "news": "News & Articles"
+  },
+  "footer": {
+    "hint": "Search results are aggregated from VaxSafe medical data",
+    "esc": "to close"
+  }
+}

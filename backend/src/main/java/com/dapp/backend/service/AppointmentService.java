@@ -882,6 +882,11 @@ public class AppointmentService {
     @Transactional(rollbackFor = Exception.class)
     public PaymentResponse createBooking(HttpServletRequest request, BookingRequest bookingRequest) throws Exception {
         User user = authService.getCurrentUserLogin();
+
+        if (!user.isActive()) {
+            throw new AppException("Please complete your profile before booking.");
+        }
+
         Vaccine vaccine = vaccineRepository.findById(bookingRequest.getVaccineId())
                 .orElseThrow(() -> new AppException("Vaccine not found!"));
 
@@ -1144,7 +1149,6 @@ public class AppointmentService {
         return AppointmentMapper.toResponse(savedAppointment);
     }
 
-
     public List<AppointmentResponse> getBooking() throws AppException {
         User user = authService.getCurrentUserLogin();
         List<Appointment> appointments = appointmentRepository
@@ -1346,15 +1350,17 @@ public class AppointmentService {
      */
     public List<AppointmentResponse> getAllAppointmentsHistory() throws AppException {
         User user = authService.getCurrentUserLogin();
-        
+
         // Get all appointments for this user (including family members)
         List<Appointment> appointments = appointmentRepository.findByPatient(user);
-        
+
         return appointments.stream()
                 .sorted((a, b) -> {
                     // Sort by created date descending (newest first)
-                    if (b.getCreatedAt() == null) return -1;
-                    if (a.getCreatedAt() == null) return 1;
+                    if (b.getCreatedAt() == null)
+                        return -1;
+                    if (a.getCreatedAt() == null)
+                        return 1;
                     return b.getCreatedAt().compareTo(a.getCreatedAt());
                 })
                 .map(apt -> {
@@ -1371,8 +1377,10 @@ public class AppointmentService {
                     paymentRepository.findByAppointmentId(apt.getId(), TypeTransactionEnum.APPOINTMENT)
                             .ifPresent(payment -> {
                                 response.setPaymentId(payment.getId());
-                                response.setPaymentStatus(payment.getStatus() != null ? payment.getStatus().name() : null);
-                                response.setPaymentMethod(payment.getMethod() != null ? payment.getMethod().name() : null);
+                                response.setPaymentStatus(
+                                        payment.getStatus() != null ? payment.getStatus().name() : null);
+                                response.setPaymentMethod(
+                                        payment.getMethod() != null ? payment.getMethod().name() : null);
                                 response.setPaymentAmount(convertToVnd(payment.getAmount(), payment.getCurrency()));
                                 response.setPaymentCurrency("VND");
                             });
@@ -1450,23 +1458,25 @@ public class AppointmentService {
     }
 
     /**
-     * Get only active bookings (PENDING, SCHEDULED, RESCHEDULE) for appointments page
+     * Get only active bookings (PENDING, SCHEDULED, RESCHEDULE) for appointments
+     * page
      * Filter out courses that are fully COMPLETED or have no active appointments
      */
     public List<VaccinationRouteResponse> getActiveGroupedBooking() throws AppException {
         User user = authService.getCurrentUserLogin();
         List<VaccinationCourse> courses = vaccinationCourseRepository.findByPatient(user);
         List<VaccinationRouteResponse> allRoutes = mapCoursesToRoutes(courses);
-        
-        // Filter: only routes that have at least one active appointment (PENDING, SCHEDULED, RESCHEDULE)
+
+        // Filter: only routes that have at least one active appointment (PENDING,
+        // SCHEDULED, RESCHEDULE)
         // and the course itself is not COMPLETED
         return allRoutes.stream()
                 .filter(route -> !"COMPLETED".equals(route.getStatus()))
                 .filter(route -> route.getAppointments().stream()
                         .anyMatch(apt -> {
                             AppointmentStatus status = apt.getAppointmentStatus();
-                            return status == AppointmentStatus.PENDING 
-                                    || status == AppointmentStatus.SCHEDULED 
+                            return status == AppointmentStatus.PENDING
+                                    || status == AppointmentStatus.SCHEDULED
                                     || status == AppointmentStatus.RESCHEDULE;
                         }))
                 .collect(java.util.stream.Collectors.toList());

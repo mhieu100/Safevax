@@ -27,7 +27,8 @@ import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { useEffect, useState } from 'react';
-import { getAppointmentStatusColor, getAppointmentStatusDisplay } from '@/constants/enums';
+import { useTranslation } from 'react-i18next';
+import { getAppointmentStatusColor } from '@/constants/enums';
 import { callFetchAppointmentOfCenter } from '@/services/appointment.service';
 import { formatAppointmentTime } from '@/utils/appointment';
 
@@ -37,6 +38,7 @@ dayjs.extend(weekOfYear);
 const { Title, Text } = Typography;
 
 const CalendarView = () => {
+  const { t } = useTranslation(['staff']);
   const [viewMode, setViewMode] = useState('week');
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [appointments, setAppointments] = useState([]);
@@ -46,7 +48,7 @@ const CalendarView = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   const doctors = [
-    { id: 'all', name: 'Tất cả bác sĩ' },
+    { id: 'all', name: t('staff:calendar.filters.allDoctors') },
     { id: 'BS001', name: 'BS. Nguyễn Văn Minh' },
     { id: 'BS002', name: 'BS. Trần Thị Hoa' },
     { id: 'BS003', name: 'BS. Lê Văn Hùng' },
@@ -99,7 +101,7 @@ const CalendarView = () => {
       setAppointments(transformedAppointments);
     } catch (error) {
       console.error('Error fetching appointments:', error);
-      message.error('Không thể tải danh sách lịch hẹn');
+      message.error(t('staff:calendar.error.fetch'));
     } finally {
       setLoading(false);
     }
@@ -190,7 +192,7 @@ const CalendarView = () => {
             textAlign: 'center',
           }}
         >
-          Giờ
+          {t('staff:calendar.weekView.hour')}
         </div>
         {weekDays.map((day) => {
           const isToday = day.isSame(dayjs(), 'day');
@@ -294,7 +296,7 @@ const CalendarView = () => {
       <div style={{ background: 'white' }}>
         {appointments.length === 0 ? (
           <div style={{ padding: '40px', textAlign: 'center' }}>
-            <Text type="secondary">Không có lịch hẹn nào trong ngày này</Text>
+            <Text type="secondary">{t('staff:calendar.dayView.noAppointments')}</Text>
           </div>
         ) : (
           appointments.map((apt) => (
@@ -472,7 +474,9 @@ const CalendarView = () => {
                       marginTop: '4px',
                     }}
                   >
-                    <strong>{dayAppointments.length} lịch</strong>
+                    <strong>
+                      {dayAppointments.length} {t('staff:calendar.monthView.events')}
+                    </strong>
                   </Text>
                 )}
               </button>
@@ -489,11 +493,11 @@ const CalendarView = () => {
     } else if (viewMode === 'week') {
       const weekStart = selectedDate.startOf('isoWeek');
       const weekEnd = selectedDate.endOf('isoWeek');
-      return `Tuần ${selectedDate.isoWeek()} - ${weekStart.format(
+      return `${t('staff:calendar.week')} ${selectedDate.isoWeek()} - ${weekStart.format(
         'DD/MM'
-      )} đến ${weekEnd.format('DD/MM/YYYY')}`;
+      )} - ${weekEnd.format('DD/MM/YYYY')}`;
     } else {
-      return `Tháng ${selectedDate.format('MM, YYYY')}`;
+      return `${t('staff:calendar.month')} ${selectedDate.format('MM, YYYY')}`;
     }
   };
 
@@ -511,9 +515,9 @@ const CalendarView = () => {
         <Row justify="space-between" align="middle">
           <Col>
             <Title level={2} style={{ color: 'white', margin: 0 }}>
-              <CalendarOutlined /> Lịch Tiêm Chủng
+              <CalendarOutlined /> {t('staff:calendar.title')}
             </Title>
-            <Text style={{ color: 'rgba(255,255,255,0.9)' }}>Xem lịch theo ngày, tuần, tháng</Text>
+            <Text style={{ color: 'rgba(255,255,255,0.9)' }}>{t('staff:calendar.subtitle')}</Text>
           </Col>
           <Col style={{ textAlign: 'right' }}>
             <Title level={4} style={{ color: 'white', margin: 0 }}>
@@ -532,9 +536,9 @@ const CalendarView = () => {
               value={viewMode}
               onChange={setViewMode}
               options={[
-                { label: 'Ngày', value: 'day', icon: <CalendarOutlined /> },
-                { label: 'Tuần', value: 'week', icon: <CalendarOutlined /> },
-                { label: 'Tháng', value: 'month', icon: <CalendarOutlined /> },
+                { label: t('staff:calendar.day'), value: 'day', icon: <CalendarOutlined /> },
+                { label: t('staff:calendar.week'), value: 'week', icon: <CalendarOutlined /> },
+                { label: t('staff:calendar.month'), value: 'month', icon: <CalendarOutlined /> },
               ]}
               block
             />
@@ -543,7 +547,7 @@ const CalendarView = () => {
             <Space>
               <Button icon={<LeftOutlined />} onClick={handlePrevious} size="small" />
               <Button type="primary" onClick={handleToday} size="small">
-                Hôm nay
+                {t('staff:calendar.today')}
               </Button>
               <Button icon={<RightOutlined />} onClick={handleNext} size="small" />
             </Space>
@@ -554,6 +558,7 @@ const CalendarView = () => {
               onChange={setSelectedDoctor}
               style={{ width: '100%' }}
               size="small"
+              placeholder={t('staff:calendar.filters.placeholder')}
             >
               {doctors.map((doc) => (
                 <Select.Option key={doc.id} value={doc.id}>
@@ -580,7 +585,7 @@ const CalendarView = () => {
                 value={selectedDate}
                 onChange={(date) => date && setSelectedDate(date)}
                 format="DD/MM/YYYY"
-                placeholder="Chọn ngày"
+                placeholder={t('staff:calendar.headers.dateSelector')}
                 allowClear={false}
               />
             </Col>
@@ -600,32 +605,32 @@ const CalendarView = () => {
         title={
           <Space>
             <CalendarOutlined />
-            <Text strong>Chi Tiết Lịch Hẹn</Text>
+            <Text strong>{t('staff:calendar.modal.title')}</Text>
           </Space>
         }
         open={detailModalOpen}
         onCancel={() => setDetailModalOpen(false)}
         footer={[
           <Button key="close" onClick={() => setDetailModalOpen(false)}>
-            Đóng
+            {t('staff:calendar.modal.close')}
           </Button>,
           <Button
             key="edit"
             type="primary"
             icon={<EditOutlined />}
-            onClick={() => message.info('Chức năng chỉnh sửa đang phát triển')}
+            onClick={() => message.info(t('staff:calendar.modal.editNotImpl'))}
           >
-            Chỉnh sửa
+            {t('staff:calendar.modal.edit')}
           </Button>,
         ]}
         width={600}
       >
         {selectedAppointment && (
           <Descriptions column={1} bordered>
-            <Descriptions.Item label="Mã lịch hẹn">
+            <Descriptions.Item label={t('staff:calendar.modal.labels.code')}>
               <Text strong>#{selectedAppointment.id}</Text>
             </Descriptions.Item>
-            <Descriptions.Item label="Bệnh nhân">
+            <Descriptions.Item label={t('staff:calendar.modal.labels.patient')}>
               <Space>
                 <UserOutlined />
                 <Text>
@@ -633,18 +638,18 @@ const CalendarView = () => {
                 </Text>
               </Space>
             </Descriptions.Item>
-            <Descriptions.Item label="Số điện thoại">
+            <Descriptions.Item label={t('staff:calendar.modal.labels.phone')}>
               <Space>
                 <PhoneOutlined />
                 <Text>{selectedAppointment.user?.phone}</Text>
               </Space>
             </Descriptions.Item>
-            <Descriptions.Item label="Loại vắc-xin">
+            <Descriptions.Item label={t('staff:calendar.modal.labels.vaccine')}>
               <Tag color={getVaccineColor(selectedAppointment.vaccine?.name)}>
                 {selectedAppointment.vaccine?.name}
               </Tag>
             </Descriptions.Item>
-            <Descriptions.Item label="Thời gian">
+            <Descriptions.Item label={t('staff:calendar.modal.labels.time')}>
               <Space>
                 <ClockCircleOutlined />
                 <Text>
@@ -653,7 +658,7 @@ const CalendarView = () => {
                 </Text>
               </Space>
             </Descriptions.Item>
-            <Descriptions.Item label="Bác sĩ">
+            <Descriptions.Item label={t('staff:calendar.modal.labels.doctor')}>
               <Space>
                 <MedicineBoxOutlined />
                 <Text>
@@ -661,13 +666,13 @@ const CalendarView = () => {
                 </Text>
               </Space>
             </Descriptions.Item>
-            <Descriptions.Item label="Trạng thái">
+            <Descriptions.Item label={t('staff:calendar.modal.labels.status')}>
               <Tag color={getAppointmentStatusColor(selectedAppointment.status)}>
-                {getAppointmentStatusDisplay(selectedAppointment.status)}
+                {t(`staff:calendar.status.${selectedAppointment.status}`)}
               </Tag>
             </Descriptions.Item>
-            <Descriptions.Item label="Ghi chú">
-              <Text>{selectedAppointment.notes || 'Không có'}</Text>
+            <Descriptions.Item label={t('staff:calendar.modal.labels.notes')}>
+              <Text>{selectedAppointment.notes || t('staff:calendar.modal.labels.none')}</Text>
             </Descriptions.Item>
           </Descriptions>
         )}

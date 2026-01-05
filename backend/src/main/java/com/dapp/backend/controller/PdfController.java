@@ -71,4 +71,53 @@ public class PdfController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(bis));
     }
+
+    @GetMapping("/generate/blockchain")
+    public ResponseEntity<InputStreamResource> generateBlockchainPdf(@RequestParam String txHash) {
+        if (txHash == null || txHash.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        ByteArrayInputStream bis = pdfService.generatePdfFromTransactionHash(txHash);
+        if (bis == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        // Use a truncated or full hash in filename
+        String shortHash = txHash.length() > 10 ? txHash.substring(0, 10) : txHash;
+        headers.add("Content-Disposition", "inline; filename=blockchain_record_" + shortHash + ".pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
+    }
+
+    @GetMapping("/generate/identity-hash")
+    public ResponseEntity<InputStreamResource> generatePdfFromIdentityHash(@RequestParam String identityHash) {
+        if (identityHash == null || identityHash.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        try {
+            ByteArrayInputStream bis = pdfService.generatePdfFromIdentityHash(identityHash);
+            if (bis == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition",
+                    "inline; filename=vaccine_passport_full_" + identityHash.substring(0, 8) + ".pdf");
+
+            return ResponseEntity
+                    .ok()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(new InputStreamResource(bis));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

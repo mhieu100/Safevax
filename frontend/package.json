@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "NODE_OPTIONS=--max-old-space-size=4096 vite build",
     "lint": "biome check .",
-    "lint:fix": "",
+    "lint:fix": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
     "format": "biome format --write .",
     "preview": "vite preview",
     "prepare": "cd .. && husky frontend/.husky"

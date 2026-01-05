@@ -1,9 +1,54 @@
 {
-  "title": "Calendar View",
+  "title": "Vaccination Calendar",
+  "subtitle": "View schedule by day, week, month",
   "today": "Today",
   "week": "Week",
   "month": "Month",
   "day": "Day",
-  "noAppointments": "No appointments scheduled",
-  "viewDetails": "View Details"
+  "prev": "Previous",
+  "next": "Next",
+  "filters": {
+    "allDoctors": "All Doctors",
+    "placeholder": "Select Doctor"
+  },
+  "weekView": {
+    "hour": "Hour",
+    "appointments": "appointments"
+  },
+  "dayView": {
+    "noAppointments": "No appointments scheduled for this day"
+  },
+  "monthView": {
+    "events": "sched"
+  },
+  "headers": {
+    "dateSelector": "Select Date"
+  },
+  "modal": {
+    "title": "Appointment Details",
+    "close": "Close",
+    "edit": "Edit",
+    "editNotImpl": "Edit function is under development",
+    "labels": {
+      "code": "Appointment Code",
+      "patient": "Patient",
+      "phone": "Phone",
+      "vaccine": "Vaccine Type",
+      "time": "Time",
+      "doctor": "Doctor",
+      "status": "Status",
+      "notes": "Notes",
+      "none": "None"
+    }
+  },
+  "status": {
+    "PENDING": "Pending Assignment",
+    "RESCHEDULE": "Reschedule Requested",
+    "SCHEDULED": "Assigned",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled"
+  },
+  "error": {
+    "fetch": "Cannot load appointment list"
+  }
 }

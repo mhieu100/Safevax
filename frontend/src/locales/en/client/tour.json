@@ -1,0 +1,38 @@
+{
+  "welcome": {
+    "title": "Hello from VaxSafe AI Assistant!",
+    "cardTitle": "Welcome New User!",
+    "description": "I will guide you on how to book a vaccination appointment quickly."
+  },
+  "step1": {
+    "title": "Step 1: Choose Vaccine",
+    "cardTitle": "Vaccine Catalog",
+    "description": "First, visit our vaccine list page."
+  },
+  "step2": {
+    "title": "Step 2: Search & Filter",
+    "cardTitle": "Smart Filter",
+    "description": "Use filters to find vaccines by price, country, or name."
+  },
+  "step3": {
+    "title": "Step 3: Book Appointment",
+    "cardTitle": "Book Now",
+    "description": "Click the 'Book' button on the vaccine you want to schedule."
+  },
+  "step4": {
+    "title": "Step 4: Appointments",
+    "cardTitle": "Manage Appointments",
+    "description": "Track the status and details of your vaccination appointments here."
+  },
+  "step5": {
+    "title": "Step 5: Details",
+    "cardTitle": "Detailed Information",
+    "description": "Review appointment information, payments, and confirmation QR codes."
+  },
+  "chatbot": {
+    "title": "AI Health Consultation",
+    "cardTitle": "Ask Anytime",
+    "description": "If you need advice on suitable vaccines or have health questions, chat with me right away!"
+  },
+  "skip": "Skip guide"
+}

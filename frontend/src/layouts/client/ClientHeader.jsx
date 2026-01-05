@@ -187,6 +187,7 @@ const Navbar = () => {
 
               {isAuthenticated && (
                 <Button
+                  id="tour-appointments-nav"
                   icon={<CalendarOutlined className="text-lg" />}
                   size="large"
                   onClick={() => navigate('/appointments')}

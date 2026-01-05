@@ -23,6 +23,7 @@ public class PdfService {
 
         private final VaccineRecordRepository vaccineRecordRepository;
         private final UserRepository userRepository;
+        private final VaccineRecordService vaccineRecordService;
 
         // BRAND COLORS
         private static final BaseColor HEADER_BG = new BaseColor(76, 29, 149); // Deep Purple
@@ -521,7 +522,8 @@ public class PdfService {
                         addCardTitle(blockchainContent, "Blockchain Verification");
                         addChainDetailRow(blockchainContent, "Status:",
                                         record.isVerified() ? "Verified" : "Pending",
-                                        record.isVerified() ? new BaseColor(209, 250, 229) : new BaseColor(254, 243, 199),
+                                        record.isVerified() ? new BaseColor(209, 250, 229)
+                                                        : new BaseColor(254, 243, 199),
                                         record.isVerified() ? new BaseColor(4, 120, 87) : new BaseColor(180, 83, 9));
                         addChainDetailRow(blockchainContent, "Network:", "SafeVax Chain",
                                         new BaseColor(219, 234, 254), new BaseColor(29, 78, 216));
@@ -668,5 +670,186 @@ public class PdfService {
                 footer.addCell(timestampCell);
 
                 document.add(footer);
+        }
+
+        public ByteArrayInputStream generatePdfFromTransactionHash(String txHash) {
+                Optional<VaccineRecord> recordOpt = vaccineRecordRepository.findByTransactionHash(txHash);
+                if (recordOpt.isEmpty()) {
+                        return null;
+                }
+                return generateSingleRecordPdf(recordOpt.get().getId());
+        }
+
+        public ByteArrayInputStream generatePdfFromIdentityHash(String identityHash) {
+                Document document = new Document(PageSize.A4, 20, 20, 20, 20);
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+                try {
+                        PdfWriter.getInstance(document, out);
+                        document.open();
+
+                        // Fetch Data from Blockchain Service
+                        List<com.dapp.backend.dto.response.VaccineRecordResponse> records = vaccineRecordService
+                                        .getVerifiedRecordsByIdentity(identityHash);
+                        long verifiedCount = records.size(); // All returned are verified
+
+                        // Basic Info
+                        String patientName = records.isEmpty() || records.get(0).getPatientName() == null
+                                        ? "Unknown Patient"
+                                        : records.get(0).getPatientName();
+                        String passportId = "BLK-"
+                                        + (identityHash.length() > 8 ? identityHash.substring(0, 8).toUpperCase()
+                                                        : "N/A");
+
+                        // === 1. HEADER ===
+                        addHeader(document, true);
+
+                        // === 2. MAIN GRID (2 Columns) ===
+                        PdfPTable mainLayout = new PdfPTable(2);
+                        mainLayout.setWidthPercentage(100);
+                        mainLayout.setWidths(new float[] { 1.8f, 1f });
+                        mainLayout.setSpacingAfter(20);
+
+                        // --- LEFT COLUMN CONTENT ---
+                        PdfPCell leftCol = new PdfPCell();
+                        leftCol.setBorder(Rectangle.NO_BORDER);
+                        leftCol.setPaddingRight(10);
+
+                        // Passport Info Card
+                        PdfPTable passportInfoContent = new PdfPTable(1);
+                        passportInfoContent.setWidthPercentage(100);
+                        addCardTitle(passportInfoContent, "Passport Information");
+                        addDetailRow(passportInfoContent, "Full Name", patientName, "Identity Hash",
+                                        identityHash.substring(0, 10) + "...");
+                        addDetailRow(passportInfoContent, "Issued Date", LocalDate.now().toString(), "Passport ID",
+                                        passportId);
+
+                        leftCol.addElement(wrapInCard(passportInfoContent));
+                        leftCol.addElement(new Paragraph("\n"));
+
+                        // Blockchain Info Card
+                        PdfPTable blockchainInfoContent = new PdfPTable(1);
+                        blockchainInfoContent.setWidthPercentage(100);
+                        addCardTitle(blockchainInfoContent, "Blockchain Verification");
+                        addChainDetailRow(blockchainInfoContent, "Network Type:", "Permissioned Blockchain",
+                                        new BaseColor(243, 232, 255), new BaseColor(126, 34, 206));
+                        addChainDetailRow(blockchainInfoContent, "Source:", "Live Blockchain Data",
+                                        new BaseColor(219, 234, 254), new BaseColor(29, 78, 216));
+                        addChainDetailRow(blockchainInfoContent, "Total Records:", verifiedCount + " Verified",
+                                        new BaseColor(209, 250, 229), new BaseColor(4, 120, 87));
+
+                        leftCol.addElement(wrapInCard(blockchainInfoContent));
+                        mainLayout.addCell(leftCol);
+
+                        // --- RIGHT COLUMN CONTENT ---
+                        PdfPCell rightCol = new PdfPCell();
+                        rightCol.setBorder(Rectangle.NO_BORDER);
+                        rightCol.setPaddingLeft(10);
+
+                        // QR Card
+                        PdfPTable qrContent = new PdfPTable(1);
+                        qrContent.setWidthPercentage(100);
+                        addCardTitle(qrContent, "Digital Verification");
+
+                        try {
+                                String qrData = "https://safevax.mhieu100.space/verify/" + identityHash;
+                                BarcodeQRCode barcodeQRCode = new BarcodeQRCode(qrData, 200, 200, null);
+                                Image qrImage = barcodeQRCode.getImage();
+                                qrImage.scaleAbsolute(140, 140);
+                                qrImage.setAlignment(Element.ALIGN_CENTER);
+
+                                PdfPCell qrCell = new PdfPCell(qrImage);
+                                qrCell.setBorder(Rectangle.NO_BORDER);
+                                qrCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                qrCell.setPaddingBottom(10);
+                                qrContent.addCell(qrCell);
+
+                                Paragraph scanText = new Paragraph("Scan to verify full history",
+                                                FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY));
+                                scanText.setAlignment(Element.ALIGN_CENTER);
+                                PdfPCell textCell = new PdfPCell(scanText);
+                                textCell.setBorder(Rectangle.NO_BORDER);
+                                textCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                qrContent.addCell(textCell);
+                        } catch (Exception e) {
+                                PdfPCell errCell = new PdfPCell(new Phrase("QR Code Error"));
+                                errCell.setBorder(Rectangle.NO_BORDER);
+                                qrContent.addCell(errCell);
+                        }
+
+                        rightCol.addElement(wrapInCard(qrContent));
+                        mainLayout.addCell(rightCol);
+
+                        document.add(mainLayout);
+
+                        // === 3. RECORDS TABLE ===
+                        addRecordsTableFromResponse(document, records);
+
+                        // === 4. FOOTER ===
+                        addFooter(document);
+
+                        document.close();
+                } catch (Exception e) {
+                        e.printStackTrace();
+                        try {
+                                if (document.isOpen()) {
+                                        document.add(new Paragraph("Error generating PDF: " + e.getMessage()));
+                                        document.close();
+                                }
+                        } catch (Exception ex) {
+                        }
+                }
+
+                return new ByteArrayInputStream(out.toByteArray());
+        }
+
+        private void addRecordsTableFromResponse(Document document,
+                        List<com.dapp.backend.dto.response.VaccineRecordResponse> records)
+                        throws DocumentException {
+                Paragraph title = new Paragraph("Blockchain-Verified Records",
+                                FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, HEADER_BG));
+                title.setSpacingAfter(10);
+                document.add(title);
+
+                PdfPTable table = new PdfPTable(5);
+                table.setWidthPercentage(100);
+                table.setWidths(new float[] { 3, 1, 2, 2, 2 });
+                table.setHeaderRows(1);
+
+                Stream.of("Vaccine", "Dose", "Date", "Location", "Status").forEach(t -> {
+                        PdfPCell h = new PdfPCell(new Phrase(t,
+                                        FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE)));
+                        h.setBackgroundColor(HEADER_BG);
+                        h.setPadding(10);
+                        h.setBorderColor(BORDER_COLOR);
+                        h.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(h);
+                });
+
+                if (records.isEmpty()) {
+                        PdfPCell cell = new PdfPCell(new Phrase("No verified records found on blockchain"));
+                        cell.setColspan(5);
+                        cell.setPadding(20);
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(cell);
+                } else {
+                        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        for (var r : records) {
+                                addRecordCell(table, r.getVaccineName() != null ? r.getVaccineName() : "Unknown");
+                                addRecordCell(table, String.valueOf(r.getDoseNumber()));
+                                addRecordCell(table, r.getVaccinationDate() != null ? r.getVaccinationDate().format(fmt)
+                                                : "N/A");
+                                addRecordCell(table, r.getCenterName() != null ? r.getCenterName() : "Unknown");
+
+                                PdfPCell s = new PdfPCell(new Phrase("Verified",
+                                                FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, ACCENT_GREEN)));
+                                s.setPadding(10);
+                                s.setBorderColor(BORDER_COLOR);
+                                s.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                s.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                                table.addCell(s);
+                        }
+                }
+                document.add(table);
         }
 }

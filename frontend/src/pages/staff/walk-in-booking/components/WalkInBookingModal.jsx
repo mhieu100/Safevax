@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TIME_SLOT_LABELS } from '@/constants';
 import { TimeSlotTime } from '@/constants/enums';
 import { callCreateWalkInBooking } from '@/services/booking.service';
@@ -32,6 +33,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
+  const { t } = useTranslation(['staff']);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [vaccines, setVaccines] = useState([]);
@@ -83,8 +85,8 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
       }
     } catch (_error) {
       notification.error({
-        message: 'Lỗi',
-        description: 'Không thể tải danh sách vắc xin',
+        message: t('staff:walkIn.messages.errorTitle'),
+        description: t('staff:walkIn.messages.loadVaccines'),
       });
     }
   };
@@ -97,8 +99,8 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
       }
     } catch (_error) {
       notification.error({
-        message: 'Lỗi',
-        description: 'Không thể tải danh sách trung tâm',
+        message: t('staff:walkIn.messages.errorTitle'),
+        description: t('staff:walkIn.messages.loadCenters'),
       });
     }
   };
@@ -130,8 +132,8 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
       }
     } catch (error) {
       notification.error({
-        message: 'Lỗi',
-        description: error?.response?.data?.message || 'Không thể tải lịch trống',
+        message: t('staff:walkIn.messages.errorTitle'),
+        description: error?.response?.data?.message || t('staff:walkIn.messages.loadSlots'),
       });
       setAvailableSlots([]);
     } finally {
@@ -163,12 +165,12 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
       const values = await form.validateFields();
 
       if (!patient) {
-        message.error('Không có thông tin bệnh nhân');
+        message.error(t('staff:walkIn.messages.noPatient'));
         return;
       }
 
       if (!selectedSlot) {
-        message.error('Vui lòng chọn bác sĩ');
+        message.error(t('staff:walkIn.messages.selectDoctor'));
         return;
       }
 
@@ -190,8 +192,11 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
 
       if (response?.data) {
         notification.success({
-          message: 'Thành công',
-          description: `Đặt lịch thành công cho bệnh nhân ${patient.fullName} với Bs. ${selectedSlot.doctorName}`,
+          message: t('staff:walkIn.messages.successTitle'),
+          description: t('staff:walkIn.messages.successDesc', {
+            patientName: patient.fullName,
+            doctorName: selectedSlot.doctorName,
+          }),
         });
         form.resetFields();
         setSelectedVaccine(null);
@@ -202,8 +207,8 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
       }
     } catch (error) {
       notification.error({
-        message: 'Lỗi',
-        description: error?.response?.data?.message || 'Không thể đặt lịch',
+        message: t('staff:walkIn.messages.errorTitle'),
+        description: error?.response?.data?.message || t('staff:walkIn.messages.bookingFailed'),
       });
     } finally {
       setLoading(false);
@@ -223,7 +228,7 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
     if (loadingSlots) {
       return (
         <div style={{ textAlign: 'center', padding: '20px' }}>
-          <Spin spinning tip="Đang tải lịch bác sĩ...">
+          <Spin spinning tip={t('staff:walkIn.slots.loading')}>
             <div style={{ minHeight: 50 }} />
           </Spin>
         </div>
@@ -241,12 +246,12 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
             <Space direction="vertical">
               <span>
                 {values.appointmentTime
-                  ? `Không có bác sĩ trống trong khung giờ ${timeSlotLabel}`
-                  : 'Chọn trung tâm, ngày và khung giờ để xem lịch bác sĩ'}
+                  ? t('staff:walkIn.slots.empty', { slot: timeSlotLabel })
+                  : t('staff:walkIn.slots.emptyHint')}
               </span>
               {values.appointmentTime && values.appointmentCenter && values.appointmentDate && (
                 <Text type="secondary" style={{ fontSize: 12 }}>
-                  Không có bác sĩ nào có slot trống trong khung giờ này
+                  {t('staff:walkIn.slots.emptyDetail')}
                 </Text>
               )}
             </Space>
@@ -307,7 +312,9 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
                         color={slot.status === 'AVAILABLE' ? 'success' : 'error'}
                         style={{ marginLeft: 0 }}
                       >
-                        {slot.status === 'AVAILABLE' ? 'Trống' : 'Đã đặt'}
+                        {slot.status === 'AVAILABLE'
+                          ? t('staff:walkIn.slots.available')
+                          : t('staff:walkIn.slots.booked')}
                       </Tag>
                     </Space>
                   </Radio>
@@ -325,7 +332,7 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
       title={
         <Space>
           <CalendarOutlined />
-          <span>Đặt lịch tiêm chủng Walk-in</span>
+          <span>{t('staff:walkIn.modal.title')}</span>
         </Space>
       }
       open={open}
@@ -333,17 +340,18 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
       onCancel={handleCancel}
       confirmLoading={loading}
       width={800}
-      okText="Xác nhận đặt lịch"
-      cancelText="Hủy"
+      okText={t('staff:walkIn.modal.okText')}
+      cancelText={t('staff:walkIn.modal.cancelText')}
     >
       {patient && (
         <Card size="small" style={{ marginBottom: 16, backgroundColor: '#f0f5ff' }}>
           <Space direction="vertical" size="small" style={{ width: '100%' }}>
             <Text strong>
-              <UserOutlined /> Bệnh nhân: {patient.fullName}
+              <UserOutlined /> {t('staff:walkIn.patientInfo.patient')}: {patient.fullName}
             </Text>
             <Text type="secondary">
-              Email: {patient.email} • SĐT: {patient.patientProfile?.phone}
+              {t('staff:walkIn.patientInfo.email')}: {patient.email} •{' '}
+              {t('staff:walkIn.patientInfo.phone')}: {patient.patientProfile?.phone}
             </Text>
           </Space>
         </Card>
@@ -358,15 +366,17 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
         <Row gutter={16}>
           {}
           <Col xs={24}>
-            <Form.Item name="appointmentFor" label="Đặt lịch cho">
+            <Form.Item name="appointmentFor" label={t('staff:walkIn.form.appointmentFor.label')}>
               <Radio.Group
                 onChange={(e) => {
                   setAppointmentFor(e.target.value);
                   form.setFieldsValue({ familyMemberId: null });
                 }}
               >
-                <Radio value="self">Bản thân ({patient?.fullName})</Radio>
-                <Radio value="family">Người thân</Radio>
+                <Radio value="self">
+                  {t('staff:walkIn.form.appointmentFor.self')} ({patient?.fullName})
+                </Radio>
+                <Radio value="family">{t('staff:walkIn.form.appointmentFor.family')}</Radio>
               </Radio.Group>
             </Form.Item>
           </Col>
@@ -376,10 +386,15 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
             <Col xs={24}>
               <Form.Item
                 name="familyMemberId"
-                label="Chọn người thân"
-                rules={[{ required: true, message: 'Vui lòng chọn người thân' }]}
+                label={t('staff:walkIn.form.familyMember.label')}
+                rules={[
+                  {
+                    required: true,
+                    message: t('staff:walkIn.form.familyMember.required'),
+                  },
+                ]}
               >
-                <Select placeholder="Chọn thành viên gia đình">
+                <Select placeholder={t('staff:walkIn.form.familyMember.placeholder')}>
                   {familyMembers.map((member) => (
                     <Option key={member.id} value={member.id}>
                       {member.fullName} ({member.relationship})
@@ -393,11 +408,11 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
           <Col xs={24} md={12}>
             <Form.Item
               name="vaccineId"
-              label="Chọn vắc xin"
-              rules={[{ required: true, message: 'Vui lòng chọn vắc xin' }]}
+              label={t('staff:walkIn.form.vaccine.label')}
+              rules={[{ required: true, message: t('staff:walkIn.form.vaccine.required') }]}
             >
               <Select
-                placeholder="Chọn vắc xin"
+                placeholder={t('staff:walkIn.form.vaccine.placeholder')}
                 showSearch
                 filterOption={(input, option) =>
                   (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -418,11 +433,11 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
           <Col xs={24} md={12}>
             <Form.Item
               name="appointmentCenter"
-              label="Trung tâm"
-              rules={[{ required: true, message: 'Vui lòng chọn trung tâm' }]}
+              label={t('staff:walkIn.form.center.label')}
+              rules={[{ required: true, message: t('staff:walkIn.form.center.required') }]}
             >
               <Select
-                placeholder="Chọn trung tâm"
+                placeholder={t('staff:walkIn.form.center.placeholder')}
                 showSearch
                 filterOption={(input, option) =>
                   (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -442,13 +457,13 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
           <Col xs={24} md={12}>
             <Form.Item
               name="appointmentDate"
-              label="Ngày hẹn"
-              rules={[{ required: true, message: 'Vui lòng chọn ngày hẹn' }]}
+              label={t('staff:walkIn.form.date.label')}
+              rules={[{ required: true, message: t('staff:walkIn.form.date.required') }]}
             >
               <DatePicker
                 style={{ width: '100%' }}
                 format="DD/MM/YYYY"
-                placeholder="Chọn ngày hẹn"
+                placeholder={t('staff:walkIn.form.date.placeholder')}
                 disabledDate={(current) => current && current < dayjs().startOf('day')}
               />
             </Form.Item>
@@ -457,10 +472,10 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
           <Col xs={24} md={12}>
             <Form.Item
               name="appointmentTime"
-              label="Khung giờ"
-              rules={[{ required: true, message: 'Vui lòng chọn khung giờ' }]}
+              label={t('staff:walkIn.form.time.label')}
+              rules={[{ required: true, message: t('staff:walkIn.form.time.required') }]}
             >
-              <Select placeholder="Chọn khung giờ">
+              <Select placeholder={t('staff:walkIn.form.time.placeholder')}>
                 {Object.entries(TIME_SLOT_LABELS).map(([key, label]) => (
                   <Option key={key} value={key}>
                     <ClockCircleOutlined /> {label}
@@ -475,28 +490,28 @@ const WalkInBookingModal = ({ open, setOpen, patient, onSuccess }) => {
               name="doctorSlot"
               label={
                 <Space>
-                  <Text strong>Chọn bác sĩ</Text>
+                  <Text strong>{t('staff:walkIn.form.doctor.label')}</Text>
                   <Text type="secondary" style={{ fontSize: 12 }}>
-                    (Chọn khung giờ trên để xem lịch bác sĩ)
+                    {t('staff:walkIn.form.doctor.hint')}
                   </Text>
                 </Space>
               }
-              rules={[{ required: true, message: 'Vui lòng chọn bác sĩ' }]}
-              tooltip="Sau khi chọn trung tâm, ngày và khung giờ, danh sách bác sĩ trống sẽ hiển thị"
+              rules={[{ required: true, message: t('staff:walkIn.form.doctor.required') }]}
+              tooltip={t('staff:walkIn.form.doctor.tooltip')}
             >
               {renderAvailableSlots()}
             </Form.Item>
           </Col>
 
           <Col xs={24}>
-            <Form.Item name="notes" label="Ghi chú (không bắt buộc)">
-              <TextArea rows={3} placeholder="Ghi chú thêm về lịch hẹn..." />
+            <Form.Item name="notes" label={t('staff:walkIn.form.notes.label')}>
+              <TextArea rows={3} placeholder={t('staff:walkIn.form.notes.placeholder')} />
             </Form.Item>
           </Col>
 
           <Col xs={24}>
             <Card size="small" style={{ backgroundColor: '#fffbe6' }}>
-              <Text strong>💵 Phương thức thanh toán: Tiền mặt (CASH)</Text>
+              <Text strong>💵 {t('staff:walkIn.form.payment')}</Text>
             </Card>
           </Col>
         </Row>

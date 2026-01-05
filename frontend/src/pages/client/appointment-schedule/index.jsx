@@ -450,7 +450,7 @@ const AppointmentSchedulePage = () => {
 
   return (
     <div className="min-h-[calc(100vh-90px)] bg-slate-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 animate-fade-in">
+      <div id="tour-appointments-list" className="max-w-7xl mx-auto px-4 sm:px-6 animate-fade-in">
         <div className="mb-6">
           <Title level={3} className="!mb-1 text-slate-800">
             {t('client:layout.sidebar.appointments')}

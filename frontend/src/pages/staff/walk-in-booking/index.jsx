@@ -2,12 +2,14 @@ import { CalendarOutlined } from '@ant-design/icons';
 import { notification, Tooltip } from 'antd';
 import queryString from 'query-string';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { sfLike } from 'spring-filter-query-builder';
 import DataTable from '@/components/data-table';
 import { callFetchPatients } from '@/services/user.service';
 import WalkInBookingModal from './components/WalkInBookingModal';
 
 const WalkInBookingPage = () => {
+  const { t } = useTranslation(['staff']);
   const tableRef = useRef();
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,8 +36,8 @@ const WalkInBookingPage = () => {
       }
     } catch (_error) {
       notification.error({
-        message: 'Lỗi',
-        description: 'Không thể tải danh sách lịch hẹn',
+        message: t('staff:walkIn.error.title'),
+        description: t('staff:walkIn.error.loadPatients'),
       });
     } finally {
       setLoading(false);
@@ -49,7 +51,7 @@ const WalkInBookingPage = () => {
 
   const columns = [
     {
-      title: 'STT',
+      title: t('staff:walkIn.columns.index'),
       key: 'index',
       width: 50,
       align: 'center',
@@ -59,37 +61,37 @@ const WalkInBookingPage = () => {
       },
     },
     {
-      title: 'Họ tên',
+      title: t('staff:walkIn.columns.fullName'),
       dataIndex: 'fullName',
       sorter: true,
     },
     {
-      title: 'Email',
+      title: t('staff:walkIn.columns.email'),
       dataIndex: 'email',
       sorter: true,
     },
     {
-      title: 'Điện thoại',
+      title: t('staff:walkIn.columns.phone'),
       dataIndex: ['patientProfile', 'phone'],
       hideInSearch: true,
     },
     {
-      title: 'Địa chỉ',
+      title: t('staff:walkIn.columns.address'),
       dataIndex: ['patientProfile', 'address'],
       sorter: true,
     },
     {
-      title: 'Ngày sinh',
+      title: t('staff:walkIn.columns.dob'),
       dataIndex: ['patientProfile', 'birthday'],
       hideInSearch: true,
     },
     {
-      title: 'Thao tác',
+      title: t('staff:walkIn.columns.actions'),
       hideInSearch: true,
       width: 150,
       align: 'center',
       render: (_value, entity) => (
-        <Tooltip title="Đặt lịch tiêm chủng">
+        <Tooltip title={t('staff:walkIn.actions.book')}>
           <CalendarOutlined
             style={{
               fontSize: 20,
@@ -142,7 +144,7 @@ const WalkInBookingPage = () => {
     <>
       <DataTable
         actionRef={tableRef}
-        headerTitle="Đặt lịch Walk-in - Chọn bệnh nhân"
+        headerTitle={t('staff:walkIn.title')}
         rowKey="id"
         loading={loading}
         columns={columns}
@@ -160,7 +162,7 @@ const WalkInBookingPage = () => {
           showTotal: (total, range) => {
             return (
               <div>
-                {range[0]}-{range[1]} trên tổng số {total} dòng
+                {t('staff:walkIn.pagination.range', { range0: range[0], range1: range[1], total })}
               </div>
             );
           },

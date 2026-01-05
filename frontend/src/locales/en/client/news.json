@@ -14,7 +14,15 @@
     "CHILDREN_HEALTH": "Children Health",
     "DISEASE_PREVENTION": "Disease Prevention",
     "HEALTH_GENERAL": "General Health",
-    "ANNOUNCEMENT": "Announcement"
+    "ANNOUNCEMENT": "Announcement",
+    "COVID_19": "Covid-19",
+    "NUTRITION": "Nutrition",
+    "WOMEN_HEALTH": "Women's Health",
+    "ELDERLY_CARE": "Elderly Care",
+    "MEDICAL_RESEARCH": "Medical Research",
+    "HEALTH_TIPS": "Health Tips",
+    "SEASONAL_DISEASES": "Seasonal Diseases",
+    "VACCINATION_SCHEDULE": "Vaccination Schedule"
   },
   "detail": {
     "homeBreadcrumb": "Home",

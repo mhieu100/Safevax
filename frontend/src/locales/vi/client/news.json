@@ -14,7 +14,15 @@
     "CHILDREN_HEALTH": "Sức khỏe trẻ em",
     "DISEASE_PREVENTION": "Phòng ngừa dịch bệnh",
     "HEALTH_GENERAL": "Sức khỏe chung",
-    "ANNOUNCEMENT": "Thông báo"
+    "ANNOUNCEMENT": "Thông báo",
+    "COVID_19": "Covid-19",
+    "NUTRITION": "Dinh dưỡng",
+    "WOMEN_HEALTH": "Sức khỏe phụ nữ",
+    "ELDERLY_CARE": "Chăm sóc người cao tuổi",
+    "MEDICAL_RESEARCH": "Nghiên cứu y khoa",
+    "HEALTH_TIPS": "Mẹo sức khỏe",
+    "SEASONAL_DISEASES": "Bệnh theo mùa",
+    "VACCINATION_SCHEDULE": "Lịch tiêm chủng"
   },
   "detail": {
     "homeBreadcrumb": "Trang chủ",

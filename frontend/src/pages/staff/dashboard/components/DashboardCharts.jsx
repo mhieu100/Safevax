@@ -12,7 +12,8 @@ import {
   Tooltip,
 } from 'chart.js';
 import { useMemo } from 'react';
-import { Bar, Line } from 'react-chartjs-2';
+import { Doughnut, Line } from 'react-chartjs-2';
+import { useTranslation } from 'react-i18next';
 
 ChartJS.register(
   CategoryScale,
@@ -27,66 +28,57 @@ ChartJS.register(
   Filler
 );
 
-const DashboardCharts = ({ urgentAppointments }) => {
-  // 1. Data for Urgency Types (Horizontal Bar)
-  const urgencyData = useMemo(() => {
-    const counts = {
-      NO_DOCTOR: 0,
-      RESCHEDULE_PENDING: 0,
-      OVERDUE: 0,
-      COMING_SOON: 0,
-    };
+const DashboardCharts = ({ stats }) => {
+  const { t } = useTranslation(['staff']);
 
-    urgentAppointments.forEach((apt) => {
-      if (counts[apt.urgencyType] !== undefined) {
-        counts[apt.urgencyType]++;
-      }
-    });
+  // 1. Data for Appointment Status (Doughnut)
+  const appointmentStatusData = useMemo(() => {
+    let completed = stats?.weekCompleted || 0;
+    let cancelled = stats?.weekCancelled || 0;
+
+    // TODO: Mock data for demonstration if empty
+    if (completed === 0 && cancelled === 0) {
+      completed = 85;
+      cancelled = 15;
+    }
 
     return {
-      labels: ['Thiếu bác sĩ', 'Yêu cầu đổi lịch', 'Quá hạn xử lý', 'Sắp đến giờ'],
+      labels: [t('staff:dashboard.charts.completed'), t('staff:dashboard.charts.cancelled')],
       datasets: [
         {
-          label: 'Số lượng hồ sơ',
-          data: [counts.NO_DOCTOR, counts.RESCHEDULE_PENDING, counts.OVERDUE, counts.COMING_SOON],
-          backgroundColor: [
-            '#ef4444', // Red for NO_DOCTOR
-            '#a855f7', // Purple for RESCHEDULE
-            '#f97316', // Orange for OVERDUE
-            '#eab308', // Yellow for COMING_SOON
-          ],
-          borderRadius: 4,
-          barThickness: 20,
+          data: [completed, cancelled],
+          backgroundColor: ['#10b981', '#ef4444'], // Green for Completed, Red for Cancelled
+          borderWidth: 0,
+          hoverBackgroundColor: ['#10b981', '#ef4444'],
         },
       ],
     };
-  }, [urgentAppointments]);
+  }, [stats, t]);
 
-  const barOptions = {
-    indexAxis: 'y', // Horizontal bar
+  const doughnutOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    cutout: '70%',
     plugins: {
-      legend: { display: false },
+      legend: {
+        position: 'bottom',
+        display: true,
+        labels: {
+          font: { family: "'Inter', sans-serif", size: 12 },
+          usePointStyle: true,
+          padding: 20,
+        },
+      },
       tooltip: {
         backgroundColor: '#1e293b',
         padding: 12,
         titleFont: { family: "'Inter', sans-serif", size: 13 },
         bodyFont: { family: "'Inter', sans-serif", size: 13 },
         displayColors: false,
-      },
-    },
-    scales: {
-      x: {
-        beginAtZero: true,
-        grid: { display: false },
-        ticks: { stepSize: 1, font: { family: "'Inter', sans-serif" }, color: '#94a3b8' },
-        border: { display: false },
-      },
-      y: {
-        grid: { display: false },
-        ticks: { font: { family: "'Inter', sans-serif", weight: 500 }, color: '#475569' },
-        border: { display: false },
+        callbacks: {
+          label: (context) =>
+            ` ${context.label}: ${context.parsed} ${t('staff:dashboard.charts.cases')}`,
+        },
       },
     },
   };
@@ -94,10 +86,18 @@ const DashboardCharts = ({ urgentAppointments }) => {
   // 2. Mock Data for Weekly Activity (Line Chart)
   // Focusing on "Performance" contexts
   const weeklyData = {
-    labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'],
+    labels: [
+      t('staff:common.calendar.mon'),
+      t('staff:common.calendar.tue'),
+      t('staff:common.calendar.wed'),
+      t('staff:common.calendar.thu'),
+      t('staff:common.calendar.fri'),
+      t('staff:common.calendar.sat'),
+      t('staff:common.calendar.sun'),
+    ],
     datasets: [
       {
-        label: 'Đã xử lý',
+        label: t('staff:dashboard.charts.processed'),
         data: [45, 52, 38, 65, 48, 60, 40],
         borderColor: '#3b82f6', // Blue
         backgroundColor: (context) => {
@@ -129,7 +129,7 @@ const DashboardCharts = ({ urgentAppointments }) => {
         bodyFont: { family: "'Inter', sans-serif", size: 13 },
         displayColors: false,
         callbacks: {
-          label: (context) => `${context.parsed.y} hồ sơ`,
+          label: (context) => `${context.parsed.y} ${t('staff:dashboard.charts.cases')}`,
         },
       },
     },
@@ -159,10 +159,12 @@ const DashboardCharts = ({ urgentAppointments }) => {
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-slate-700 font-semibold flex items-center gap-2 m-0">
             <span className="w-2 h-6 bg-blue-500 rounded-full"></span>
-            Hiệu suất xử lý tuần này
+            {t('staff:dashboard.charts.weeklyPerformance')}
           </h3>
           <div className="text-right">
-            <span className="text-xs text-slate-400 block">Tổng hồ sơ đã xử lý</span>
+            <span className="text-xs text-slate-400 block">
+              {t('staff:dashboard.charts.totalProcessed')}
+            </span>
             <span className="text-xl font-bold text-slate-700">348</span>
           </div>
         </div>
@@ -171,23 +173,16 @@ const DashboardCharts = ({ urgentAppointments }) => {
         </div>
       </div>
 
-      {/* Bar Chart: Urgency Analysis */}
+      {/* Doughnut Chart: Appointment Status */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-slate-700 font-semibold flex items-center gap-2 m-0">
-            <span className="w-2 h-6 bg-red-500 rounded-full"></span>
-            Vấn đề cần tập trung
+            <span className="w-2 h-6 bg-emerald-500 rounded-full"></span>
+            {t('staff:dashboard.charts.appointmentStatus')}
           </h3>
         </div>
-        <div className="h-[250px]">
-          {urgentAppointments.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-slate-400">
-              <span className="text-4xl mb-2">🎉</span>
-              <span className="text-sm">Không có vấn đề cần xử lý</span>
-            </div>
-          ) : (
-            <Bar data={urgencyData} options={barOptions} />
-          )}
+        <div className="h-[250px] flex items-center justify-center">
+          <Doughnut data={appointmentStatusData} options={doughnutOptions} />
         </div>
       </div>
     </div>

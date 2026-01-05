@@ -12,81 +12,83 @@ import java.util.Optional;
 @Repository
 public interface VaccineRecordRepository extends JpaRepository<VaccineRecord, Long> {
 
-    List<VaccineRecord> findByUserIdOrderByVaccinationDateDesc(Long userId);
+        List<VaccineRecord> findByUserIdOrderByVaccinationDateDesc(Long userId);
 
-    List<VaccineRecord> findByFamilyMemberIdOrderByVaccinationDateDesc(Long familyMemberId);
+        List<VaccineRecord> findByFamilyMemberIdOrderByVaccinationDateDesc(Long familyMemberId);
 
-    Optional<VaccineRecord> findByAppointmentId(Long appointmentId);
+        Optional<VaccineRecord> findByAppointmentId(Long appointmentId);
 
-    Optional<VaccineRecord> findByPatientIdentityHash(String identityHash);
+        Optional<VaccineRecord> findByPatientIdentityHash(String identityHash);
 
-    List<VaccineRecord> findByVaccineId(Long vaccineId);
+        List<VaccineRecord> findByVaccineId(Long vaccineId);
 
-    Optional<VaccineRecord> findByTransactionHash(String txHash);
+        Optional<VaccineRecord> findByTransactionHash(String txHash);
 
-    List<VaccineRecord> findByIsVerifiedTrue();
+        List<VaccineRecord> findByIsVerifiedTrue();
 
-    List<VaccineRecord> findByIsVerifiedFalse();
+        List<VaccineRecord> findByIsVerifiedFalse();
 
-    @Query("""
-            SELECT vr FROM VaccineRecord vr
-            WHERE (vr.user.id = :userId OR vr.familyMember.id = :familyMemberId)
-            ORDER BY vr.vaccinationDate DESC
-            """)
-    List<VaccineRecord> findVaccineHistory(
-            @Param("userId") Long userId,
-            @Param("familyMemberId") Long familyMemberId);
+        @Query("""
+                        SELECT vr FROM VaccineRecord vr
+                        WHERE (vr.user.id = :userId OR vr.familyMember.id = :familyMemberId)
+                        ORDER BY vr.vaccinationDate DESC
+                        """)
+        List<VaccineRecord> findVaccineHistory(
+                        @Param("userId") Long userId,
+                        @Param("familyMemberId") Long familyMemberId);
 
-    long countByUserId(Long userId);
+        long countByUserId(Long userId);
 
-    long countByFamilyMemberId(Long familyMemberId);
+        long countByFamilyMemberId(Long familyMemberId);
 
-    @Query("""
-            SELECT vr FROM VaccineRecord vr
-            WHERE vr.followUpDate IS NOT NULL
-            AND vr.followUpDate <= CURRENT_DATE
-            AND vr.center.id = :centerId
-            """)
-    List<VaccineRecord> findRecordsNeedingFollowUp(@Param("centerId") Long centerId);
+        @Query("""
+                        SELECT vr FROM VaccineRecord vr
+                        WHERE vr.followUpDate IS NOT NULL
+                        AND vr.followUpDate <= CURRENT_DATE
+                        AND vr.center.id = :centerId
+                        """)
+        List<VaccineRecord> findRecordsNeedingFollowUp(@Param("centerId") Long centerId);
 
-    List<VaccineRecord> findByDoctor_IdOrderByVaccinationDateDesc(Long doctorId);
+        List<VaccineRecord> findByDoctor_IdOrderByVaccinationDateDesc(Long doctorId);
 
-    List<VaccineRecord> findByCenter_CenterIdOrderByVaccinationDateDesc(Long centerId);
+        List<VaccineRecord> findByCenter_CenterIdOrderByVaccinationDateDesc(Long centerId);
 
-    Optional<VaccineRecord> findByIpfsHash(String ipfsHash);
+        Optional<VaccineRecord> findByIpfsHash(String ipfsHash);
 
-    // Filter by vaccine slug and dose number
-    @Query("""
-            SELECT vr FROM VaccineRecord vr
-            WHERE vr.vaccine.slug = :vaccineSlug
-            AND vr.doseNumber = :doseNumber
-            AND vr.patientIdentityHash = :identityHash
-            AND vr.isVerified = true
-            ORDER BY vr.vaccinationDate DESC
-            """)
-    Optional<VaccineRecord> findVerifiedByVaccineSlugAndDoseAndIdentity(
-            @Param("vaccineSlug") String vaccineSlug,
-            @Param("doseNumber") int doseNumber,
-            @Param("identityHash") String identityHash);
+        // Filter by vaccine slug and dose number
+        @Query("""
+                        SELECT vr FROM VaccineRecord vr
+                        WHERE vr.vaccine.slug = :vaccineSlug
+                        AND vr.doseNumber = :doseNumber
+                        AND vr.patientIdentityHash = :identityHash
+                        AND vr.isVerified = true
+                        ORDER BY vr.vaccinationDate DESC
+                        """)
+        Optional<VaccineRecord> findVerifiedByVaccineSlugAndDoseAndIdentity(
+                        @Param("vaccineSlug") String vaccineSlug,
+                        @Param("doseNumber") int doseNumber,
+                        @Param("identityHash") String identityHash);
 
-    // Find all verified records by identity hash
-    @Query("""
-            SELECT vr FROM VaccineRecord vr
-            WHERE vr.patientIdentityHash = :identityHash
-            AND vr.isVerified = true
-            ORDER BY vr.vaccinationDate DESC
-            """)
-    List<VaccineRecord> findVerifiedByIdentityHash(@Param("identityHash") String identityHash);
+        // Find all verified records by identity hash
+        @Query("""
+                        SELECT vr FROM VaccineRecord vr
+                        WHERE vr.patientIdentityHash = :identityHash
+                        AND vr.isVerified = true
+                        ORDER BY vr.vaccinationDate DESC
+                        """)
+        List<VaccineRecord> findVerifiedByIdentityHash(@Param("identityHash") String identityHash);
 
-    // Find records by vaccine slug and identity hash (all doses)
-    @Query("""
-            SELECT vr FROM VaccineRecord vr
-            WHERE vr.vaccine.slug = :vaccineSlug
-            AND vr.patientIdentityHash = :identityHash
-            AND vr.isVerified = true
-            ORDER BY vr.doseNumber ASC
-            """)
-    List<VaccineRecord> findVerifiedByVaccineSlugAndIdentity(
-            @Param("vaccineSlug") String vaccineSlug,
-            @Param("identityHash") String identityHash);
+        // Find records by vaccine slug and identity hash (all doses)
+        @Query("""
+                        SELECT vr FROM VaccineRecord vr
+                        WHERE vr.vaccine.slug = :vaccineSlug
+                        AND vr.patientIdentityHash = :identityHash
+                        AND vr.isVerified = true
+                        ORDER BY vr.doseNumber ASC
+                        """)
+        List<VaccineRecord> findVerifiedByVaccineSlugAndIdentity(
+                        @Param("vaccineSlug") String vaccineSlug,
+                        @Param("identityHash") String identityHash);
+
+        Optional<VaccineRecord> findByBlockchainRecordId(String blockchainRecordId);
 }

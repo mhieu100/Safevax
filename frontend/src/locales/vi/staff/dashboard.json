@@ -7,7 +7,29 @@
   "error": {
     "load": "Không thể tải dữ liệu Dashboard"
   },
+  "charts": {
+    "noDoctor": "Thiếu bác sĩ",
+    "reschedulePending": "Yêu cầu đổi lịch",
+    "overdue": "Quá hạn xử lý",
+    "comingSoon": "Sắp đến giờ",
+    "caseCount": "Số lượng hồ sơ",
+    "processed": "Đã xử lý",
+    "cases": "hồ sơ",
+    "weeklyPerformance": "Hiệu suất xử lý tuần này",
+    "totalProcessed": "Tổng hồ sơ đã xử lý",
+    "focusAreas": "Vấn đề cần tập trung",
+    "noIssues": "Không có vấn đề cần xử lý",
+    "appointmentStatus": "Trạng thái lịch hẹn",
+    "completed": "Thành công",
+    "cancelled": "Thất bại",
+    "noData": "Không có dữ liệu"
+  },
   "stats": {
+    "urgentCount": "Cần Xử Lý Gấp",
+    "todayCount": "Lịch Hôm Nay",
+    "completedCount": "Đã Hoàn Thành",
+    "cancelledCount": "Đã Hủy",
+    "appointments": "lịch hẹn",
     "urgent": {
       "title": "Cần Xử Lý Gấp",
       "suffix": "lịch hẹn",
@@ -44,10 +66,8 @@
     "dose": "Mũi {{number}}",
     "urgencyMessage": "Cần xử lý",
     "changeTo": "Đổi sang:",
-    "empty": {
-      "title": "Không có việc gấp!",
-      "desc": "Hệ thống đang hoạt động ổn định."
-    },
+    "empty": "Không có lịch hẹn cần xử lý ngay.",
+    "process": "Xử Lý",
     "actions": {
       "process": "Xử Lý",
       "detail": "Chi Tiết"
@@ -57,7 +77,8 @@
     "title": "Thao Tác Nhanh",
     "viewDoctorSchedule": "Xem Lịch Bác Sĩ",
     "pendingList": "Danh Sách Chờ",
-    "assignedList": "Đã Phân Công"
+    "assignedList": "Đã Phân Công",
+    "assigned": "Đã Phân Công"
   },
   "urgencyGuide": {
     "title": "Hướng Dẫn Ưu Tiên",

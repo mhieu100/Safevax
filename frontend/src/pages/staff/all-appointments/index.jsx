@@ -4,14 +4,12 @@ import {
   ClockCircleOutlined,
   CloseCircleOutlined,
   EditOutlined,
-  FilterOutlined,
   PhoneOutlined,
   ReloadOutlined,
   ScheduleOutlined,
-  SearchOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, Card, Input, Select, Space, Tag, Tooltip, Typography } from 'antd';
+import { Avatar, Button, Card, Space, Tag, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import queryString from 'query-string';
 import { useRef, useState } from 'react';
@@ -23,7 +21,6 @@ import {
   AppointmentStatus,
   formatPaymentAmount,
   getAppointmentStatusColor,
-  getAppointmentStatusDisplay,
   getPaymentStatusColor,
   PaymentStatus,
 } from '@/constants/enums';
@@ -31,7 +28,6 @@ import { useAppointmentStore } from '@/stores/useAppointmentStore';
 import AppointmentDetailModal from '../pending-appointment/AppointmentDetailModal';
 
 const { Text } = Typography;
-const { Option } = Select;
 
 const AllAppointmentsPage = () => {
   const { t } = useTranslation(['staff']);
@@ -44,8 +40,8 @@ const AllAppointmentsPage = () => {
 
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [detailAppointmentId, setDetailAppointmentId] = useState(null);
-  const [searchText, setSearchText] = useState('');
-  const [statusFilter, setStatusFilter] = useState(null);
+  const [_searchText, _setSearchText] = useState('');
+  const [_statusFilter, setStatusFilter] = useState(null);
 
   const reloadTable = () => {
     tableRef?.current?.reload();
@@ -169,7 +165,7 @@ const AllAppointmentsPage = () => {
           icon={getStatusIcon(status)}
           className="flex items-center gap-1 w-fit"
         >
-          {getAppointmentStatusDisplay(status)}
+          {t(`staff:appointments.status.${status}`)}
         </Tag>
       ),
     },
@@ -250,11 +246,11 @@ const AllAppointmentsPage = () => {
     return queryString.stringify(q);
   };
 
-  const handleSearch = () => {
+  const _handleSearch = () => {
     reloadTable();
   };
 
-  const handleStatusChange = (value) => {
+  const _handleStatusChange = (value) => {
     setStatusFilter(value);
     setTimeout(() => reloadTable(), 0);
   };
@@ -277,46 +273,6 @@ const AllAppointmentsPage = () => {
           </Button>
         }
       >
-        {/* Filter Bar */}
-        <div className="mb-4 flex flex-wrap gap-3">
-          <Input
-            placeholder={t('staff:appointments.searchAppointment')}
-            prefix={<SearchOutlined />}
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            onPressEnter={handleSearch}
-            style={{ width: 250 }}
-            allowClear
-          />
-          <Select
-            placeholder={t('staff:appointments.columns.status')}
-            value={statusFilter}
-            onChange={handleStatusChange}
-            style={{ width: 180 }}
-            allowClear
-            suffixIcon={<FilterOutlined />}
-          >
-            <Option value={AppointmentStatus.PENDING}>
-              {getAppointmentStatusDisplay(AppointmentStatus.PENDING)}
-            </Option>
-            <Option value={AppointmentStatus.RESCHEDULE}>
-              {getAppointmentStatusDisplay(AppointmentStatus.RESCHEDULE)}
-            </Option>
-            <Option value={AppointmentStatus.SCHEDULED}>
-              {getAppointmentStatusDisplay(AppointmentStatus.SCHEDULED)}
-            </Option>
-            <Option value={AppointmentStatus.COMPLETED}>
-              {getAppointmentStatusDisplay(AppointmentStatus.COMPLETED)}
-            </Option>
-            <Option value={AppointmentStatus.CANCELLED}>
-              {getAppointmentStatusDisplay(AppointmentStatus.CANCELLED)}
-            </Option>
-          </Select>
-          <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
-            {t('staff:appointments.searchAppointment').split('...')[0]}
-          </Button>
-        </div>
-
         <DataTable
           actionRef={tableRef}
           rowKey="id"

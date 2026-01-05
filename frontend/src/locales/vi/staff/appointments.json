@@ -2,10 +2,67 @@
   "title": "Quản lý Lịch hẹn",
   "titleList": "Danh Sách Lịch Hẹn",
   "refresh": "Làm mới",
+  "completion": {
+    "title": "Quy trình hoàn thành tiêm chủng",
+    "steps": {
+      "vitals": "Chỉ số sinh tồn",
+      "info": "Thông tin & Phản ứng",
+      "confirm": "Xác nhận"
+    },
+    "alerts": {
+      "vitalsUpdate": {
+        "message": "Cập nhật chỉ số sức khỏe",
+        "description": "Hệ thống sẽ tự động cập nhật cân nặng và chiều cao vào hồ sơ bệnh nhân."
+      },
+      "irreversible": {
+        "message": "Hành động này không thể hoàn tác",
+        "description": "Vui lòng kiểm tra kỹ các thông tin chỉ số sinh tồn và phản ứng trước khi xác nhận."
+      }
+    },
+    "fields": {
+      "weight": "Cân nặng (kg)",
+      "weightReq": "Nhập cân nặng",
+      "height": "Chiều cao (cm)",
+      "heightReq": "Nhập chiều cao",
+      "temperature": "Nhiệt độ (°C)",
+      "bloodPressure": "Huyết áp (mmHg)",
+      "heartRate": "Nhịp tim (bpm)",
+      "site": "Vị trí tiêm",
+      "reactionType": "Loại phản ứng (nếu có)",
+      "reactionTypePlaceholder": "Chọn loại phản ứng",
+      "reactionDetail": "Mô tả chi tiết phản ứng",
+      "reactionPlaceholder": "Mô tả chi tiết triệu chứng, thời điểm xuất hiện...",
+      "notes": "Ghi chú khác",
+      "notesPlaceholder": "Ghi chú thêm về quy trình tiêm..."
+    },
+    "options": {
+      "leftArm": "Bắp tay trái",
+      "rightArm": "Bắp tay phải",
+      "leftThigh": "Đùi trái",
+      "rightThigh": "Đùi phải",
+      "none": "Không có",
+      "fever": "Sốt nhẹ",
+      "pain": "Đau tại chỗ tiêm",
+      "allergy": "Dị ứng",
+      "shock": "Sốc phản vệ (Nguy hiểm)"
+    },
+    "confirm": {
+      "title": "Xác nhận hoàn thành tiêm chủng",
+      "text": "Bạn đang xác nhận đã tiêm vắc-xin {{vaccine}} cho bệnh nhân {{patient}}.",
+      "button": "Xác nhận hoàn thành"
+    },
+    "success": "Đã hoàn thành tiêm chủng và ghi nhận chỉ số!"
+  },
   "columns": {
     "code": "Mã LH",
+    "index": "STT",
     "patient": "Bệnh Nhân",
     "vaccine": "Vaccine",
+    "center": "Trung Tâm",
+    "doctor": "Bác Sĩ",
+    "cashier": "Thu Ngân",
+    "injectionDate": "Ngày Tiêm",
+    "injectionTime": "Giờ Tiêm",
     "registerDate": "Ngày Đăng Ký",
     "officialDate": "Ngày Chính Thức",
     "centerDoctor": "Trung Tâm / Bác Sĩ",
@@ -13,6 +70,7 @@
     "payment": "Thanh Toán",
     "actions": "Hành Động"
   },
+  "todayList": "Danh sách lịch hẹn hôm nay",
   "tags": {
     "editSchedule": "Đổi lịch",
     "urgent": "GẤP",
@@ -20,7 +78,8 @@
     "rescheduledAt": "Đổi lúc:",
     "officialTime": "Giờ chính thức:",
     "waitingDoctor": "Chờ chỉ định bác sĩ...",
-    "assigned": "Đã phân công"
+    "assigned": "Đã phân công",
+    "update": "Cập nhật"
   },
   "payment": {
     "success": "Thành công",
@@ -30,6 +89,8 @@
     "unpaid": "Chưa thanh toán"
   },
   "actions": {
+    "confirm": "Xác nhận",
+    "cancelAppointment": "Hủy lịch hẹn",
     "approveReschedule": "Duyệt Đổi Lịch",
     "rescheduleRequest": "Yêu cầu đổi lịch",
     "assignTooltip": "Phân công lịch hẹn cho bác sĩ",
@@ -57,5 +118,12 @@
   "cancelSuccess": "Hủy lịch hẹn thành công",
   "completeSuccess": "Hoàn thành lịch hẹn thành công",
   "assignSuccess": "Phân công lịch hẹn thành công",
-  "rescheduleSuccess": "Đổi lịch hẹn thành công"
+  "rescheduleSuccess": "Đổi lịch hẹn thành công",
+  "status": {
+    "PENDING": "Chờ phân công",
+    "RESCHEDULE": "Chờ duyệt đổi lịch",
+    "SCHEDULED": "Đã phân công",
+    "COMPLETED": "Hoàn thành",
+    "CANCELLED": "Đã hủy"
+  }
 }

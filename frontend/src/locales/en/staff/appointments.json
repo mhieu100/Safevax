@@ -2,10 +2,67 @@
   "title": "Appointment Management",
   "titleList": "Appointment List",
   "refresh": "Refresh",
+  "completion": {
+    "title": "Vaccination Completion Process",
+    "steps": {
+      "vitals": "Vital Signs",
+      "info": "Info & Reactions",
+      "confirm": "Confirm"
+    },
+    "alerts": {
+      "vitalsUpdate": {
+        "message": "Update Health Indicators",
+        "description": "System will automatically update weight and height to patient records."
+      },
+      "irreversible": {
+        "message": "This action cannot be undone",
+        "description": "Please double check vital signs and reaction info before confirming."
+      }
+    },
+    "fields": {
+      "weight": "Weight (kg)",
+      "weightReq": "Enter weight",
+      "height": "Height (cm)",
+      "heightReq": "Enter height",
+      "temperature": "Temperature (°C)",
+      "bloodPressure": "Blood Pressure (mmHg)",
+      "heartRate": "Heart Rate (bpm)",
+      "site": "Injection Site",
+      "reactionType": "Reaction Type (if any)",
+      "reactionTypePlaceholder": "Select reaction type",
+      "reactionDetail": "Detailed Reaction Description",
+      "reactionPlaceholder": "Describe symptoms details, time of appearance...",
+      "notes": "Other Notes",
+      "notesPlaceholder": "Additional notes about vaccination process..."
+    },
+    "options": {
+      "leftArm": "Left Arm",
+      "rightArm": "Right Arm",
+      "leftThigh": "Left Thigh",
+      "rightThigh": "Right Thigh",
+      "none": "None",
+      "fever": "Mild Fever",
+      "pain": "Pain at injection site",
+      "allergy": "Allergy",
+      "shock": "Anaphylaxis (Dangerous)"
+    },
+    "confirm": {
+      "title": "Confirm Vaccination Completion",
+      "text": "You are confirming vaccination of vaccine {{vaccine}} for patient {{patient}}.",
+      "button": "Confirm Completion"
+    },
+    "success": "Vaccination completed and indicators recorded!"
+  },
   "columns": {
     "code": "Appt Code",
+    "index": "No.",
     "patient": "Patient",
     "vaccine": "Vaccine",
+    "center": "Center",
+    "doctor": "Doctor",
+    "cashier": "Cashier",
+    "injectionDate": "Injection Date",
+    "injectionTime": "Injection Time",
     "registerDate": "Register Date",
     "officialDate": "Official Date",
     "centerDoctor": "Center / Doctor",
@@ -13,6 +70,7 @@
     "payment": "Payment",
     "actions": "Actions"
   },
+  "todayList": "Today's Appointment List",
   "tags": {
     "editSchedule": "Reschedule",
     "urgent": "URGENT",
@@ -20,7 +78,8 @@
     "rescheduledAt": "Rescheduled at:",
     "officialTime": "Official Time:",
     "waitingDoctor": "Waiting for doctor assignment...",
-    "assigned": "Assigned"
+    "assigned": "Assigned",
+    "update": "Update"
   },
   "payment": {
     "success": "Success",
@@ -30,6 +89,8 @@
     "unpaid": "Unpaid"
   },
   "actions": {
+    "confirm": "Confirm",
+    "cancelAppointment": "Cancel Appointment",
     "approveReschedule": "Approve Reschedule",
     "rescheduleRequest": "Reschedule Request",
     "assignTooltip": "Assign appointment to doctor",
@@ -57,5 +118,12 @@
   "cancelSuccess": "Appointment cancelled successfully",
   "completeSuccess": "Appointment completed successfully",
   "assignSuccess": "Appointment assigned successfully",
-  "rescheduleSuccess": "Appointment rescheduled successfully"
+  "rescheduleSuccess": "Appointment rescheduled successfully",
+  "status": {
+    "PENDING": "Pending Assignment",
+    "RESCHEDULE": "Reschedule Requested",
+    "SCHEDULED": "Assigned",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled"
+  }
 }

@@ -1,0 +1,94 @@
+{
+  "title": "Đặt lịch Walk-in - Chọn bệnh nhân",
+  "error": {
+    "title": "Lỗi",
+    "loadPatients": "Không thể tải danh sách bệnh nhân"
+  },
+  "columns": {
+    "index": "STT",
+    "fullName": "Họ tên",
+    "email": "Email",
+    "phone": "Điện thoại",
+    "address": "Địa chỉ",
+    "dob": "Ngày sinh",
+    "actions": "Thao tác"
+  },
+  "actions": {
+    "book": "Đặt lịch tiêm chủng"
+  },
+  "pagination": {
+    "range": "{{range0}}-{{range1}} trên tổng số {{total}} dòng"
+  },
+  "modal": {
+    "title": "Đặt lịch tiêm chủng Walk-in",
+    "okText": "Xác nhận đặt lịch",
+    "cancelText": "Hủy"
+  },
+  "patientInfo": {
+    "patient": "Bệnh nhân",
+    "email": "Email",
+    "phone": "SĐT"
+  },
+  "form": {
+    "appointmentFor": {
+      "label": "Đặt lịch cho",
+      "self": "Bản thân",
+      "family": "Người thân"
+    },
+    "familyMember": {
+      "label": "Chọn người thân",
+      "placeholder": "Chọn thành viên gia đình",
+      "required": "Vui lòng chọn người thân"
+    },
+    "vaccine": {
+      "label": "Chọn vắc xin",
+      "placeholder": "Chọn vắc xin",
+      "required": "Vui lòng chọn vắc xin"
+    },
+    "center": {
+      "label": "Trung tâm",
+      "placeholder": "Chọn trung tâm",
+      "required": "Vui lòng chọn trung tâm"
+    },
+    "date": {
+      "label": "Ngày hẹn",
+      "placeholder": "Chọn ngày hẹn",
+      "required": "Vui lòng chọn ngày hẹn"
+    },
+    "time": {
+      "label": "Khung giờ",
+      "placeholder": "Chọn khung giờ",
+      "required": "Vui lòng chọn khung giờ"
+    },
+    "doctor": {
+      "label": "Chọn bác sĩ",
+      "hint": "(Chọn khung giờ trên để xem lịch bác sĩ)",
+      "required": "Vui lòng chọn bác sĩ",
+      "tooltip": "Sau khi chọn trung tâm, ngày và khung giờ, danh sách bác sĩ trống sẽ hiển thị"
+    },
+    "notes": {
+      "label": "Ghi chú (không bắt buộc)",
+      "placeholder": "Ghi chú thêm về lịch hẹn..."
+    },
+    "payment": "Phương thức thanh toán: Tiền mặt (CASH)"
+  },
+  "messages": {
+    "noPatient": "Không có thông tin bệnh nhân",
+    "selectDoctor": "Vui lòng chọn bác sĩ",
+    "successTitle": "Thành công",
+    "successDesc": "Đặt lịch thành công cho bệnh nhân {{patientName}} với Bs. {{doctorName}}",
+    "errorTitle": "Lỗi",
+    "bookingFailed": "Không thể đặt lịch",
+    "loadVaccines": "Không thể tải danh sách vắc xin",
+    "loadCenters": "Không thể tải danh sách trung tâm",
+    "loadSlots": "Không thể tải lịch trống"
+  },
+  "slots": {
+    "loading": "Đang tải lịch bác sĩ...",
+    "empty": "Không có bác sĩ trống trong khung giờ {{slot}}",
+    "emptyHint": "Chọn trung tâm, ngày và khung giờ để xem lịch bác sĩ",
+    "emptyDetail": "Không có bác sĩ nào có slot trống trong khung giờ này",
+    "available": "Trống",
+    "booked": "Đã đặt"
+  }
+}
