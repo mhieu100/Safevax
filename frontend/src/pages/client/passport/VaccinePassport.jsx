@@ -134,22 +134,17 @@ const WalletVaccinePassport = () => {
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
-      message.success(
-        t(
-          'client:records.vaccinePassport.downloadSuccess',
-          'Vaccine passport downloaded successfully'
-        )
-      );
+      message.success(t('client:records.vaccinePassport.downloadSuccess'));
     } catch (err) {
       console.error('Failed to download vaccine passport', err);
-      message.error(t('client:records.vaccinePassport.downloadError', 'Failed to download PDF'));
+      message.error(t('client:records.vaccinePassport.downloadError'));
     }
   };
 
   const handleCopyLink = (record) => {
     if (record.ipfsHash) {
       navigator.clipboard.writeText(`https://safevax.mhieu100.space/verify/${record.ipfsHash}`);
-      message.success('Verification link copied to clipboard');
+      message.success(t('client:records.vaccinePassport.copyLinkSuccess'));
     }
   };
 
@@ -162,7 +157,7 @@ const WalletVaccinePassport = () => {
           : familyMembers.find((f) => f.id === activeTab)?.blockchainIdentityHash;
 
     if (!identityHash) {
-      message.error('No blockchain identity found for this user.');
+      message.error(t('client:records.vaccinePassport.noIdentityFound'));
       return;
     }
 
@@ -182,10 +177,10 @@ const WalletVaccinePassport = () => {
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
-      message.success('Full history exported successfully');
+      message.success(t('client:records.vaccinePassport.fullHistoryExportSuccess'));
     } catch (err) {
       console.error(err);
-      message.error('Failed to export history');
+      message.error(t('client:records.vaccinePassport.exportFailed'));
     }
   };
 
@@ -204,7 +199,7 @@ const WalletVaccinePassport = () => {
             <div className="font-semibold text-slate-800 line-clamp-1">{text}</div>
             <div className="flex items-center gap-2 mt-1">
               <Tag color="blue" className="rounded-full text-xs px-2 m-0">
-                Dose #{record.doseNumber}
+                {t('client:records.vaccinePassport.dose')} #{record.doseNumber}
               </Tag>
             </div>
           </div>
@@ -238,7 +233,7 @@ const WalletVaccinePassport = () => {
       width: 110,
       render: (site) => (
         <Tag className="rounded-lg border-0 bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700 font-medium px-3 py-1">
-          {site?.replace('_', ' ') || 'N/A'}
+          {site?.replace('_', ' ') || t('client:records.vaccinePassport.notAvailable')}
         </Tag>
       ),
     },
@@ -251,7 +246,7 @@ const WalletVaccinePassport = () => {
         <div className="flex items-center gap-2">
           <GlobalOutlined className="text-slate-400" />
           <Text className="text-slate-600 line-clamp-2" title={name}>
-            {name || 'N/A'}
+            {name || t('client:records.vaccinePassport.notAvailable')}
           </Text>
         </div>
       ),
@@ -277,7 +272,7 @@ const WalletVaccinePassport = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small" wrap>
-          <Tooltip title="Download PDF Passport">
+          <Tooltip title={t('client:records.vaccinePassport.tooltipDownload')}>
             <Button
               type="primary"
               size="small"
@@ -288,7 +283,7 @@ const WalletVaccinePassport = () => {
           </Tooltip>
           {(record.transactionHash || record.blockchainRecordId) && (
             <>
-              <Tooltip title="Show QR Code">
+              <Tooltip title={t('client:records.vaccinePassport.tooltipShowQR')}>
                 <Button
                   size="small"
                   icon={<QrcodeOutlined />}
@@ -296,7 +291,7 @@ const WalletVaccinePassport = () => {
                   className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:border-purple-300"
                 />
               </Tooltip>
-              <Tooltip title="Copy Verification Link">
+              <Tooltip title={t('client:records.vaccinePassport.tooltipCopyLink')}>
                 <Button
                   size="small"
                   icon={<ShareAltOutlined />}
@@ -304,7 +299,7 @@ const WalletVaccinePassport = () => {
                   className="border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:border-emerald-300"
                 />
               </Tooltip>
-              <Tooltip title="Verify on Blockchain">
+              <Tooltip title={t('client:records.vaccinePassport.tooltipVerify')}>
                 <Button
                   size="small"
                   icon={<SafetyCertificateOutlined />}
@@ -330,7 +325,7 @@ const WalletVaccinePassport = () => {
           <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
             <UserOutlined className="text-blue-600 text-xs" />
           </div>
-          <span>My Records</span>
+          <span>{t('client:records.vaccinePassport.myRecords')}</span>
         </span>
       ),
     },
@@ -367,16 +362,17 @@ const WalletVaccinePassport = () => {
                   level={2}
                   className="!mb-1 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
                 >
-                  Vaccine Passport
+                  {t('client:records.vaccinePassport.title')}
                 </Title>
                 <Text className="text-slate-500">
-                  Your digital vaccination records secured by blockchain technology
+                  {t('client:records.vaccinePassport.headerDesc')}
                 </Text>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Tag className="rounded-full px-4 py-1 bg-emerald-50 text-emerald-600 border-emerald-200 font-medium">
-                <CheckCircleFilled className="mr-1" /> {verifiedRecords.length} Verified
+                <CheckCircleFilled className="mr-1" /> {verifiedRecords.length}{' '}
+                {t('client:records.vaccinePassport.statsVerified')}
               </Tag>
             </div>
           </div>
@@ -403,7 +399,7 @@ const WalletVaccinePassport = () => {
             />
             <div className="text-center mt-4">
               <Text className="text-slate-400 text-xs">
-                Scan this QR code to verify your complete vaccination history on the blockchain.
+                {t('client:records.vaccinePassport.scanQR')}
               </Text>
             </div>
             <div className="mt-4">
@@ -414,7 +410,7 @@ const WalletVaccinePassport = () => {
                 onClick={handleExportFullHistory}
                 className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300 h-10 font-medium"
               >
-                Export Vaccine Passport (PDF)
+                {t('client:records.vaccinePassport.exportPdfBtn')}
               </Button>
             </div>
           </div>
@@ -426,13 +422,17 @@ const WalletVaccinePassport = () => {
               <Card className="rounded-xl shadow-sm border-0 bg-white/60 backdrop-blur">
                 <div className="text-center p-2">
                   <div className="text-2xl font-bold text-slate-800">{records.length}</div>
-                  <Text className="text-[10px] uppercase text-slate-400 font-bold">Records</Text>
+                  <Text className="text-[10px] uppercase text-slate-400 font-bold">
+                    {t('client:records.vaccinePassport.statsRecords')}
+                  </Text>
                 </div>
               </Card>
               <Card className="rounded-xl shadow-sm border-0 bg-white/60 backdrop-blur">
                 <div className="text-center p-2">
                   <div className="text-2xl font-bold text-slate-800">{verifiedRecords.length}</div>
-                  <Text className="text-[10px] uppercase text-emerald-500 font-bold">Verified</Text>
+                  <Text className="text-[10px] uppercase text-emerald-500 font-bold">
+                    {t('client:records.vaccinePassport.statsVerified')}
+                  </Text>
                 </div>
               </Card>
               <Card className="rounded-xl shadow-sm border-0 bg-white/60 backdrop-blur">
@@ -440,7 +440,9 @@ const WalletVaccinePassport = () => {
                   <div className="text-2xl font-bold text-slate-800">
                     {new Set(records.map((r) => r.vaccineName)).size}
                   </div>
-                  <Text className="text-[10px] uppercase text-slate-400 font-bold">Vaccines</Text>
+                  <Text className="text-[10px] uppercase text-slate-400 font-bold">
+                    {t('client:records.vaccinePassport.statsVaccines')}
+                  </Text>
                 </div>
               </Card>
               <Card className="rounded-xl shadow-sm border-0 bg-white/60 backdrop-blur">
@@ -450,9 +452,11 @@ const WalletVaccinePassport = () => {
                       ? new Date(
                           Math.max(...records.map((r) => new Date(r.vaccinationDate)))
                         ).toLocaleDateString(i18n.language, { month: 'short', year: '2-digit' })
-                      : 'N/A'}
+                      : t('client:records.vaccinePassport.notAvailable')}
                   </div>
-                  <Text className="text-[10px] uppercase text-slate-400 font-bold">Last Dose</Text>
+                  <Text className="text-[10px] uppercase text-slate-400 font-bold">
+                    {t('client:records.vaccinePassport.statsLastDose')}
+                  </Text>
                 </div>
               </Card>
             </div>
@@ -492,10 +496,10 @@ const WalletVaccinePassport = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Title level={4} className="!mb-1">
-                      Vaccination Records
+                      {t('client:records.vaccinePassport.recordsHeader')}
                     </Title>
                     <Text className="text-slate-400">
-                      All your vaccination history with blockchain verification
+                      {t('client:records.vaccinePassport.recordsSubHeader')}
                     </Text>
                   </div>
                 </div>
@@ -511,7 +515,8 @@ const WalletVaccinePassport = () => {
                   pagination={{
                     pageSize: 10,
                     showSizeChanger: true,
-                    showTotal: (total) => `Total ${total} records`,
+                    showTotal: (total) =>
+                      t('client:records.vaccinePassport.recordsTotal', { count: total }),
                     className: 'px-4',
                   }}
                   scroll={{ x: 'max-content' }}
@@ -522,7 +527,7 @@ const WalletVaccinePassport = () => {
                           <div className="space-y-4">
                             <div>
                               <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
-                                Patient Identity Hash
+                                {t('client:records.vaccinePassport.patientIdentityHash')}
                               </Text>
                               <div className="mt-1 p-3 bg-white rounded-lg border border-slate-100">
                                 <Text className="font-mono text-xs text-slate-600 break-all">
@@ -533,7 +538,7 @@ const WalletVaccinePassport = () => {
                             <div className="grid grid-cols-2 gap-4">
                               <div>
                                 <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
-                                  Record ID
+                                  {t('client:records.vaccinePassport.recordId')}
                                 </Text>
                                 <div className="mt-1 p-3 bg-white rounded-lg border border-slate-100">
                                   <Text className="font-mono text-sm font-semibold text-slate-700">
@@ -548,7 +553,7 @@ const WalletVaccinePassport = () => {
                             <div className="space-y-4">
                               <div>
                                 <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
-                                  Transaction Hash
+                                  {t('client:records.vaccinePassport.transactionHash')}
                                 </Text>
                                 <div className="mt-1 p-3 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-100">
                                   <Text className="font-mono text-xs text-emerald-600 break-all">
@@ -558,11 +563,12 @@ const WalletVaccinePassport = () => {
                               </div>
                               <div>
                                 <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
-                                  IPFS Hash
+                                  {t('client:records.vaccinePassport.ipfsHash')}
                                 </Text>
                                 <div className="mt-1 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100 flex items-center justify-between gap-2">
                                   <Text className="font-mono text-xs text-blue-600 break-all">
-                                    {record.ipfsHash || 'N/A'}
+                                    {record.ipfsHash ||
+                                      t('client:records.vaccinePassport.notAvailable')}
                                   </Text>
                                   {record.ipfsHash && (
                                     <Button
@@ -572,7 +578,7 @@ const WalletVaccinePassport = () => {
                                       target="_blank"
                                       className="text-blue-600 shrink-0"
                                     >
-                                      View on IPFS →
+                                      {t('client:records.vaccinePassport.viewOnIpfsBtn')} →
                                     </Button>
                                   )}
                                 </div>
@@ -593,10 +599,10 @@ const WalletVaccinePassport = () => {
                     description={
                       <div className="text-center">
                         <Text className="text-slate-400 block mb-2">
-                          No vaccination records found
+                          {t('client:records.vaccinePassport.noRecords')}
                         </Text>
                         <Text className="text-slate-300 text-sm">
-                          Your records will appear here after vaccination
+                          {t('client:records.vaccinePassport.noRecordsDesc')}
                         </Text>
                       </div>
                     }
@@ -628,10 +634,10 @@ const WalletVaccinePassport = () => {
               <QrcodeOutlined className="text-3xl text-white" />
             </div>
             <Title level={4} className="!mb-1 text-center">
-              Digital Verification
+              {t('client:records.vaccinePassport.digitalVerification')}
             </Title>
             <Text className="text-slate-400 text-center mb-6">
-              Scan to verify this vaccination record
+              {t('client:records.vaccinePassport.scanToVerify')}
             </Text>
 
             <div className="p-6 bg-white rounded-2xl border-2 border-slate-100 shadow-inner mb-6">
@@ -641,11 +647,15 @@ const WalletVaccinePassport = () => {
             {selectedRecord && (
               <div className="w-full p-4 bg-gradient-to-r from-slate-50 to-blue-50 rounded-xl mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <Text className="text-slate-500 text-sm">Vaccine</Text>
+                  <Text className="text-slate-500 text-sm">
+                    {t('client:records.vaccinePassport.vaccine')}
+                  </Text>
                   <Text className="font-semibold text-slate-700">{selectedRecord.vaccineName}</Text>
                 </div>
                 <div className="flex items-center justify-between">
-                  <Text className="text-slate-500 text-sm">Date</Text>
+                  <Text className="text-slate-500 text-sm">
+                    {t('client:records.vaccinePassport.date')}
+                  </Text>
                   <Text className="font-semibold text-slate-700">
                     {new Date(selectedRecord.vaccinationDate).toLocaleDateString()}
                   </Text>
@@ -655,7 +665,7 @@ const WalletVaccinePassport = () => {
 
             <div className="w-full p-3 bg-slate-50 rounded-xl">
               <Text className="text-xs text-slate-400 block text-center mb-1">
-                Verification URL
+                {t('client:records.vaccinePassport.verificationUrl')}
               </Text>
               <Text className="font-mono text-xs text-slate-600 break-all text-center block">
                 {qrUrl}
@@ -668,10 +678,10 @@ const WalletVaccinePassport = () => {
                 icon={<ShareAltOutlined />}
                 onClick={() => {
                   navigator.clipboard.writeText(qrUrl);
-                  message.success('Link copied!');
+                  message.success(t('client:records.vaccinePassport.copyLinkSuccessShort'));
                 }}
               >
-                Copy Link
+                {t('client:records.vaccinePassport.copyLink')}
               </Button>
               <Button
                 type="primary"
@@ -680,7 +690,7 @@ const WalletVaccinePassport = () => {
                 onClick={() => selectedRecord && handleDownloadRecordPdf(selectedRecord)}
                 className="bg-gradient-to-r from-blue-500 to-indigo-500 border-0"
               >
-                Download PDF
+                {t('client:records.vaccinePassport.downloadPdf')}
               </Button>
             </div>
           </div>
