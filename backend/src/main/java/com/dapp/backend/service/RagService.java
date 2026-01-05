@@ -60,7 +60,7 @@ public class RagService {
                     - Số mũi cần tiêm: %d
                     - Khoảng cách mũi tiếp theo: %d ngày
                     - Slug: %s
-                    - Link chi tiết: https://safevax.mhieu100.space/vaccine/%s
+                    - Link chi tiết: https://safevax.mhieu100.space/vaccines/%s
                     """,
                     v.getName(),
                     v.getCountry(),
