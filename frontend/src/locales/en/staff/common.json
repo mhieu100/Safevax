@@ -50,5 +50,14 @@
     "passwordMismatch": "New password and confirm password do not match",
     "userEmailNotFound": "User email not found",
     "unexpectedError": "An error occurred while updating password"
+  },
+  "calendar": {
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun"
   }
 }

@@ -50,5 +50,14 @@
     "passwordMismatch": "Mật khẩu mới và xác nhận mật khẩu không khớp",
     "userEmailNotFound": "Không tìm thấy email người dùng",
     "unexpectedError": "Đã xảy ra lỗi khi cập nhật mật khẩu"
+  },
+  "calendar": {
+    "mon": "T2",
+    "tue": "T3",
+    "wed": "T4",
+    "thu": "T5",
+    "fri": "T6",
+    "sat": "T7",
+    "sun": "CN"
   }
 }
