@@ -330,11 +330,6 @@ const ChatBot = () => {
                     className="rounded-xl bg-blue-600 hover:bg-blue-500 border-none shadow-lg shadow-blue-500/30"
                   />
                 </div>
-                <div className="text-center mt-2">
-                  <span className="text-[10px] text-slate-400">
-                    AI có thể mắc lỗi. Vui lòng kiểm tra lại thông tin quan trọng.
-                  </span>
-                </div>
               </div>
             </>
           )}
