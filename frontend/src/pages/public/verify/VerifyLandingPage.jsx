@@ -1,15 +1,4 @@
-import {
-  Activity,
-  ArrowRight,
-  ChevronDown,
-  Filter,
-  Globe,
-  Lock,
-  Search,
-  Shield,
-  Syringe,
-  X,
-} from 'lucide-react';
+import { Activity, ArrowRight, Globe, Lock, Search, Shield, Syringe } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,7 +16,8 @@ const VACCINE_OPTIONS = [
 
 const VerifyLandingPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [searchMode, setSearchMode] = useState('record'); // 'record' | 'identity'
+  const [_showAdvanced, _setShowAdvanced] = useState(false);
   const [advancedSearch, setAdvancedSearch] = useState({
     identityHash: '',
     vaccineSlug: '',
@@ -38,7 +28,11 @@ const VerifyLandingPage = () => {
   const handleVerify = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      navigate(`/verify/${searchTerm.trim()}`);
+      if (searchMode === 'record') {
+        navigate(`/verify/${searchTerm.trim()}`);
+      } else {
+        navigate(`/verify/search?identity=${searchTerm.trim()}`);
+      }
     }
   };
 
@@ -117,67 +111,85 @@ const VerifyLandingPage = () => {
           </p>
 
           {/* Search Bar */}
-          <form onSubmit={handleVerify} className="w-full max-w-xl mx-auto relative group">
-            <div className="bg-white p-2 pl-6 flex items-center gap-3 rounded-full shadow-2xl shadow-blue-900/5 border border-slate-100 transition-all focus-within:ring-4 focus-within:ring-blue-500/10 focus-within:border-blue-200">
-              <Search
-                className="text-slate-400 group-focus-within:text-blue-500 transition-colors"
-                size={24}
-              />
-              <input
-                type="text"
-                placeholder="Paste IPFS Hash or Transaction Hash..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="flex-1 bg-transparent border-none outline-none text-lg text-slate-800 placeholder:text-slate-400 py-3"
-              />
+          <div className="w-full max-w-xl mx-auto mb-8">
+            <div className="flex justify-center mb-6 gap-2 flex-wrap">
               <button
-                type="submit"
-                className="bg-slate-900 hover:bg-blue-600 text-white p-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95"
+                onClick={() => {
+                  setSearchMode('record');
+                  setSearchTerm('');
+                }}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${searchMode === 'record' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-white text-slate-500 hover:bg-slate-50'}`}
               >
-                <ArrowRight size={24} />
+                Verify Record
+              </button>
+              <button
+                onClick={() => {
+                  setSearchMode('identity');
+                  setSearchTerm('');
+                }}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${searchMode === 'identity' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-white text-slate-500 hover:bg-slate-50'}`}
+              >
+                Track Patient History
+              </button>
+              <button
+                onClick={() => {
+                  setSearchMode('extract');
+                }}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${searchMode === 'extract' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-white text-slate-500 hover:bg-slate-50'}`}
+              >
+                Vaccine Passport Extract
               </button>
             </div>
-            <div className="mt-4 text-xs font-medium text-slate-400 uppercase tracking-widest">
-              Secured by Ethereum & IPFS
-            </div>
-          </form>
 
-          {/* Advanced Search Toggle */}
-          <button
-            type="button"
-            onClick={() => setShowAdvanced(!showAdvanced)}
-            className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors"
-          >
-            <Filter size={16} />
-            <span>Advanced Search (Filter by Vaccine & Dose)</span>
-            <ChevronDown
-              size={16}
-              className={`transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
-            />
-          </button>
+            {searchMode !== 'extract' && (
+              <form onSubmit={handleVerify} className="relative group animate-fade-in-up">
+                <div className="bg-white p-2 pl-6 flex items-center gap-3 rounded-full shadow-2xl shadow-blue-900/5 border border-slate-100 transition-all focus-within:ring-4 focus-within:ring-blue-500/10 focus-within:border-blue-200">
+                  <Search
+                    className="text-slate-400 group-focus-within:text-blue-500 transition-colors"
+                    size={24}
+                  />
+                  <input
+                    type="text"
+                    placeholder={
+                      searchMode === 'record'
+                        ? 'Paste IPFS Hash or Transaction Hash...'
+                        : 'Paste Patient Identity Hash...'
+                    }
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="flex-1 bg-transparent border-none outline-none text-lg text-slate-800 placeholder:text-slate-400 py-3"
+                  />
+                  <button
+                    type="submit"
+                    className="bg-slate-900 hover:bg-blue-600 text-white p-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95"
+                  >
+                    <ArrowRight size={24} />
+                  </button>
+                </div>
+                <div className="mt-4 text-xs font-medium text-slate-400 uppercase tracking-widest">
+                  {searchMode === 'record'
+                    ? 'Secured by Ethereum & IPFS'
+                    : 'Trace Immutable Health History'}
+                </div>
+              </form>
+            )}
+          </div>
 
-          {/* Advanced Search Panel */}
-          {showAdvanced && (
-            <div className="mt-6 w-full max-w-2xl mx-auto animate-fade-in-up">
+          {/* Advanced Search Panel - Now Extract Tab */}
+          {searchMode === 'extract' && (
+            <div className="mt-2 w-full max-w-2xl mx-auto animate-fade-in-up">
               <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                     <Syringe size={20} className="text-blue-600" />
                     Verify Specific Vaccination
                   </h3>
-                  <button
-                    type="button"
-                    onClick={() => setShowAdvanced(false)}
-                    className="text-slate-400 hover:text-slate-600"
-                  >
-                    <X size={20} />
-                  </button>
                 </div>
 
                 <form onSubmit={handleAdvancedSearch} className="space-y-4">
                   {/* Identity Hash Input */}
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    <label className="block text-sm font-semibold text-slate-700 mb-2 text-left">
                       Patient Identity Hash <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -195,7 +207,7 @@ const VerifyLandingPage = () => {
                   {/* Vaccine Selection */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      <label className="block text-sm font-semibold text-slate-700 mb-2 text-left">
                         Vaccine Type (Optional)
                       </label>
                       <select
@@ -219,7 +231,7 @@ const VerifyLandingPage = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      <label className="block text-sm font-semibold text-slate-700 mb-2 text-left">
                         Dose Number (Optional)
                       </label>
                       <select

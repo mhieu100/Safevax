@@ -50,4 +50,25 @@ public class PdfController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(bis));
     }
+
+    @GetMapping("/generate/record")
+    public ResponseEntity<InputStreamResource> generateRecordPdf(@RequestParam Long recordId) {
+        if (recordId == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        ByteArrayInputStream bis = pdfService.generateSingleRecordPdf(recordId);
+        if (bis == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=vaccine_passport_" + recordId + ".pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
+    }
 }

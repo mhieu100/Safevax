@@ -1,27 +1,69 @@
+Phần slide 
+Vaccine Passport là gì (về mặt “hình ảnh” & trải nghiệm)
+Thực tế, vaccine passport không phải hộ chiếu giấy, mà thường là:
+📱 Ứng dụng di động (hoặc web)
+🧾 Hiển thị thông tin tiêm chủng đã được xác thực
+🔐 Có QR code / mã xác minh để bên thứ ba kiểm tra
+Chúng có thể hình dung nó giống Apple Wallet / Google Wallet, nhưng chứa dữ liệu y tế.
+
+3. Khi dùng blockchain thì khác gì?
+🔗 Dữ liệu KHÔNG lưu trực tiếp trên blockchain
+
+Thường sẽ là:
+On-chain:
+Hash của vaccine record
+DID (Decentralized Identity)
+Chữ ký của cơ quan y tế
+Off-chain:
+Dữ liệu chi tiết (IPFS / database bảo mật)
+📌 Blockchain dùng để:
+Chống giả mạo
+Không thể sửa lịch sử tiêm
+Xác minh nguồn gốc dữ liệu
+
+4. Quy trình sử dụng (Use case thực tế)
+✈️ Khi đi du lịch
+Người dùng mở app → hiển thị QR
+Hải quan scan QR
+Hệ thống:
+Kiểm tra chữ ký cơ quan y tế
+So hash trên blockchain
+✅ Hợp lệ → cho phép nhập cảnh
+⏱️ Mất vài giây, không cần xem hồ sơ giấy.
+🏥 Khi mua bán / dịch vụ yêu cầu sức khỏe
+Ví dụ:
+Công ty bảo hiểm
+Sự kiện đông người
+Công việc đặc thù
+Người dùng có thể:
+Chỉ chia sẻ “Đã tiêm đủ”
+❌ Không lộ chi tiết bệnh án khác
+→ đúng tinh thần privacy + self-sovereign identity
+
+========================================
 Về phần demo thì đây là : 
 - phân trang chủ của nhóm em thì nó cũng sẽ có 
 header footer banner như mọi website khác
 
-Tính năng Tìm kiếm Thông minh Smart Search
-
-Đây là tính năng Global Search Hub tích hợp AI, được thiết kế để trở thành trợ lý y tế đắc lực cho người dùng.
+Ơi đây em có 1 component em gọi là Global Search Hub được tích hợp AI, được thiết kế để trở thành trợ lý y tế đắc lực cho người dùng.
 Hệ thống tìm kiếm song song từ 3 nguồn dữ liệu khác nhau (Vắc xin, Tin tức, AI Knowledge) mà không làm chậm trải nghiệm, trả kết quả gần như tức thì.
 Tích hợp RAG AI (Retrieval-Augmented Generation): Sử dụng mô hình AI (qua RagService) để hiểu ngôn ngữ tự nhiên, cho phép người dùng đặt câu hỏi y tế phức tạp (VD: "Bé 2 tháng tiêm gì?") thay vì chỉ tìm từ khóa cứng nhắc.
 
 Ví dụ khi người dùng nhập vào 1 đoạn thông tin bất ký thì nó sẽ trả về các thông tin như vaccine, tin tức liên quan cho người dùng trường hợp người dùng 
-trường hợp người dùng nhập vào 1 đoạn dạng câu hỏi thì nó sẽ tự động sẽ đưa 
+trường hợp người dùng nhập vào 1 đoạn dạng câu hỏi thì nó sẽ tự động sẽ đưa ra câu trả lời dưa trên AI knowledge của hệ thống chứ không lấy thông tin sao nhãn
 
-======================================================================
+
 # Phần tiếp theo sẽ hiển thị 1 số loại vaccine gợi ý cho người dùng như vaccine dành cho trẻ em , phụ nữ mang thai, ....
 nhưng phần này khi mà người dùng đăng nhập sẽ nó sẽ hiển thị ra các loại vaccine phù hợp cho mỗi user khác nhau dựa trên thông tin của user
 
-Các phần như tin tức về sức khỏe người dùng có thể đọc để biết thêm các thông tin
+Các phần như tin tức về sức khỏe người dùng có thể đọc để biết thêm các thông tin 
 
 Các phần tĩnh trang website như là: 
 - hướng dẫn các bước đặt lịch tiêm chủng trên website
 - tính năng ứng dụng nổi bật của blochchain 
 - phần giới thiệu về nền tảng ứng dụng tiêm chủng trên mobile để người dùng có thể cải và sử dụng ngay trên thiết bị di dộng
 
+======================================================================
 
 - về phân trang vaccine thì em sẽ lấy ra 12 loại vaccine trên 1 page em có 1 cái pagination để phân trang , người dùng có click để xem thêm các loại vaccine khác trong hệ thống
 Bên này thì em có phần filter, em chọn lọc ra các thuộc tính của vaccine thì :
@@ -29,49 +71,107 @@ có tìm kiếm tên , hoặc quốc gia
 xắp xếp thì có sắp xếp theo bảng chữ cái, hoặc giá tăng và giảm dần
 lọc thì lọc theo quốc gia sản xuất, loại bệnh, đối tượng tiêm, và khoảng giá
 
-ví dụ lọc các loại vaccine của mỹ hay hàn quốc chẳng hạn sẽ trả về các loại vaccine của mỹ hay hàn quốc
+ví dụ lọc các loại vaccine của mỹ hay hàn quốc chẳng hạn sẽ trả về các loại vaccine của mỹ và hàn quốc
+hay theo giá hoặc bệnh theo bộ lọc
 
-=======================================================================
+======================================================================
 
-Tiếp đến là phần đăng ký đăng nhập thì em có làm 2 phương thức là email password và login với google 
-khi đăng ký người dùng sẽ cần cung cấp thông tin cơ bản và chỉ số của súc khỏe để hệ thống có thẻ đưa ra các loại vaccine phù hợp với ngưới dùng 
-Sau khi đăng ký hoặc đăng nhập hệ thống sẽ có hướng dẫn người dùng đặt lịch ,ta có thể bỏ qua nếu muốn 
+- Về phần đăng nhập đăng ký thì ở đây em có 2 phương thức là đăng ký bằng email mặt khẩu và đăng nhập bằng google
+thì về phần đăng ký cho một người dùng mới thì 
+hệ thống sẽ yêu cầu cung cấp các thông tin của người dùng như là tên email giới tính ngày sinh và các thông tin về sức khỏe như nhóm máu chiều cao
+để hệ thống có thể đưa ra thông tin vaccine phù hợp với người dùng này 
+=> Sau khi đăng ký xong hoặc đăng nhập lần đầu thì sẽ đưa ta tới trang chủ và sẽ có 1 cái hướng dẫn người lịch tiêm chủng chẳng hạn
+hoặc người dùng có thể bỏ qua nếu muốn. Bây giờ em sẽ chọn 1 loại vaccine để em đặt, em chọn vaccine phòng cúm chẳng hạn 
 
+======================================================================
+Đây em chọn vaccine _____
+Ở đây trang chi tiết của vaccine _____ thì như trong này thì trong này em sẽ lấy ra được là tên và các thông tin về loại vaccine này bệnh đối tượng , nới sản xuất giá, số lượng mũi tiêm 
+người dùng có thể  biết được số mũi tiên yêu cầu và thơi gian giữa các mũi tiêm
+dưới sẽ gồm các thông tin về thành phần bảo quản hoặc lưu ý của vaccine
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+Bên dưới có thêm phần vaccine liên quan nó cũng sẽ hiển thị các vaccine có cùng loại bệnh và danh mục vaccine
+nó sẽ hiển thị ưu tiên các loại vaccine có cùng loại bệnh ở đầu tiên để người dùng có thể ưu tiên lựa chọn
 
 
-### Cơ chế hoạt động (Technical Flow):
+======================================================================
 
-1. **Kích hoạt & Gửi yêu cầu:**
-   - Khi người dùng nhập từ khóa (ví dụ "Cúm"), Frontend sẽ chờ người dùng ngừng gõ (debounce 500ms) rồi gửi 1 request duy nhất đến API `/api/search/global`.
+Và Bây giờ tiền hành đặt lịch luôn thì em sẽ tiên hành chọn thông tin tiêm chủng trung tâm và thời gian
+đến phần thanh toán thì em có tích hợp các phương thức tiền mặc ,paypal , ngân hàng và metamark 
+thì ở đây em chọn phương thức bằng ví meta mark bước tiếp theo người dùng xác nhận thông tin và xác nhận đặt lịch và tiến hành thanh toán
 
-2. **Xử lý Đa luồng tại Backend (Parallel Processing):**
-   Thay vì tìm lần lượt, Server sẽ khởi chạy **3 luồng xử lý song song** cùng lúc để tối ưu thời gian phản hồi:
-   - **Luồng 1 (Vaccine Service):** Quét toàn bộ CSDL Vắc xin để tìm các sản phẩm khớp với tên, mô tả, bệnh lý, hoặc quốc gia xuất xứ.
-   - **Luồng 2 (News Service):** Quét CSDL Tin tức để tìm các bài viết, hướng dẫn y tế liên quan.
-   - **Luồng 3 (AI Service):** Hệ thống phân tích chuỗi tìm kiếm. Nếu phát hiện đây là một câu hỏi (ví dụ: có dấu "?", từ khóa "là gì", "tiêm gì"), nó sẽ kích hoạt **RAG (Retrieval-Augmented Generation)**:
-     - *Bước 3.1:* Tìm kiếm các văn bản y khoa liên quan trong Vector Database.
-     - *Bước 3.2:* Gửi câu hỏi kèm thông tin tìm được cho AI (LLM) để tổng hợp câu trả lời chính xác, ngắn gọn.
+thì hiển thị giao diện thành toán của ví đến ví của hệ thống sau khi thành công sẽ đưa đến trang thành công 
+sẽ hiện thống tin của lịch hẹn thành toán và kèm email thống báo đến email người dùng 
+======================================================================
 
-3. **Trả về kết quả (Aggregation):**
-   - Server chờ cả 3 luồng hoàn tất, gộp chung vào một gói dữ liệu JSON duy nhất và gửi về Frontend.
+Ở đây sau khi đặt xong thì ta có thể xem lịch hẹn ở trang lịch hẹn sẽ hiển thị các lịch hẹn đã đặt thông tin của lịch hẹn với trạng thái đang xử lý
+thì nó cần được chờ nhân viên họ xác nhận và phân công bác sĩ tiếp nhận lịch hẹn
 
-4. **Hiển thị (Rendering):**
-   - Frontend hiển thị kết quả phân tách rõ ràng:
-     - **VaxSafe AI:** Hiển thị câu trả lời tư vấn (nếu có).
-     - **Vắc xin:** Hiển thị danh sách sản phẩm kèm giá và tình trạng kho.
-     - **Tin tức:** Các bài viết liên quan.
-=> Giúp người dùng có cái nhìn toàn diện chỉ trong 1 lần tìm kiếm.
+======================================================================
+
+Bây giờ sẽ đăng nhập nhân viên của trung tâm vừa đặt để xác nhận và phân công bác sĩ tiếp nhận lịch hẹn
+Ở đây sẽ giao diện nhân viên của trung tâm thì sẽ có các thông kê như số lượng lịch hẹn theo tuần theo tháng, rồi tỉ lệ hủy lịch và thành công 
+Có thêm phần xử lý các lịch hẹn cần ưu tiên giải quyết có các rule để có thể giải quyết một cách tạm thời
+
+Và đây là em sẽ xử lý lịch hẹn vừa rồi phân công bác sĩ và xác nhận lịch hẹn
+Ngoài ra có các trang khác như trang lịch và danh sách nhân viên và trang hổ trợ đặt lịch tại trung tâm
+
+======================================================================
+
+Sau khi đã xác nhận lịch hẹn thì bác sĩ tiền hành xác nhận tiêm chủng cho bệnh nhân
+
+Thì ở đây bác sĩ sẽ vào lịch làm việc của tôi xem lịch hẹn của mình trong quá trình tiêm chủng bác sĩ sẽ
+ghi lại các dấu hiệu sức khỏe của bệnh nhân và xác nhận tiêm chủng 
+
+======================================================================
+
+Bệnh nhân sẽ có được 1 cái vaccine passport với cái vaccine passport này người dùng có thể
+tải xuống dạng pdf hoặc theo mã qr để quét nhằm chứng minh sức khỏe của minh
+
+Ví dụ như bạn muốn đi du lịch chẳng hạn thì cần có chích mũi 3 vaccine covid đi người dùng 
+có thể xuất trình vaccine passport để chứng minh sức khỏe của mình
+
+Thay vì phải dùng giấy tờ thì ở đây có thể truy cập mọi nơi với dự liệu bất biết và minh bạch 
+
+===========================================================
+
+Việc tạo ra hộ chiếu vaccine không chỉ phục vụ nhu cầu xác minh tình trạng tiêm chủng khi đi lại hay tham gia các hoạt động xã hội, mà còn đóng vai trò quan trọng trong việc ghi nhận
+và theo dõi toàn bộ quá trình tiêm chủng của con cái từ khi sinh ra
+Trước hết, hộ chiếu vaccine giúp lưu trữ đầy đủ, chính xác và xuyên suốt các mũi tiêm theo từng giai đoạn phát triển của trẻ. Thông tin về loại vaccine, thời điểm tiêm, liều lượng và cơ sở y tế thực hiện được ghi nhận một cách hệ thống,
+ hạn chế tình trạng thất lạc sổ tiêm giấy hoặc sai lệch thông tin.
+
+Bên cạnh đó, hộ chiếu vaccine hỗ trợ cha mẹ và cơ sở y tế theo dõi lịch tiêm chủng, nhắc nhở các mũi tiêm tiếp theo, đảm bảo trẻ được tiêm đúng thời điểm và đủ liều, từ đó nâng cao hiệu quả phòng bệnh và bảo vệ sức khỏe lâu dài cho trẻ.
+
+Ngoài ra, trong các trường hợp chuyển nơi sinh sống, nhập học, du lịch hoặc khám chữa bệnh tại cơ sở y tế khác, hộ chiếu vaccine giúp xác minh nhanh chóng và đáng tin cậy lịch sử tiêm chủng của trẻ, giảm thủ tục hành chính và tránh tiêm chủng trùng lặp không cần thiết.
+
+Về lâu dài, hộ chiếu vaccine còn tạo nền tảng cho hồ sơ sức khỏe điện tử suốt đời, giúp mỗi cá nhân có một lịch sử y tế liền mạch từ thời thơ ấu đến trưởng thành, góp phần nâng cao chất lượng chăm sóc y tế và quản lý sức khỏe cộng đồng.
+===========================================================
+6. Logic Verification (Xác minh Blockchain)
+
+Hệ thống SafeVax sử dụng Blockchain Ethereum (Smart Contract) và IPFS để đảm bảo tính toàn vẹn và minh bạch của dữ liệu tiêm chủng.
+
+�� 1. Quy trình Lưu trữ (Khi Bác sĩ Xác nhận Tiêm):
+   - Bước 1: Dữ liệu tiêm chủng (Bệnh nhân, Vaccine, Ngày, Nơi tiêm...) được đóng gói.
+   - Bước 2: Một chứng nhận (Certificate) dạng JSON được tạo ra và tải lên mạng IPFS (InterPlanetary File System). IPFS sẽ trả về một mã băm duy nhất (IPFS Hash) đại diện cho nội dung file này.
+   - Bước 3: IPFS Hash cùng với thông tin cốt lõi (IdentityHash, VaccineID, Dose) được ghi vào Smart Contract trên Blockchain thông qua hàm `createRecord`.
+   - Result: Dữ liệu trên Blockchain là BẤT BIẾN (Immutable). Không ai (kể cả admin) có thể sửa đổi lịch sử này.
+
+🔹 2. Quy trình Xác minh (Verify Logic):
+   Khi người dùng hoặc bên thứ 3 muốn xác minh một mũi tiêm:
+
+   A. Verify bằng Blockchain Record (Trang /verify):
+      - Input: Người dùng nhập Identity Hash hoặc Transaction Hash.
+      - Query Blockchain: Hệ thống gọi trực tiếp vào Smart Contract (qua Node.js Middleware) để lấy dữ liệu gốc.
+      - Trust: Dữ liệu trả về từ Blockchain được coi là "Nguồn sự thật" (Source of Truth).
+      - Check: Hệ thống hiển thị thông tin trả về (Vaccine, Ngày tiêm, ...) và dấu tích xanh "Blockchain Verified".
+
+   B. Verify bằng IPFS (Xem chứng chỉ gốc):
+      - Hệ thống lấy IPFS Hash từ record trên Blockchain.
+      - Từ đó tải file chứng nhận gốc từ mạng IPFS về.
+      - Do đặc tính của IPFS, nếu file bị sửa đổi dù chỉ 1 byte, Hash sẽ thay đổi -> Hash trên Blockchain sẽ không khớp -> Phát hiện giả mạo ngay lập tức.
+
+   C. Tracking Timeline (Lịch sử tiêm chủng):
+      - Sử dụng Identity Hash của bệnh nhân.
+      - Hệ thống query Smart Contract để lấy danh sách TẤT CẢ các mũi tiêm gắn với Identity Hash đó.
+      - Kết quả được hiển thị dưới dạng Timeline, đảm bảo người xem thấy được toàn bộ lịch sử y tế minh bạch và không bị che giấu.
+
+=> Tóm lại: "Trust Blockchain" ở đây nghĩa là chúng ta không tin vào Database cục bộ (có thể bị sửa), mà tin vào dữ liệu được ghi trên sổ cái công khai (Blockchain) và file được lưu phân tán (IPFS).

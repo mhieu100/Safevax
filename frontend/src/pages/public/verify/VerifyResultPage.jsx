@@ -1,8 +1,18 @@
-import { AlertTriangle, ArrowLeft, CheckCircle2, Loader2, ShieldCheck } from 'lucide-react';
+import { Modal, Table, Tag, Typography } from 'antd';
+import {
+  AlertTriangle,
+  ArrowLeft,
+  CheckCircle2,
+  FileText,
+  Loader2,
+  ShieldCheck,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import VerificationCard from '@/components/verify/VerificationCard';
-import { verifyRecord } from '@/services/verify.service';
+import { getRecordsByIdentity, verifyRecord } from '@/services/verify.service';
+
+const { Text } = Typography;
 
 const STEPS = [
   { id: 1, label: 'Connecting to Blockchain Node', delay: 800 },
@@ -22,6 +32,11 @@ const VerifyResultPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
+
+  // Passport state
+  const [passportModalOpen, setPassportModalOpen] = useState(false);
+  const [passportRecords, setPassportRecords] = useState([]);
+  const [passportLoading, setPassportLoading] = useState(false);
 
   useEffect(() => {
     if (!recordId) {
@@ -64,6 +79,61 @@ const VerifyResultPage = () => {
   }, [recordId]);
 
   const handleBack = () => navigate('/verify');
+
+  const handleViewPassport = async () => {
+    if (!data?.patientIdentityHash) return;
+
+    setPassportModalOpen(true);
+    setPassportLoading(true);
+
+    try {
+      const records = await getRecordsByIdentity(data.patientIdentityHash);
+      if (records && records.data) {
+        // Sort by date desc
+        const sorted = records.data.sort(
+          (a, b) => new Date(b.vaccinationDate) - new Date(a.vaccinationDate)
+        );
+        setPassportRecords(sorted);
+      }
+    } catch (err) {
+      console.error('Failed to fetch passport:', err);
+    } finally {
+      setPassportLoading(false);
+    }
+  };
+
+  const passportColumns = [
+    {
+      title: 'Vaccine',
+      dataIndex: 'vaccineName',
+      key: 'vaccineName',
+      render: (text) => <span className="font-semibold">{text}</span>,
+    },
+    {
+      title: 'Dose',
+      dataIndex: 'doseNumber',
+      key: 'doseNumber',
+      render: (dose) => <Tag color="blue">#{dose}</Tag>,
+      width: 80,
+    },
+    {
+      title: 'Date',
+      dataIndex: 'vaccinationDate',
+      key: 'vaccinationDate',
+      render: (date) => new Date(date).toLocaleDateString(),
+    },
+    {
+      title: 'Site',
+      dataIndex: 'site',
+      key: 'site',
+      render: (site) => <Tag>{site?.replace('_', ' ')}</Tag>,
+    },
+    {
+      title: 'Status',
+      key: 'status',
+      render: () => <Tag color="success">Verified</Tag>,
+    },
+  ];
 
   if (loading) {
     return (
@@ -182,13 +252,54 @@ const VerifyResultPage = () => {
 
       {/* Main Content */}
       <div className="flex-1 w-full max-w-md px-6 flex flex-col justify-center items-center pb-20 relative z-10 animate-fade-in-up">
-        <VerificationCard data={data} />
+        <VerificationCard data={data} onViewPassport={handleViewPassport} />
 
         <div className="mt-8 flex items-center gap-2 text-slate-400 text-xs font-mono tracking-widest opacity-60">
           <ShieldCheck size={14} />
           SECURED BY VAXSAFE PROTOCOL v2.0
         </div>
       </div>
+
+      <Modal
+        title={
+          <div className="flex items-center gap-2 text-lg">
+            <FileText size={20} className="text-blue-600" /> Verified Vaccine Passport
+          </div>
+        }
+        open={passportModalOpen}
+        onCancel={() => setPassportModalOpen(false)}
+        footer={null}
+        width={800}
+        centered
+      >
+        <div className="p-4 bg-slate-50 rounded-lg mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <Text type="secondary" className="text-xs uppercase tracking-wider">
+              Beneficiary
+            </Text>
+            <Text strong className="text-lg">
+              {data?.patientName}
+            </Text>
+          </div>
+          <div className="flex justify-between items-center">
+            <Text type="secondary" className="text-xs uppercase tracking-wider">
+              Identity Hash
+            </Text>
+            <Text className="font-mono text-xs bg-white px-2 py-1 rounded border overflow-hidden text-ellipsis max-w-[200px] sm:max-w-md">
+              {data?.patientIdentityHash}
+            </Text>
+          </div>
+        </div>
+
+        <Table
+          dataSource={passportRecords}
+          columns={passportColumns}
+          loading={passportLoading}
+          rowKey={(record) => record.recordId || record.transactionHash}
+          pagination={{ pageSize: 5 }}
+          size="small"
+        />
+      </Modal>
 
       <style>{`
         @keyframes bounce-slow {

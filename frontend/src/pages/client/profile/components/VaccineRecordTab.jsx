@@ -1,6 +1,7 @@
 import {
   CalendarOutlined,
   CheckCircleFilled,
+  DownloadOutlined,
   FilePdfOutlined,
   MedicineBoxOutlined,
   SafetyCertificateOutlined,
@@ -70,6 +71,37 @@ const VaccineRecordTab = ({ familyMemberId }) => {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Failed to download PDF', err);
+      message.error(t('client:records.vaccinePassport.downloadError', 'Failed to download PDF'));
+    }
+  };
+
+  const handleDownloadRecordPdf = async (recordId) => {
+    try {
+      const response = await apiClient.get('/api/pdf/generate/record', {
+        params: { recordId },
+        responseType: 'blob',
+        headers: {
+          Accept: 'application/pdf',
+        },
+      });
+
+      const blob = new Blob([response], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `vaccine_passport_${recordId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      message.success(
+        t(
+          'client:records.vaccinePassport.downloadSuccess',
+          'Vaccine passport downloaded successfully'
+        )
+      );
+    } catch (err) {
+      console.error('Failed to download vaccine passport', err);
       message.error(t('client:records.vaccinePassport.downloadError', 'Failed to download PDF'));
     }
   };
@@ -188,22 +220,34 @@ const VaccineRecordTab = ({ familyMemberId }) => {
     {
       title: t('client:records.vaccinePassport.actions'),
       key: 'actions',
-      width: 100,
+      width: 180,
       fixed: 'right',
-      render: (_, record) =>
-        record.transactionHash && (
+      render: (_, record) => (
+        <div className="flex items-center gap-1">
           <Button
             type="link"
             size="small"
-            icon={<SafetyCertificateOutlined />}
-            onClick={() => {
-              setSelectedRecord(record);
-              setVerificationModalOpen(true);
-            }}
+            icon={<DownloadOutlined />}
+            onClick={() => handleDownloadRecordPdf(record.id)}
+            title={t('client:records.vaccinePassport.exportPassport', 'Export Vaccine Passport')}
           >
-            {t('client:records.vaccinePassport.verify')}
+            {t('client:records.vaccinePassport.export', 'Export')}
           </Button>
-        ),
+          {record.transactionHash && (
+            <Button
+              type="link"
+              size="small"
+              icon={<SafetyCertificateOutlined />}
+              onClick={() => {
+                setSelectedRecord(record);
+                setVerificationModalOpen(true);
+              }}
+            >
+              {t('client:records.vaccinePassport.verify')}
+            </Button>
+          )}
+        </div>
+      ),
     },
   ];
 

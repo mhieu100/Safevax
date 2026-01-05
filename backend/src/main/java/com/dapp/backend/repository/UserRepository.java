@@ -25,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     long countByRole_Name(String roleName);
 
     Optional<User> findByResetPasswordToken(String resetPasswordToken);
+
+    Optional<User> findByBlockchainIdentityHash(String blockchainIdentityHash);
 }

@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
 
-const VerificationCard = ({ data }) => {
+const VerificationCard = ({ data, onViewPassport }) => {
   if (!data) return null;
 
   return (
@@ -109,6 +109,20 @@ const VerificationCard = ({ data }) => {
           <div className="text-sm font-semibold text-slate-800 break-words">{data.centerName}</div>
         </div>
       </div>
+
+      {data.patientIdentityHash && (
+        <div className="px-6 py-4 bg-blue-50/50 border-t border-slate-100 flex items-center justify-between">
+          <span className="text-xs font-medium text-slate-500">
+            More records found for this identity
+          </span>
+          <button
+            onClick={onViewPassport}
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1 transition-colors pointer-events-auto"
+          >
+            View Full Passport <Activity size={12} />
+          </button>
+        </div>
+      )}
 
       {/* Blockchain Footer */}
       <div className="bg-slate-900 p-4 space-y-2">

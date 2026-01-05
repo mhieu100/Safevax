@@ -1,31 +1,36 @@
 import {
-  CalendarOutlined,
   CheckCircleFilled,
+  DownloadOutlined,
+  GlobalOutlined,
   MedicineBoxOutlined,
   QrcodeOutlined,
   SafetyCertificateOutlined,
+  ShareAltOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import {
   Alert,
   Button,
   Card,
-  Descriptions,
   Empty,
   Modal,
+  message,
   QRCode,
   Skeleton,
+  Space,
   Table,
   Tabs,
   Tag,
+  Tooltip,
   Typography,
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import DigitalPassportCard from '@/components/client/passport/DigitalPassportCard';
 import BlockchainBadge from '@/components/common/BlockchainBadge';
 import BlockchainVerificationModal from '@/components/common/BlockchainVerificationModal';
 import apiClient from '@/services/apiClient';
-import { callGetFamilyMemberRecords, callGetMyFamilyMembers } from '@/services/family.service';
+import { callGetMyFamilyMembers } from '@/services/family.service';
 import useAccountStore from '@/stores/useAccountStore';
 
 const { Title, Text } = Typography;
@@ -69,9 +74,10 @@ const WalletVaccinePassport = () => {
         let response;
 
         if (activeTab === 'me') {
-          response = await apiClient.post('/api/vaccine-records/my-records');
+          // Default to blockchain records
+          response = await apiClient.get('/api/vaccine-records/blockchain/my-records');
         } else {
-          response = await callGetFamilyMemberRecords(activeTab);
+          response = await apiClient.get(`/api/vaccine-records/blockchain/family/${activeTab}`);
         }
 
         if (response.data) {
@@ -98,22 +104,62 @@ const WalletVaccinePassport = () => {
     }
   };
 
+  const handleDownloadRecordPdf = async (recordId) => {
+    try {
+      const response = await apiClient.get('/api/pdf/generate/record', {
+        params: { recordId },
+        responseType: 'blob',
+        headers: {
+          Accept: 'application/pdf',
+        },
+      });
+
+      const blob = new Blob([response], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `vaccine_passport_${recordId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      message.success(
+        t(
+          'client:records.vaccinePassport.downloadSuccess',
+          'Vaccine passport downloaded successfully'
+        )
+      );
+    } catch (err) {
+      console.error('Failed to download vaccine passport', err);
+      message.error(t('client:records.vaccinePassport.downloadError', 'Failed to download PDF'));
+    }
+  };
+
+  const handleCopyLink = (record) => {
+    if (record.ipfsHash) {
+      navigator.clipboard.writeText(`https://safevax.mhieu100.space/verify/${record.ipfsHash}`);
+      message.success('Verification link copied to clipboard');
+    }
+  };
+
   const columns = [
     {
       title: t('client:records.vaccinePassport.vaccine'),
       dataIndex: 'vaccineName',
       key: 'vaccineName',
-      width: 200,
+      width: 220,
       render: (text, record) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-            <MedicineBoxOutlined className="text-blue-600 text-lg" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
+            <MedicineBoxOutlined className="text-white text-xl" />
           </div>
           <div>
-            <div className="font-medium text-slate-800 line-clamp-2">{text}</div>
-            <Text type="secondary" className="text-xs">
-              {t('client:records.vaccinePassport.dose')} #{record.doseNumber}
-            </Text>
+            <div className="font-semibold text-slate-800 line-clamp-1">{text}</div>
+            <div className="flex items-center gap-2 mt-1">
+              <Tag color="blue" className="rounded-full text-xs px-2 m-0">
+                Dose #{record.doseNumber}
+              </Tag>
+            </div>
           </div>
         </div>
       ),
@@ -122,11 +168,19 @@ const WalletVaccinePassport = () => {
       title: t('client:records.vaccinePassport.date'),
       dataIndex: 'vaccinationDate',
       key: 'vaccinationDate',
-      width: 140,
+      width: 130,
       render: (date) => (
-        <div className="flex items-center gap-2 text-slate-600">
-          <CalendarOutlined className="text-emerald-500" />
-          <span>{new Date(date).toLocaleDateString(i18n.language)}</span>
+        <div className="flex flex-col">
+          <span className="font-medium text-slate-700">
+            {new Date(date).toLocaleDateString(i18n.language, {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+            })}
+          </span>
+          <span className="text-xs text-slate-400">
+            {new Date(date).toLocaleDateString(i18n.language, { weekday: 'long' })}
+          </span>
         </div>
       ),
     },
@@ -134,9 +188,9 @@ const WalletVaccinePassport = () => {
       title: t('client:records.vaccinePassport.site'),
       dataIndex: 'site',
       key: 'site',
-      width: 120,
+      width: 110,
       render: (site) => (
-        <Tag color="blue" className="rounded-md border-0 bg-blue-50 text-blue-600">
+        <Tag className="rounded-lg border-0 bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700 font-medium px-3 py-1">
           {site?.replace('_', ' ') || 'N/A'}
         </Tag>
       ),
@@ -145,55 +199,79 @@ const WalletVaccinePassport = () => {
       title: t('client:records.vaccinePassport.center'),
       dataIndex: 'centerName',
       key: 'centerName',
-      width: 200,
+      width: 180,
       render: (name) => (
-        <Text className="text-slate-500 line-clamp-2" title={name}>
-          {name || 'N/A'}
-        </Text>
+        <div className="flex items-center gap-2">
+          <GlobalOutlined className="text-slate-400" />
+          <Text className="text-slate-600 line-clamp-2" title={name}>
+            {name || 'N/A'}
+          </Text>
+        </div>
       ),
     },
     {
       title: t('client:records.vaccinePassport.status'),
       key: 'status',
-      width: 160,
+      width: 180,
       render: (_, record) => (
-        <div className="flex items-center gap-2">
-          <Tag icon={<CheckCircleFilled />} color="success" className="rounded-full px-3 border-0">
-            {t('client:records.vaccinePassport.completed')}
-          </Tag>
-          {record.transactionHash && <BlockchainBadge verified={true} compact={true} />}
+        <div className="flex flex-col gap-1">
+          {(record.transactionHash || record.blockchainRecordId) && (
+            <div className="flex items-center gap-1">
+              <BlockchainBadge verified={true} compact={true} />
+            </div>
+          )}
         </div>
       ),
     },
     {
       title: t('client:records.vaccinePassport.actions'),
       key: 'actions',
-      width: 120,
+      width: 160,
       fixed: 'right',
-      render: (_, record) =>
-        record.transactionHash && (
-          <div className="flex gap-2">
+      render: (_, record) => (
+        <Space size="small" wrap>
+          <Tooltip title="Download PDF Passport">
             <Button
               type="primary"
               size="small"
-              icon={<QrcodeOutlined />}
-              onClick={() => handleShowQr(record)}
-            >
-              QR
-            </Button>
-            <Button
-              type="link"
-              size="small"
-              icon={<SafetyCertificateOutlined />}
-              onClick={() => {
-                setSelectedRecord(record);
-                setVerificationModalOpen(true);
-              }}
-            >
-              {t('client:records.vaccinePassport.verify')}
-            </Button>
-          </div>
-        ),
+              icon={<DownloadOutlined />}
+              onClick={() => handleDownloadRecordPdf(record.id)}
+              className="bg-gradient-to-r from-blue-500 to-indigo-500 border-0 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
+            />
+          </Tooltip>
+          {(record.transactionHash || record.blockchainRecordId) && (
+            <>
+              <Tooltip title="Show QR Code">
+                <Button
+                  size="small"
+                  icon={<QrcodeOutlined />}
+                  onClick={() => handleShowQr(record)}
+                  className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:border-purple-300"
+                />
+              </Tooltip>
+              <Tooltip title="Copy Verification Link">
+                <Button
+                  size="small"
+                  icon={<ShareAltOutlined />}
+                  onClick={() => handleCopyLink(record)}
+                  className="border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:border-emerald-300"
+                />
+              </Tooltip>
+              <Tooltip title="Verify on Blockchain">
+                <Button
+                  size="small"
+                  icon={<SafetyCertificateOutlined />}
+                  onClick={() => {
+                    setSelectedRecord(record);
+                    setVerificationModalOpen(true);
+                  }}
+                  className="border-amber-200 text-amber-600 hover:bg-amber-50 hover:border-amber-300"
+                />
+              </Tooltip>
+            </>
+          )}
+        </Space>
+      ),
     },
   ];
 
@@ -201,125 +279,170 @@ const WalletVaccinePassport = () => {
     {
       key: 'me',
       label: (
-        <span className="flex items-center gap-2">
-          <UserOutlined />
-          My Records
+        <span className="flex items-center gap-2 px-2">
+          <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
+            <UserOutlined className="text-blue-600 text-xs" />
+          </div>
+          <span>My Records</span>
         </span>
       ),
     },
     ...familyMembers.map((member) => ({
       key: member.id,
       label: (
-        <span className="flex items-center gap-2">
-          <UserOutlined />
-          {member.fullName} ({member.relationship})
+        <span className="flex items-center gap-2 px-2">
+          <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center">
+            <UserOutlined className="text-purple-600 text-xs" />
+          </div>
+          <span>{member.fullName}</span>
+          <Tag size="small" className="text-xs rounded-full">
+            {member.relationship}
+          </Tag>
         </span>
       ),
     })),
   ];
 
+  const verifiedRecords = records.filter((r) => r.transactionHash || r.blockchainRecordId);
+
   return (
-    <div className="min-h-[calc(100vh-90px)] lg:h-[calc(100vh-90px)] bg-slate-50 py-8 lg:overflow-hidden flex flex-col animate-fade-in">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full lg:h-full lg:overflow-y-auto hide-scrollbar">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="p-3 bg-blue-600 rounded-xl text-white shadow-lg shadow-blue-500/30">
-            <QrcodeOutlined className="text-2xl" />
-          </div>
-          <div>
-            <Title level={2} className="!mb-0">
-              Vaccine Passport
-            </Title>
-            <Text type="secondary">Digital storage for your verified vaccination records</Text>
+    <div className="min-h-[calc(100vh-90px)] bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 py-8 animate-fade-in">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex items-start justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-4 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl text-white shadow-xl shadow-blue-500/30">
+                <SafetyCertificateOutlined className="text-3xl" />
+              </div>
+              <div>
+                <Title
+                  level={2}
+                  className="!mb-1 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+                >
+                  Vaccine Passport
+                </Title>
+                <Text className="text-slate-500">
+                  Your digital vaccination records secured by blockchain technology
+                </Text>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Tag className="rounded-full px-4 py-1 bg-emerald-50 text-emerald-600 border-emerald-200 font-medium">
+                <CheckCircleFilled className="mr-1" /> {verifiedRecords.length} Verified
+              </Tag>
+            </div>
           </div>
         </div>
 
-        <Tabs
-          activeKey={activeTab}
-          onChange={setActiveTab}
-          items={tabItems}
-          className="mb-6 custom-tabs"
-          type="card"
-        />
+        {/* Digital Passport Card & Tabs Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Left: Digital Passport Card */}
+          <div className="lg:col-span-1">
+            <DigitalPassportCard
+              user={activeTab === 'me' ? user : familyMembers.find((f) => f.id === activeTab) || {}}
+              identityHash={
+                records.length > 0
+                  ? records[0].patientIdentityHash
+                  : activeTab === 'me'
+                    ? user?.blockchainIdentityHash
+                    : familyMembers.find((f) => f.id === activeTab)?.blockchainIdentityHash
+              }
+              qrUrl={
+                records.length > 0 && records[0].ipfsHash
+                  ? `${window.location.origin}/verify/${records[0].ipfsHash}`
+                  : ''
+              }
+            />
+            <div className="text-center mt-4">
+              <Text className="text-slate-400 text-xs">
+                Scan this QR code to verify your complete vaccination history on the blockchain.
+              </Text>
+            </div>
+          </div>
+
+          {/* Right: Stats & Records */}
+          <div className="lg:col-span-2 flex flex-col gap-6">
+            {/* Stats Cards - Compact Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <Card className="rounded-xl shadow-sm border-0 bg-white/60 backdrop-blur">
+                <div className="text-center p-2">
+                  <div className="text-2xl font-bold text-slate-800">{records.length}</div>
+                  <Text className="text-[10px] uppercase text-slate-400 font-bold">Records</Text>
+                </div>
+              </Card>
+              <Card className="rounded-xl shadow-sm border-0 bg-white/60 backdrop-blur">
+                <div className="text-center p-2">
+                  <div className="text-2xl font-bold text-slate-800">{verifiedRecords.length}</div>
+                  <Text className="text-[10px] uppercase text-emerald-500 font-bold">Verified</Text>
+                </div>
+              </Card>
+              <Card className="rounded-xl shadow-sm border-0 bg-white/60 backdrop-blur">
+                <div className="text-center p-2">
+                  <div className="text-2xl font-bold text-slate-800">
+                    {new Set(records.map((r) => r.vaccineName)).size}
+                  </div>
+                  <Text className="text-[10px] uppercase text-slate-400 font-bold">Vaccines</Text>
+                </div>
+              </Card>
+              <Card className="rounded-xl shadow-sm border-0 bg-white/60 backdrop-blur">
+                <div className="text-center p-2">
+                  <div className="text-base font-bold text-slate-800 mt-1.5">
+                    {records.length > 0
+                      ? new Date(
+                          Math.max(...records.map((r) => new Date(r.vaccinationDate)))
+                        ).toLocaleDateString(i18n.language, { month: 'short', year: '2-digit' })
+                      : 'N/A'}
+                  </div>
+                  <Text className="text-[10px] uppercase text-slate-400 font-bold">Last Dose</Text>
+                </div>
+              </Card>
+            </div>
+
+            {/* Tabs */}
+            <Card className="rounded-2xl shadow-sm border-0 overflow-hidden">
+              <Tabs
+                activeKey={activeTab}
+                onChange={setActiveTab}
+                items={tabItems}
+                className="custom-passport-tabs"
+              />
+            </Card>
+          </div>
+        </div>
 
         {loading ? (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              {[1, 2, 3].map((i) => (
-                <Card key={i} className="rounded-2xl shadow-sm border border-slate-100">
-                  <Skeleton active paragraph={{ rows: 1 }} title={{ width: 60 }} />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <Card key={i} className="rounded-2xl shadow-sm border-0">
+                  <Skeleton active paragraph={{ rows: 1 }} title={{ width: 80 }} />
                 </Card>
               ))}
             </div>
-            <Card className="rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-              <Skeleton active paragraph={{ rows: 5 }} />
+            <Card className="rounded-2xl shadow-sm border-0">
+              <Skeleton active paragraph={{ rows: 6 }} />
             </Card>
           </div>
         ) : error ? (
-          <Alert type="error" message={error} showIcon className="mb-4 rounded-xl" />
+          <Alert type="error" message={error} showIcon className="rounded-xl" />
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <Card
-                size="small"
-                className="rounded-2xl shadow-sm border border-slate-100 bg-gradient-to-br from-blue-50 to-white"
-              >
-                <div className="flex items-center justify-between p-2">
+            {/* Records Table */}
+            <Card className="rounded-2xl shadow-sm border-0 overflow-hidden">
+              <div className="p-4 border-b border-slate-100">
+                <div className="flex items-center justify-between">
                   <div>
-                    <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                      {t('client:records.vaccinePassport.totalRecords')}
+                    <Title level={4} className="!mb-1">
+                      Vaccination Records
+                    </Title>
+                    <Text className="text-slate-400">
+                      All your vaccination history with blockchain verification
                     </Text>
-                    <div className="text-3xl font-bold text-blue-600 mt-1">{records.length}</div>
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                    <SafetyCertificateOutlined className="text-2xl text-blue-600" />
                   </div>
                 </div>
-              </Card>
+              </div>
 
-              <Card
-                size="small"
-                className="rounded-2xl shadow-sm border border-slate-100 bg-gradient-to-br from-emerald-50 to-white"
-              >
-                <div className="flex items-center justify-between p-2">
-                  <div>
-                    <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                      {t('client:records.vaccinePassport.vaccinesTaken')}
-                    </Text>
-                    <div className="text-3xl font-bold text-emerald-600 mt-1">
-                      {new Set(records.map((r) => r.vaccineName)).size}
-                    </div>
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
-                    <MedicineBoxOutlined className="text-2xl text-emerald-600" />
-                  </div>
-                </div>
-              </Card>
-
-              <Card
-                size="small"
-                className="rounded-2xl shadow-sm border border-slate-100 bg-gradient-to-br from-purple-50 to-white"
-              >
-                <div className="flex items-center justify-between p-2">
-                  <div>
-                    <Text className="text-slate-500 font-medium uppercase text-xs tracking-wider">
-                      {t('client:records.vaccinePassport.lastVaccination')}
-                    </Text>
-                    <div className="text-lg font-bold text-purple-600 mt-2">
-                      {records.length > 0
-                        ? new Date(
-                            Math.max(...records.map((r) => new Date(r.vaccinationDate)))
-                          ).toLocaleDateString(i18n.language)
-                        : 'N/A'}
-                    </div>
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
-                    <CalendarOutlined className="text-2xl text-purple-600" />
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            <Card className="rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
               {records.length > 0 ? (
                 <Table
                   columns={columns}
@@ -330,49 +453,68 @@ const WalletVaccinePassport = () => {
                   pagination={{
                     pageSize: 10,
                     showSizeChanger: true,
-                    showTotal: (total) =>
-                      t('client:records.vaccinePassport.totalRecordsCount', { count: total }),
+                    showTotal: (total) => `Total ${total} records`,
+                    className: 'px-4',
                   }}
                   scroll={{ x: 'max-content' }}
                   expandable={{
                     expandedRowRender: (record) => (
-                      <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 m-2">
-                        <Descriptions
-                          bordered
-                          size="small"
-                          column={2}
-                          className="bg-white rounded-lg"
-                        >
-                          <Descriptions.Item
-                            label={t('client:records.vaccinePassport.patientIdentityHash')}
-                            span={2}
-                          >
-                            <Text className="font-mono text-xs text-slate-500">
-                              {record.patientIdentityHash}
-                            </Text>
-                          </Descriptions.Item>
-                          <Descriptions.Item
-                            label={t('client:records.vaccinePassport.appointmentId')}
-                          >
-                            <span className="font-mono text-slate-700">{record.appointmentId}</span>
-                          </Descriptions.Item>
-
-                          {record.transactionHash && (
-                            <>
-                              <Descriptions.Item
-                                label={t('client:records.vaccinePassport.transactionHash')}
-                                span={2}
-                              >
-                                <Text className="font-mono text-xs text-emerald-600 break-all">
-                                  {record.transactionHash}
+                      <div className="p-6 bg-gradient-to-br from-slate-50 to-blue-50/50 rounded-xl m-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-4">
+                            <div>
+                              <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
+                                Patient Identity Hash
+                              </Text>
+                              <div className="mt-1 p-3 bg-white rounded-lg border border-slate-100">
+                                <Text className="font-mono text-xs text-slate-600 break-all">
+                                  {record.patientIdentityHash}
                                 </Text>
-                              </Descriptions.Item>
-                              <Descriptions.Item
-                                label={t('client:records.vaccinePassport.ipfsHash')}
-                                span={2}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <Text className="font-mono text-xs text-blue-600">
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
+                                  Appointment ID
+                                </Text>
+                                <div className="mt-1 p-3 bg-white rounded-lg border border-slate-100">
+                                  <Text className="font-mono text-sm font-semibold text-slate-700">
+                                    {record.appointmentId}
+                                  </Text>
+                                </div>
+                              </div>
+                              <div>
+                                <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
+                                  Record ID
+                                </Text>
+                                <div className="mt-1 p-3 bg-white rounded-lg border border-slate-100">
+                                  <Text className="font-mono text-sm font-semibold text-slate-700">
+                                    {record.id}
+                                  </Text>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {(record.transactionHash || record.blockchainRecordId) && (
+                            <div className="space-y-4">
+                              <div>
+                                <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
+                                  Transaction Hash
+                                </Text>
+                                <div className="mt-1 p-3 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-100">
+                                  <Text className="font-mono text-xs text-emerald-600 break-all">
+                                    {record.transactionHash ||
+                                      `Block Record #${record.blockchainRecordId}`}
+                                  </Text>
+                                </div>
+                              </div>
+                              <div>
+                                <Text className="text-xs uppercase tracking-wider text-slate-400 font-medium">
+                                  IPFS Hash
+                                </Text>
+                                <div className="mt-1 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100 flex items-center justify-between gap-2">
+                                  <Text className="font-mono text-xs text-blue-600 break-all">
                                     {record.ipfsHash || 'N/A'}
                                   </Text>
                                   {record.ipfsHash && (
@@ -381,30 +523,44 @@ const WalletVaccinePassport = () => {
                                       size="small"
                                       href={`https://ipfs.io/ipfs/${record.ipfsHash}`}
                                       target="_blank"
+                                      className="text-blue-600 shrink-0"
                                     >
-                                      {t('client:records.vaccinePassport.viewOnIpfs')}
+                                      View on IPFS →
                                     </Button>
                                   )}
                                 </div>
-                              </Descriptions.Item>
-                            </>
+                              </div>
+                            </div>
                           )}
-                        </Descriptions>
+                        </div>
                       </div>
                     ),
+                    expandRowByClick: true,
                   }}
-                  className="custom-table"
+                  className="custom-passport-table"
                 />
               ) : (
-                <Empty
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  description={t('client:records.vaccinePassport.noRecords')}
-                />
+                <div className="p-12">
+                  <Empty
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    description={
+                      <div className="text-center">
+                        <Text className="text-slate-400 block mb-2">
+                          No vaccination records found
+                        </Text>
+                        <Text className="text-slate-300 text-sm">
+                          Your records will appear here after vaccination
+                        </Text>
+                      </div>
+                    }
+                  />
+                </div>
               )}
             </Card>
           </>
         )}
 
+        {/* Modals */}
         <BlockchainVerificationModal
           open={verificationModalOpen}
           onClose={() => setVerificationModalOpen(false)}
@@ -416,22 +572,69 @@ const WalletVaccinePassport = () => {
           onCancel={() => setQrModalOpen(false)}
           footer={null}
           centered
-          title={
-            <div className="flex items-center gap-2">
-              <QrcodeOutlined className="text-blue-600" />
-              <span>Digital Vaccine Verification</span>
-            </div>
-          }
+          width={420}
+          className="qr-modal"
+          title={null}
         >
-          <div className="flex flex-col items-center justify-center p-4">
-            <div className="p-4 bg-white rounded-xl border-2 border-blue-100 shadow-inner mb-4">
-              <QRCode value={qrUrl} size={250} icon="/logo.png" />
+          <div className="flex flex-col items-center justify-center p-6">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-xl shadow-blue-500/30">
+              <QrcodeOutlined className="text-3xl text-white" />
             </div>
-            <Text type="secondary" className="text-center mb-2">
-              Scan this QR code to verify the vaccine record on the blockchain.
+            <Title level={4} className="!mb-1 text-center">
+              Digital Verification
+            </Title>
+            <Text className="text-slate-400 text-center mb-6">
+              Scan to verify this vaccination record
             </Text>
-            <div className="p-2 bg-slate-50 rounded-lg w-full break-all text-center font-mono text-xs text-slate-500">
-              {qrUrl}
+
+            <div className="p-6 bg-white rounded-2xl border-2 border-slate-100 shadow-inner mb-6">
+              <QRCode value={qrUrl} size={220} icon="/logo.png" />
+            </div>
+
+            {selectedRecord && (
+              <div className="w-full p-4 bg-gradient-to-r from-slate-50 to-blue-50 rounded-xl mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <Text className="text-slate-500 text-sm">Vaccine</Text>
+                  <Text className="font-semibold text-slate-700">{selectedRecord.vaccineName}</Text>
+                </div>
+                <div className="flex items-center justify-between">
+                  <Text className="text-slate-500 text-sm">Date</Text>
+                  <Text className="font-semibold text-slate-700">
+                    {new Date(selectedRecord.vaccinationDate).toLocaleDateString()}
+                  </Text>
+                </div>
+              </div>
+            )}
+
+            <div className="w-full p-3 bg-slate-50 rounded-xl">
+              <Text className="text-xs text-slate-400 block text-center mb-1">
+                Verification URL
+              </Text>
+              <Text className="font-mono text-xs text-slate-600 break-all text-center block">
+                {qrUrl}
+              </Text>
+            </div>
+
+            <div className="flex gap-3 mt-6 w-full">
+              <Button
+                block
+                icon={<ShareAltOutlined />}
+                onClick={() => {
+                  navigator.clipboard.writeText(qrUrl);
+                  message.success('Link copied!');
+                }}
+              >
+                Copy Link
+              </Button>
+              <Button
+                type="primary"
+                block
+                icon={<DownloadOutlined />}
+                onClick={() => selectedRecord && handleDownloadRecordPdf(selectedRecord.id)}
+                className="bg-gradient-to-r from-blue-500 to-indigo-500 border-0"
+              >
+                Download PDF
+              </Button>
             </div>
           </div>
         </Modal>

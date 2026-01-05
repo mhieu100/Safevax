@@ -7,6 +7,7 @@ import com.dapp.backend.exception.AppException;
 import com.dapp.backend.model.*;
 import com.dapp.backend.dto.blockchain.BlockchainVaccineRecordDetails;
 import com.dapp.backend.repository.FamilyMemberRepository;
+import com.dapp.backend.repository.UserRepository;
 import com.dapp.backend.repository.VaccineRecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class VaccineRecordService {
 
     private final VaccineRecordRepository vaccineRecordRepository;
+    private final UserRepository userRepository;
     private final FamilyMemberRepository familyMemberRepository;
     private final BlockchainService blockchainService;
     private final FhirImmunizationMapper fhirImmunizationMapper;
@@ -346,12 +348,14 @@ public class VaccineRecordService {
 
     /**
      * Verify if a patient has received a specific vaccine dose
-     * @param vaccineSlug The vaccine slug (e.g., "covid-19-pfizer")
-     * @param doseNumber The dose number to check (e.g., 3 for 3rd dose)
+     * 
+     * @param vaccineSlug  The vaccine slug (e.g., "covid-19-pfizer")
+     * @param doseNumber   The dose number to check (e.g., 3 for 3rd dose)
      * @param identityHash The patient's identity hash
      * @return VaccineRecordResponse if found and verified
      */
-    public VaccineRecordResponse verifySpecificDose(String vaccineSlug, int doseNumber, String identityHash) throws AppException {
+    public VaccineRecordResponse verifySpecificDose(String vaccineSlug, int doseNumber, String identityHash)
+            throws AppException {
         log.info("Verifying dose {} of vaccine {} for identity hash {}", doseNumber, vaccineSlug, identityHash);
 
         VaccineRecord record = vaccineRecordRepository.findVerifiedByVaccineSlugAndDoseAndIdentity(
@@ -381,30 +385,49 @@ public class VaccineRecordService {
 
     /**
      * Get all verified vaccination records for a patient by identity hash
+     * 
      * @param identityHash The patient's identity hash
      * @return List of all verified vaccine records
      */
     public List<VaccineRecordResponse> getVerifiedRecordsByIdentity(String identityHash) throws AppException {
         log.info("Fetching all verified records for identity hash: {}", identityHash);
 
-        List<VaccineRecord> records = vaccineRecordRepository.findVerifiedByIdentityHash(identityHash);
+        var blockchainList = blockchainService.getVaccineRecordsByIdentity(identityHash);
 
-        if (records.isEmpty()) {
-            throw new AppException("No verified vaccination records found for this identity");
+        if (blockchainList == null || !blockchainList.isSuccess() || blockchainList.getData() == null) {
+            return List.of();
         }
 
-        return records.stream()
-                .map(this::mapToResponse)
+        // Try to find patient name from local DB if possible
+        String patientName = null;
+        try {
+            var user = userRepository.findByBlockchainIdentityHash(identityHash).orElse(null);
+            if (user != null) {
+                patientName = user.getFullName();
+            } else {
+                // Try family members? Not fetching all family members for perf, but could add
+                // later
+            }
+        } catch (Exception e) {
+            log.warn("Failed to lookup patient name for identity hash: {}", identityHash);
+        }
+
+        final String resolvedName = patientName;
+
+        return blockchainList.getData().stream()
+                .map(data -> mapBlockchainDetailToResponse(data, resolvedName))
                 .collect(Collectors.toList());
     }
 
     /**
      * Get all doses of a specific vaccine for a patient
-     * @param vaccineSlug The vaccine slug
+     * 
+     * @param vaccineSlug  The vaccine slug
      * @param identityHash The patient's identity hash
      * @return List of all doses received for this vaccine
      */
-    public List<VaccineRecordResponse> getVaccineDosesByIdentity(String vaccineSlug, String identityHash) throws AppException {
+    public List<VaccineRecordResponse> getVaccineDosesByIdentity(String vaccineSlug, String identityHash)
+            throws AppException {
         log.info("Fetching all doses of vaccine {} for identity hash: {}", vaccineSlug, identityHash);
 
         List<VaccineRecord> records = vaccineRecordRepository.findVerifiedByVaccineSlugAndIdentity(
@@ -416,6 +439,95 @@ public class VaccineRecordService {
 
         return records.stream()
                 .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<VaccineRecordResponse> getBlockchainRecords(Long userId) throws AppException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found"));
+
+        if (user.getBlockchainIdentityHash() == null) {
+            throw new AppException("User has no blockchain identity");
+        }
+
+        var blockchainList = blockchainService.getVaccineRecordsByIdentity(user.getBlockchainIdentityHash());
+
+        if (blockchainList == null || !blockchainList.isSuccess() || blockchainList.getData() == null) {
+            return List.of();
+        }
+
+        return blockchainList.getData().stream()
+                .map(data -> mapBlockchainDetailToResponse(data, user.getFullName()))
+                .collect(Collectors.toList());
+    }
+
+    private VaccineRecordResponse mapBlockchainDetailToResponse(
+            BlockchainVaccineRecordDetails.VaccineRecordDetailData data, String patientName) {
+
+        com.dapp.backend.enums.VaccinationSite site = null;
+        if (data.getSite() != null) {
+            try {
+                site = com.dapp.backend.enums.VaccinationSite.valueOf(data.getSite());
+            } catch (IllegalArgumentException e) {
+                // Ignore or log
+            }
+        }
+
+        LocalDate vaccinationDate = null;
+        if (data.getVaccinationDate() != null) {
+            try {
+                // Try parsing as ISO Date Time if it contains 'T'
+                if (data.getVaccinationDate().contains("T")) {
+                    vaccinationDate = java.time.LocalDateTime
+                            .parse(data.getVaccinationDate(), java.time.format.DateTimeFormatter.ISO_DATE_TIME)
+                            .toLocalDate();
+                } else {
+                    vaccinationDate = LocalDate.parse(data.getVaccinationDate());
+                }
+            } catch (Exception e) {
+                log.warn("Failed to parse vaccination date: {}", data.getVaccinationDate());
+            }
+        }
+
+        return VaccineRecordResponse.builder()
+                .id(data.getRecordId() != null ? Long.parseLong(data.getRecordId()) : null)
+                .blockchainRecordId(data.getRecordId())
+                .patientIdentityHash(data.getIdentityHash())
+                .vaccineId(data.getVaccineId() != null ? Long.parseLong(data.getVaccineId()) : null)
+                .vaccineName(data.getVaccineName())
+                .doseNumber(data.getDoseNumber())
+                .vaccinationDate(vaccinationDate)
+                .site(site)
+                .doctorName(data.getDoctorName())
+                .centerName(data.getCenterName())
+                .notes(data.getNotes())
+                .ipfsHash(data.getIpfsHash())
+                .patientName(patientName)
+                .isVerified(true) // Coming from blockchain, so implicitly verified
+                .build();
+    }
+
+    public List<VaccineRecordResponse> getFamilyMemberBlockchainRecords(Long familyMemberId, Long ownerId)
+            throws AppException {
+        FamilyMember member = familyMemberRepository.findById(familyMemberId)
+                .orElseThrow(() -> new AppException("Family member not found"));
+
+        if (!member.getUser().getId().equals(ownerId)) {
+            throw new AppException("Unauthorized access to family member records");
+        }
+
+        if (member.getBlockchainIdentityHash() == null) {
+            throw new AppException("Family member has no blockchain identity");
+        }
+
+        var blockchainList = blockchainService.getVaccineRecordsByIdentity(member.getBlockchainIdentityHash());
+
+        if (blockchainList == null || !blockchainList.isSuccess() || blockchainList.getData() == null) {
+            return List.of();
+        }
+
+        return blockchainList.getData().stream()
+                .map(data -> mapBlockchainDetailToResponse(data, member.getFullName()))
                 .collect(Collectors.toList());
     }
 }

@@ -1,3 +1,4 @@
+import { ConfigProvider, Timeline } from 'antd';
 import {
   Activity,
   AlertTriangle,
@@ -5,7 +6,9 @@ import {
   BadgeCheck,
   Calendar,
   CheckCircle2,
+  Clock,
   Download,
+  LayoutGrid,
   Loader2,
   ShieldCheck,
   Syringe,
@@ -39,6 +42,7 @@ const VerifySearchResultPage = () => {
   const [error, setError] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [searchType, setSearchType] = useState(''); // 'specific-dose', 'vaccine-doses', 'all-records'
+  const [viewMode, setViewMode] = useState(!vaccineSlug ? 'timeline' : 'grid'); // 'grid' | 'timeline'
 
   useEffect(() => {
     if (!identityHash) {
@@ -53,12 +57,15 @@ const VerifySearchResultPage = () => {
     let apiPromise;
     if (vaccineSlug && doseNumber) {
       setSearchType('specific-dose');
+      setViewMode('grid');
       apiPromise = verifySpecificDose(vaccineSlug, parseInt(doseNumber, 10), identityHash);
     } else if (vaccineSlug) {
       setSearchType('vaccine-doses');
+      setViewMode('grid');
       apiPromise = getVaccineDosesByIdentity(vaccineSlug, identityHash);
     } else {
       setSearchType('all-records');
+      setViewMode('timeline');
       apiPromise = getRecordsByIdentity(identityHash);
     }
 
@@ -197,25 +204,50 @@ const VerifySearchResultPage = () => {
       <main className="max-w-4xl mx-auto px-6 pb-12">
         {/* Summary Card */}
         <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="bg-emerald-100 p-3 rounded-xl">
-              <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="bg-emerald-100 p-3 rounded-xl">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-slate-900">
+                  {searchType === 'specific-dose' && 'Dose Verification Successful'}
+                  {searchType === 'vaccine-doses' && `Found ${records.length} Dose(s)`}
+                  {searchType === 'all-records' && `Found ${records.length} Vaccination Record(s)`}
+                </h1>
+
+                {records.length > 0 && records[0].patientName && (
+                  <div className="text-xl font-bold text-slate-800 mt-1">
+                    {records[0].patientName}
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2 mt-1">
+                  <p className="text-slate-500 text-sm font-mono bg-slate-100 px-2 py-1 rounded border border-slate-200 break-all">
+                    {identityHash}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">
-                {searchType === 'specific-dose' && 'Dose Verification Successful'}
-                {searchType === 'vaccine-doses' && `Found ${records.length} Dose(s)`}
-                {searchType === 'all-records' && `Found ${records.length} Vaccination Record(s)`}
-              </h1>
-              <p className="text-slate-500">
-                Identity: {identityHash?.substring(0, 12)}...
-                {identityHash?.substring(identityHash.length - 6)}
-              </p>
+
+            <div className="flex items-center bg-slate-100 rounded-lg p-1">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                <LayoutGrid size={20} />
+              </button>
+              <button
+                onClick={() => setViewMode('timeline')}
+                className={`p-2 rounded-md transition-all ${viewMode === 'timeline' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                <Clock size={20} />
+              </button>
             </div>
           </div>
 
           {vaccineSlug && (
-            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+            <div className="mt-4 flex">
               <Syringe size={16} />
               <span>{vaccineSlug}</span>
               {doseNumber && (
@@ -227,12 +259,114 @@ const VerifySearchResultPage = () => {
           )}
         </div>
 
-        {/* Records Grid */}
-        <div className={`grid gap-6 ${isMultiple ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
-          {records.map((record, index) => (
-            <RecordCard key={record.id || index} record={record} index={index} />
-          ))}
-        </div>
+        {/* Records Content */}
+        {viewMode === 'grid' ? (
+          <div
+            className={`grid gap-6 ${isMultiple ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}
+          >
+            {records.map((record, index) => (
+              <RecordCard key={record.id || index} record={record} index={index} />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-8">
+            <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+              <Activity className="text-blue-500" /> Virtual Health Timeline
+            </h3>
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: '#3b82f6',
+                },
+              }}
+            >
+              <Timeline
+                items={records
+                  .sort((a, b) => new Date(b.vaccinationDate) - new Date(a.vaccinationDate))
+                  .map((record) => ({
+                    color: 'blue',
+                    dot: (
+                      <div className="w-4 h-4 rounded-full border-[3px] border-blue-500 bg-white" />
+                    ),
+                    children: (
+                      <div className="mb-8 rounded-xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                        {/* Header */}
+                        <div className="bg-blue-600 p-4 text-white">
+                          <div className="flex items-center gap-2 mb-1">
+                            <BadgeCheck size={18} className="text-white" />
+                            <span className="font-bold text-lg">{record.vaccineName}</span>
+                          </div>
+                          <div className="text-blue-100 text-sm flex gap-2 items-center">
+                            <span>Dose {record.doseNumber}</span>
+                            <span>•</span>
+                            <span>{record.vaccinationDate}</span>
+                          </div>
+                        </div>
+
+                        {/* Body */}
+                        <div className="p-4 bg-white">
+                          <div className="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <span className="text-xs font-bold text-slate-400 uppercase">
+                                Center
+                              </span>
+                              <div className="text-slate-700 font-medium text-sm truncate">
+                                {record.centerName}
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-xs font-bold text-slate-400 uppercase">
+                                Manufacturer
+                              </span>
+                              <div className="text-slate-700 font-medium text-sm line-clamp-1">
+                                {record.manufacturer || 'Standard'}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Immutable Record Box */}
+                          <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
+                            <div className="flex items-center gap-2 mb-1">
+                              <ShieldCheck size={14} className="text-emerald-500" />
+                              <span className="text-xs font-bold text-emerald-600 uppercase">
+                                Immutable Record
+                              </span>
+                            </div>
+                            <div className="space-y-1">
+                              <div className="flex items-start gap-2">
+                                <span className="text-xs text-slate-400 font-mono w-8 shrink-0">
+                                  Hash:
+                                </span>
+                                <span className="text-xs text-slate-600 font-mono break-all line-clamp-1">
+                                  {record.blockNumber
+                                    ? record.transactionHash
+                                    : record.patientIdentityHash}
+                                </span>
+                              </div>
+                              {record.ipfsHash && (
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-slate-400 font-mono w-8 shrink-0">
+                                    IPFS:
+                                  </span>
+                                  <a
+                                    href={`/verify/${record.ipfsHash}`}
+                                    target="_blank"
+                                    className="text-xs text-blue-500 font-mono hover:underline truncate"
+                                  >
+                                    {record.ipfsHash}
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ),
+                  }))}
+              />
+            </ConfigProvider>
+          </div>
+        )}
       </main>
     </div>
   );

@@ -1,19 +1,11 @@
-import { CheckCircleFilled, SafetyCertificateOutlined } from '@ant-design/icons';
-import { Badge, Tooltip } from 'antd';
+import { SafetyCertificateOutlined } from '@ant-design/icons';
+import { Badge } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-const BlockchainBadge = ({ verified = false, compact = false }) => {
+const BlockchainBadge = ({ verified = false }) => {
   const { t } = useTranslation(['common']);
 
   if (!verified) return null;
-
-  if (compact) {
-    return (
-      <Tooltip title={t('common:blockchain.verifiedOnBlockchain')}>
-        <CheckCircleFilled className="text-emerald-500 text-lg" />
-      </Tooltip>
-    );
-  }
 
   return (
     <Badge
