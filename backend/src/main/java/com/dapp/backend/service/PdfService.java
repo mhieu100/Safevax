@@ -719,8 +719,7 @@ public class PdfService {
                         PdfPTable passportInfoContent = new PdfPTable(1);
                         passportInfoContent.setWidthPercentage(100);
                         addCardTitle(passportInfoContent, "Passport Information");
-                        addDetailRow(passportInfoContent, "Full Name", patientName, "Identity Hash",
-                                        identityHash.substring(0, 10) + "...");
+                        addDetailRow(passportInfoContent, "Full Name", patientName, "Identity Hash", identityHash);
                         addDetailRow(passportInfoContent, "Issued Date", LocalDate.now().toString(), "Passport ID",
                                         passportId);
 
@@ -752,7 +751,7 @@ public class PdfService {
                         addCardTitle(qrContent, "Digital Verification");
 
                         try {
-                                String qrData = "https://safevax.mhieu100.space/verify/" + identityHash;
+                                String qrData = "https://safevax.mhieu100.space/verify/search?identity=" + identityHash;
                                 BarcodeQRCode barcodeQRCode = new BarcodeQRCode(qrData, 200, 200, null);
                                 Image qrImage = barcodeQRCode.getImage();
                                 qrImage.scaleAbsolute(140, 140);
@@ -811,12 +810,12 @@ public class PdfService {
                 title.setSpacingAfter(10);
                 document.add(title);
 
-                PdfPTable table = new PdfPTable(5);
+                PdfPTable table = new PdfPTable(6);
                 table.setWidthPercentage(100);
-                table.setWidths(new float[] { 3, 1, 2, 2, 2 });
+                table.setWidths(new float[] { 3, 1, 2, 2, 2, 1.5f });
                 table.setHeaderRows(1);
 
-                Stream.of("Vaccine", "Dose", "Date", "Location", "Status").forEach(t -> {
+                Stream.of("Vaccine", "Dose", "Date", "Location", "Status", "Scan").forEach(t -> {
                         PdfPCell h = new PdfPCell(new Phrase(t,
                                         FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE)));
                         h.setBackgroundColor(HEADER_BG);
@@ -828,7 +827,7 @@ public class PdfService {
 
                 if (records.isEmpty()) {
                         PdfPCell cell = new PdfPCell(new Phrase("No verified records found on blockchain"));
-                        cell.setColspan(5);
+                        cell.setColspan(6);
                         cell.setPadding(20);
                         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                         table.addCell(cell);
@@ -848,6 +847,25 @@ public class PdfService {
                                 s.setHorizontalAlignment(Element.ALIGN_CENTER);
                                 s.setVerticalAlignment(Element.ALIGN_MIDDLE);
                                 table.addCell(s);
+
+                                try {
+                                        String recordUrl = "https://safevax.mhieu100.space/verify/"
+                                                        + (r.getIpfsHash() != null ? r.getIpfsHash() : r.getId());
+                                        BarcodeQRCode barcodeQRCode = new BarcodeQRCode(recordUrl, 100, 100, null);
+                                        Image qrImage = barcodeQRCode.getImage();
+                                        qrImage.scaleAbsolute(40, 40);
+
+                                        PdfPCell qrCell = new PdfPCell(qrImage);
+                                        qrCell.setPadding(5);
+                                        qrCell.setBorderColor(BORDER_COLOR);
+                                        qrCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        qrCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                                        table.addCell(qrCell);
+                                } catch (Exception e) {
+                                        PdfPCell qrCell = new PdfPCell(new Phrase("N/A"));
+                                        qrCell.setBorderColor(BORDER_COLOR);
+                                        table.addCell(qrCell);
+                                }
                         }
                 }
                 document.add(table);
