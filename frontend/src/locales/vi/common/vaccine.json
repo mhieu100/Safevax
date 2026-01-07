@@ -96,5 +96,6 @@
     "ADULT_ROUTINE": "Người lớn (Định kỳ)",
     "ELDERLY_CARE": "Chăm sóc người cao tuổi"
   },
-  "relatedVaccines": "Vắc xin liên quan"
+  "relatedVaccines": "Vắc xin liên quan",
+  "activeBookingWarning": "Bạn đang có lịch hẹn cho vắc xin này"
 }

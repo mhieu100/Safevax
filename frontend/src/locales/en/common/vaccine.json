@@ -97,5 +97,6 @@
     "ADULT_ROUTINE": "Adult Routine",
     "ELDERLY_CARE": "Elderly Care"
   },
-  "relatedVaccines": "Related Vaccines"
+  "relatedVaccines": "Related Vaccines",
+  "activeBookingWarning": "You already have an active appointment for this vaccine"
 }
