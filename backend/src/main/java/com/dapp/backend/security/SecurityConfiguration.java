@@ -96,6 +96,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(whiteList).permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/vaccines/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/news/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/centers/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/vaccines/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/api/vaccines/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/api/vaccines/**").authenticated()
