@@ -93,7 +93,8 @@
     "2": "Cao",
     "3": "Trung Bình",
     "4": "Thấp",
-    "5": "Không xác định"
+    "5": "Không xác định",
+    "urgent": "Gấp"
   },
   "doctor": {
     "greeting": "Xin chào, BS. {{name}} 👋",

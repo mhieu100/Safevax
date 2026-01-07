@@ -28,7 +28,10 @@ const ModalCenter = (props) => {
         address: dataInit.address,
         phoneNumber: dataInit.phoneNumber,
         capacity: dataInit.capacity,
+
         workingHours: dataInit.workingHours,
+        latitude: dataInit.latitude,
+        longitude: dataInit.longitude,
       });
 
       if (dataInit.image) {
@@ -126,7 +129,7 @@ const ModalCenter = (props) => {
   };
 
   const submitCenter = async (valuesForm) => {
-    const { name, address, phoneNumber, capacity, workingHours } = valuesForm;
+    const { name, address, phoneNumber, capacity, workingHours, latitude, longitude } = valuesForm;
 
     if (dataLogo.length === 0) {
       message.error('Please upload a Logo image');
@@ -139,6 +142,8 @@ const ModalCenter = (props) => {
       phoneNumber,
       capacity: parseInt(capacity, 10),
       workingHours,
+      latitude: latitude ? parseFloat(latitude) : null,
+      longitude: longitude ? parseFloat(longitude) : null,
       image: dataLogo[0].name,
     };
 
@@ -236,6 +241,12 @@ const ModalCenter = (props) => {
                   rules={[{ required: true, message: 'Please do not leave blank' }]}
                   placeholder="Center working hours..."
                 />
+              </Col>
+              <Col span={12}>
+                <ProFormText label="Latitude" name="latitude" placeholder="Enter latitude..." />
+              </Col>
+              <Col span={12}>
+                <ProFormText label="Longitude" name="longitude" placeholder="Enter longitude..." />
               </Col>
               <Col span={8}>
                 <Form.Item labelCol={{ span: 24 }} label="Logo Image" name="logo">

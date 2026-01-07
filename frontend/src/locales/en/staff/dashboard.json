@@ -93,7 +93,8 @@
     "2": "High",
     "3": "Medium",
     "4": "Low",
-    "5": "Unknown"
+    "5": "Unknown",
+    "urgent": "Urgent"
   },
   "doctor": {
     "greeting": "Hello, Dr. {{name}} 👋",
