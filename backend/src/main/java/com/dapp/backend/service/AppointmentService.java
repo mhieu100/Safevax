@@ -469,8 +469,24 @@ public class AppointmentService {
 
     @Transactional(rollbackFor = Exception.class)
     public String cancel(HttpServletRequest request, long id) throws AppException {
+        User currentUser = authService.getCurrentUserLogin();
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppException("Appointment not found " + id));
+
+        if (appointment.getScheduledDate() != null) {
+            boolean isPatient = (appointment.getPatient() != null
+                    && appointment.getPatient().getId().equals(currentUser.getId())) ||
+                    (appointment.getFamilyMember() != null
+                            && appointment.getFamilyMember().getUser().getId().equals(currentUser.getId()));
+
+            if (isPatient) {
+                long daysUntil = java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.now(),
+                        appointment.getScheduledDate());
+                if (daysUntil < 3) {
+                    throw new AppException("Bạn không thể hủy lịch hẹn trước 3 ngày trước khi tiêm");
+                }
+            }
+        }
 
         if (appointment.getSlot() != null) {
             DoctorAvailableSlot slot = appointment.getSlot();
@@ -573,6 +589,14 @@ public class AppointmentService {
 
         if (!isOwner) {
             throw new AppException("You can only reschedule your own appointments");
+        }
+
+        if (appointment.getScheduledDate() != null) {
+            long daysUntil = java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.now(),
+                    appointment.getScheduledDate());
+            if (daysUntil < 3) {
+                throw new AppException("Bạn không thể đổi lịch hẹn trước 3 ngày trước khi tiêm");
+            }
         }
 
         if (appointment.getStatus() == AppointmentStatus.COMPLETED) {
