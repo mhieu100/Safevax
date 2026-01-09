@@ -121,9 +121,8 @@
     "tabs": {
       "personal": "For You",
       "family": "Family Members",
-      "prePregnancy": "Pre-pregnancy",
-      "pregnancySafe": "During Pregnancy",
-      "postPregnancy": "Postpartum"
+      "children": "For Children",
+      "maternity": "Pregnant Women"
     },
     "selectFamilyMember": "Select family member",
     "chooseFamilyMember": "Choose family member",

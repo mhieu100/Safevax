@@ -121,9 +121,8 @@
     "tabs": {
       "personal": "Cho bạn",
       "family": "Người thân",
-      "prePregnancy": "Trước mang thai",
-      "pregnancySafe": "Khi mang thai",
-      "postPregnancy": "Sau sinh"
+      "children": "Cho trẻ em",
+      "maternity": "Phụ nữ mang thai"
     },
     "selectFamilyMember": "Chọn người thân",
     "chooseFamilyMember": "Chọn thành viên gia đình",

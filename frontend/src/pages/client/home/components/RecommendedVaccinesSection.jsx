@@ -1,8 +1,7 @@
 import {
   ArrowRightOutlined,
-  CalendarOutlined,
-  HeartOutlined,
   SafetyCertificateOutlined,
+  SmileOutlined,
   TeamOutlined,
   UserOutlined,
   WomanOutlined,
@@ -15,10 +14,9 @@ import FadeIn from '@/components/common/animation/FadeIn';
 import { callGetMyFamilyMembers } from '@/services/family.service';
 import {
   getEssentialVaccines,
-  getPostPregnancyVaccines,
   getPregnancySafeVaccines,
-  getPrePregnancyVaccines,
   getRecommendedVaccines,
+  getVaccinesByCategory,
 } from '@/services/vaccine.service';
 import useAccountStore from '@/stores/useAccountStore';
 
@@ -205,12 +203,10 @@ const RecommendedVaccinesSection = () => {
       try {
         let res;
 
-        if (activeTab === 'pregnancy-safe') {
+        if (activeTab === 'maternity') {
           res = await getPregnancySafeVaccines();
-        } else if (activeTab === 'pre-pregnancy') {
-          res = await getPrePregnancyVaccines();
-        } else if (activeTab === 'post-pregnancy') {
-          res = await getPostPregnancyVaccines();
+        } else if (activeTab === 'children') {
+          res = await getVaccinesByCategory('BASIC_CHILDHOOD');
         } else if (activeTab === 'personal') {
           // Vaccine cho bản thân
           const ageInMonths = calculateAgeInMonths(user?.birthday);
@@ -307,29 +303,20 @@ const RecommendedVaccinesSection = () => {
       disabled: !isAuthenticated || familyMembers.length === 0,
     },
     {
-      key: 'pre-pregnancy',
+      key: 'children',
+      label: (
+        <span className="flex items-center gap-2">
+          <SmileOutlined />
+          {t('home.recommendedVaccines.tabs.children')}
+        </span>
+      ),
+    },
+    {
+      key: 'maternity',
       label: (
         <span className="flex items-center gap-2">
           <WomanOutlined />
-          {t('home.recommendedVaccines.tabs.prePregnancy')}
-        </span>
-      ),
-    },
-    {
-      key: 'pregnancy-safe',
-      label: (
-        <span className="flex items-center gap-2">
-          <HeartOutlined />
-          {t('home.recommendedVaccines.tabs.pregnancySafe')}
-        </span>
-      ),
-    },
-    {
-      key: 'post-pregnancy',
-      label: (
-        <span className="flex items-center gap-2">
-          <CalendarOutlined />
-          {t('home.recommendedVaccines.tabs.postPregnancy')}
+          {t('home.recommendedVaccines.tabs.maternity')}
         </span>
       ),
     },
