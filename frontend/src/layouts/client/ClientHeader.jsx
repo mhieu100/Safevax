@@ -83,11 +83,11 @@ const Navbar = () => {
       icon: <InfoCircleOutlined />,
       label: t('layout.navbar.news'),
     },
-    {
-      key: '/about',
-      icon: <InfoCircleOutlined />,
-      label: t('layout.navbar.about'),
-    },
+    // {
+    //   key: '/about',
+    //   icon: <InfoCircleOutlined />,
+    //   label: t('layout.navbar.about'),
+    // },
     {
       key: '/contact',
       icon: <PhoneOutlined />,
