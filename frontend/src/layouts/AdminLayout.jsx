@@ -193,7 +193,7 @@ const LayoutAdmin = () => {
               {!collapsed && (
                 <div className="flex flex-col animate-fade-in">
                   <span className="text-lg font-bold text-white tracking-tight leading-none">
-                    VaxSafe
+                    SafeVax
                   </span>
                   <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">
                     {t('admin:common.header.subtitle')}

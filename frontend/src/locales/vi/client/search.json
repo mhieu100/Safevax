@@ -10,7 +10,7 @@
     "baby": "Bé 2 tháng tuổi cần tiêm gì?"
   },
   "ai": {
-    "title": "VaxSafe AI Assistant",
+    "title": "SafeVax AI Assistant",
     "beta": "Beta"
   },
   "sections": {
@@ -18,7 +18,7 @@
     "news": "Tin tức & Bài viết"
   },
   "footer": {
-    "hint": "Kết quả tìm kiếm được tổng hợp từ dữ liệu y khoa VaxSafe",
+    "hint": "Kết quả tìm kiếm được tổng hợp từ dữ liệu y khoa SafeVax",
     "esc": "để đóng"
   }
 }

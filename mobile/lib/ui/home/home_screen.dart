@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('VaxSafe Home'),
+        title: const Text('SafeVax Home'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
         actions: [

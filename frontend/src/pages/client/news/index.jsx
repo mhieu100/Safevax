@@ -149,7 +149,7 @@ const ClientNewsPage = () => {
                         <EyeOutlined /> {news[0].viewCount || 0} {t('client:news.views')}
                       </span>
                       <span>
-                        {t('client:news.by')} {news[0].author || 'VaxSafe Team'}
+                        {t('client:news.by')} {news[0].author || 'SafeVax Team'}
                       </span>
                     </div>
                   </div>
@@ -301,7 +301,7 @@ const ClientNewsPage = () => {
                               {t('client:news.by')}
                             </Text>
                             <Text strong className="text-xs">
-                              {item.author || 'VaxSafe Team'}
+                              {item.author || 'SafeVax Team'}
                             </Text>
                           </div>
                         </div>

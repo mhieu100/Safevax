@@ -15,7 +15,7 @@ const Loading = () => {
 
         {}
         <div className="flex flex-col items-center gap-3">
-          <h3 className="text-2xl font-bold text-slate-800 tracking-tight">VaxSafe</h3>
+          <h3 className="text-2xl font-bold text-slate-800 tracking-tight">SafeVax</h3>
           <div className="flex items-center gap-2 text-slate-500 font-medium text-sm bg-white/50 px-4 py-1.5 rounded-full border border-slate-200/50">
             <Spin size="small" />
             <span>Loading secure data...</span>

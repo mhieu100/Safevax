@@ -27,7 +27,7 @@ const DigitalPassportCard = ({ user, identityHash, qrUrl }) => {
             </div>
             <div>
               <div className="text-[10px] uppercase tracking-widest text-blue-200 font-bold opacity-80">
-                VaxSafe Protocol
+                SafeVax Protocol
               </div>
               <div className="text-lg font-bold leading-none tracking-tight">Digital Passport</div>
             </div>
@@ -46,7 +46,7 @@ const DigitalPassportCard = ({ user, identityHash, qrUrl }) => {
           {/* QR Code Area */}
           <div className="relative group/qr p-3 bg-white rounded-2xl shadow-xl">
             <QRCodeCanvas
-              value={qrUrl || 'https://vaxsafe.com'}
+              value={qrUrl || 'https://safevax.com'}
               size={110}
               level="H"
               bgColor="#FFFFFF"

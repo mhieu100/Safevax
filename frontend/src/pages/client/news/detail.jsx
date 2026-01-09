@@ -241,7 +241,7 @@ const ClientNewsDetailPage = () => {
                       <div className="flex items-center gap-2">
                         <UserOutlined />
                         <span className="font-medium text-gray-700">
-                          {news.author || 'VaxSafe Editor'}
+                          {news.author || 'SafeVax Editor'}
                         </span>
                       </div>
                       <Tag

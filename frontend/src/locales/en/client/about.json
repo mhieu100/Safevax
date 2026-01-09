@@ -17,7 +17,7 @@
     "revolutionizing": "Revolutionizing Healthcare",
     "readMore": "Read more",
     "trustTitle": "Trust in Every Dose, <br /> Secured by Blockchain.",
-    "description": "VaxSafe is the world's leading decentralized vaccination management platform. We bridge the gap between healthcare providers and patients with immutable, transparent, and secure records.",
+    "description": "SafeVax is the world's leading decentralized vaccination management platform. We bridge the gap between healthcare providers and patients with immutable, transparent, and secure records.",
     "getStarted": "Get Started",
     "contactSales": "Contact Sales"
   },
@@ -31,7 +31,7 @@
     "milestones": "Milestones that define us",
     "2023": {
       "title": "2023 - Inception",
-      "desc": "VaxSafe was founded with a vision to secure health records."
+      "desc": "SafeVax was founded with a vision to secure health records."
     },
     "2024": {
       "title": "2024 - Beta Launch",
@@ -47,8 +47,8 @@
     }
   },
   "cta": {
-    "title": "Ready to secure your health? <br /> Start using VaxSafe today.",
-    "description": "Join thousands of users who trust VaxSafe for their vaccination management. Secure, fast, and always accessible.",
+    "title": "Ready to secure your health? <br /> Start using SafeVax today.",
+    "description": "Join thousands of users who trust SafeVax for their vaccination management. Secure, fast, and always accessible.",
     "createAccount": "Create Account",
     "viewVaccines": "View Vaccines"
   }

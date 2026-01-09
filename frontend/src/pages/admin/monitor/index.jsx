@@ -330,7 +330,7 @@ const MonitorPage = () => {
               prefix={<UserOutlined />}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
-              VaxSafe identities
+              SafeVax identities
             </Text>
           </Card>
         </Col>

@@ -17,7 +17,7 @@
     "revolutionizing": "Cách mạng hóa y tế",
     "readMore": "Đọc thêm",
     "trustTitle": "Niềm tin trong từng liều vắc xin, <br /> Bảo mật bởi Blockchain.",
-    "description": "VaxSafe là nền tảng quản lý tiêm chủng phi tập trung hàng đầu thế giới. Chúng tôi là cầu nối giữa các nhà cung cấp dịch vụ y tế và bệnh nhân với các hồ sơ bất biến, minh bạch và an toàn.",
+    "description": "SafeVax là nền tảng quản lý tiêm chủng phi tập trung hàng đầu thế giới. Chúng tôi là cầu nối giữa các nhà cung cấp dịch vụ y tế và bệnh nhân với các hồ sơ bất biến, minh bạch và an toàn.",
     "getStarted": "Bắt đầu ngay",
     "contactSales": "Liên hệ kinh doanh"
   },
@@ -31,7 +31,7 @@
     "milestones": "Những cột mốc định hình nên chúng tôi",
     "2023": {
       "title": "2023 - Khởi đầu",
-      "desc": "VaxSafe được thành lập với tầm nhìn bảo mật hồ sơ sức khỏe."
+      "desc": "SafeVax được thành lập với tầm nhìn bảo mật hồ sơ sức khỏe."
     },
     "2024": {
       "title": "2024 - Ra mắt bản thử nghiệm",
@@ -47,8 +47,8 @@
     }
   },
   "cta": {
-    "title": "Sẵn sàng bảo vệ sức khỏe của bạn? <br /> Hãy bắt đầu sử dụng VaxSafe ngay hôm nay.",
-    "description": "Tham gia cùng hàng ngàn người dùng tin tưởng VaxSafe để quản lý tiêm chủng. An toàn, nhanh chóng và luôn có thể truy cập.",
+    "title": "Sẵn sàng bảo vệ sức khỏe của bạn? <br /> Hãy bắt đầu sử dụng SafeVax ngay hôm nay.",
+    "description": "Tham gia cùng hàng ngàn người dùng tin tưởng SafeVax để quản lý tiêm chủng. An toàn, nhanh chóng và luôn có thể truy cập.",
     "createAccount": "Tạo tài khoản",
     "viewVaccines": "Xem vắc xin"
   }

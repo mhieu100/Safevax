@@ -24,7 +24,7 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: 'Xin chào! Tôi là trợ lý AI VaxSafe. Tôi có thể giúp gì cho bạn về tiêm chủng hôm nay?',
+      text: 'Xin chào! Tôi là trợ lý AI SafeVax. Tôi có thể giúp gì cho bạn về tiêm chủng hôm nay?',
       sender: 'bot',
     },
   ]);
@@ -182,7 +182,7 @@ const ChatBot = () => {
                 <img src={modelImage} alt="AI" className="w-8 h-8 rounded-full object-cover" />
               </div>
               <div>
-                <h3 className="text-white font-bold text-base m-0 leading-tight">VaxSafe AI</h3>
+                <h3 className="text-white font-bold text-base m-0 leading-tight">SafeVax AI</h3>
                 <span className="text-blue-100 text-xs flex items-center gap-1">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                   Online

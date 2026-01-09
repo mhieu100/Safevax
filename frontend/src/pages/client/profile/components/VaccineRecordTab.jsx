@@ -64,7 +64,7 @@ const VaccineRecordTab = ({ familyMemberId }) => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `vaxsafe_report_${targetUserId || 'user'}.pdf`);
+      link.setAttribute('download', `safevax_report_${targetUserId || 'user'}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();

@@ -396,7 +396,7 @@ const Navbar = () => {
             {/* Contact Info */}
             <div className="mb-4 space-y-3 px-1">
               <div className="flex items-center gap-3 text-slate-500 text-sm">
-                <MailOutlined className="text-blue-600" /> <span>contact@vaxsafe.com</span>
+                <MailOutlined className="text-blue-600" /> <span>contact@safevax.com</span>
               </div>
               <div className="flex items-center gap-3 text-slate-500 text-sm">
                 <PhoneOutlined className="text-blue-600" /> <span>+84 123 456 789</span>

@@ -10,7 +10,7 @@
     "baby": "What vaccines for 2-month-old?"
   },
   "ai": {
-    "title": "VaxSafe AI Assistant",
+    "title": "SafeVax AI Assistant",
     "beta": "Beta"
   },
   "sections": {
@@ -18,7 +18,7 @@
     "news": "News & Articles"
   },
   "footer": {
-    "hint": "Search results are aggregated from VaxSafe medical data",
+    "hint": "Search results are aggregated from SafeVax medical data",
     "esc": "to close"
   }
 }
