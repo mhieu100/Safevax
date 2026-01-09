@@ -246,18 +246,8 @@ const RecommendedVaccinesSection = () => {
 
   // Get display info for current selection
   const getCurrentInfo = () => {
-    if (activeTab === 'personal' && user?.birthday) {
-      const ageInMonths = calculateAgeInMonths(user.birthday);
-      return {
-        name: user.fullName || t('home.recommendedVaccines.you'),
-        age: formatAge(ageInMonths, t),
-        gender:
-          user.gender === 'MALE'
-            ? t('home.recommendedVaccines.male')
-            : user.gender === 'FEMALE'
-              ? t('home.recommendedVaccines.female')
-              : '',
-      };
+    if (activeTab === 'personal') {
+      return null;
     }
     if (activeTab === 'family' && selectedMember) {
       const member = familyMembers.find((m) => m.id === selectedMember);
