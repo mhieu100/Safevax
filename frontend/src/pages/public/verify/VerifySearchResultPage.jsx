@@ -337,7 +337,7 @@ const VerifySearchResultPage = () => {
                             </div>
                             <div className="space-y-1">
                               <div className="flex items-start gap-2">
-                                <span className="text-xs text-slate-400 font-mono w-8 shrink-0">
+                                <span className="text-xs text-slate-400 font-mono w-12 shrink-0">
                                   Hash:
                                 </span>
                                 <span className="text-xs text-slate-600 font-mono break-all line-clamp-1">
@@ -348,7 +348,7 @@ const VerifySearchResultPage = () => {
                               </div>
                               {record.ipfsHash && (
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xs text-slate-400 font-mono w-8 shrink-0">
+                                  <span className="text-xs text-slate-400 font-mono w-12 shrink-0">
                                     IPFS:
                                   </span>
                                   <a
