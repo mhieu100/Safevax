@@ -20,6 +20,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
 
         List<Appointment> findByStatusAndDesiredDateIsNotNullAndCenter(AppointmentStatus status, Center center);
 
+        List<Appointment> findByStatusAndScheduledDateBeforeAndCenter(AppointmentStatus status, LocalDate date,
+                        Center center);
+
         @Query("SELECT a FROM Appointment a WHERE a.doctor IS NULL " +
                         "AND a.status IN :statuses " +
                         "AND a.scheduledDate BETWEEN :startDate AND :endDate " +

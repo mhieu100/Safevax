@@ -663,6 +663,14 @@ public class AppointmentService {
                     "KHẨN CẤP: Chưa có bác sĩ", 1));
         }
 
+        List<Appointment> overdueAppointments = appointmentRepository
+                .findByStatusAndScheduledDateBeforeAndCenter(AppointmentStatus.SCHEDULED, today, center);
+
+        for (Appointment apt : overdueAppointments) {
+            urgentAppointments.add(buildUrgentDto(apt, "OVERDUE",
+                    "Lịch quá hạn chưa xử lý", 2));
+        }
+
         urgentAppointments.sort(java.util.Comparator.comparingInt(
                 UrgentAppointmentDto::getPriorityLevel));
 
