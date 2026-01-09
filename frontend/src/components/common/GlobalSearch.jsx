@@ -66,6 +66,9 @@ const GlobalSearch = ({ open, onCancel }) => {
     setLoading(true);
     try {
       const data = await globalSearch(value);
+      if (data.aiConsultation && typeof data.aiConsultation === 'string') {
+        data.aiConsultation = data.aiConsultation.replace(/\/vaccine\//g, '/vaccines/');
+      }
       setResults(data);
     } catch (error) {
       console.error(error);
