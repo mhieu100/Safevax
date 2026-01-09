@@ -82,7 +82,10 @@ const ChatBot = () => {
       return ragService.consult(data);
     },
     onSuccess: (data) => {
-      setMessages((prev) => [...prev, { id: Date.now(), text: data, sender: 'bot' }]);
+      // Fix potential wrong URL from AI
+      const fixedData =
+        typeof data === 'string' ? data.replace(/\/vaccine\//g, '/vaccines/') : data;
+      setMessages((prev) => [...prev, { id: Date.now(), text: fixedData, sender: 'bot' }]);
     },
     onError: () => {
       setMessages((prev) => [
