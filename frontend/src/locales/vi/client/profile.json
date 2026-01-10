@@ -85,5 +85,35 @@
     "passwordMismatch": "Mật khẩu mới và xác nhận mật khẩu không khớp",
     "userEmailNotFound": "Không tìm thấy email người dùng",
     "unexpectedError": "Đã xảy ra lỗi khi cập nhật mật khẩu"
+  },
+  "completeProfile": {
+    "title": "Hoàn tất hồ sơ sức khỏe",
+    "subtitle": "Chúng tôi cần thêm một vài thông tin để thiết lập <bold>Thẻ Y Tế Số</bold> bảo mật và đảm bảo hồ sơ tiêm chủng chính xác.",
+    "personalInfoDesc": "Thông tin định danh cơ bản",
+    "contactDetails": "Thông tin liên hệ",
+    "contactDetailsDesc": "Cách chúng tôi có thể liên hệ với bạn",
+    "medicalInfoDesc": "Quan trọng cho an toàn tiêm chủng của bạn",
+    "identityNumber": "Số CCCD / CMND",
+    "identityNumberTooltip": "Đối với trẻ em dưới 14 tuổi, vui lòng sử dụng Mã định danh cá nhân trên Giấy khai sinh.",
+    "identityNumberRequired": "Vui lòng nhập số CCCD/CMND!",
+    "identityNumberInvalid": "Vui lòng nhập số CCCD/CMND hợp lệ!",
+    "phoneNumber": "Số điện thoại",
+    "phoneNumberRequired": "Vui lòng nhập số điện thoại!",
+    "phoneNumberInvalid": "Vui lòng nhập số điện thoại hợp lệ!",
+    "addressRequired": "Vui lòng nhập địa chỉ!",
+    "addressPlaceholder": "Nhập địa chỉ đầy đủ của bạn",
+    "bloodTypeRequired": "Vui lòng chọn nhóm máu!",
+    "heightLabel": "Chiều cao (cm)",
+    "weightLabel": "Cân nặng (kg)",
+    "submitLoading": "Đang tạo thẻ số...",
+    "submit": "Hoàn tất hồ sơ & Tạo thẻ số",
+    "termsText": "Bằng cách nhấp vào nút này, bạn đồng ý với Điều khoản Dịch vụ và Chính sách Quyền riêng tư của chúng tôi.",
+    "successMessage": "Hồ sơ sức khỏe đã hoàn tất! Bây giờ bạn có thể đặt lịch tiêm chủng.",
+    "failureMessage": "Không thể hoàn tất hồ sơ",
+    "errorMessage": "Đã xảy ra lỗi khi hoàn tất hồ sơ",
+    "validation": {
+      "birthdayRequired": "Vui lòng chọn ngày sinh của bạn!",
+      "ageRequirement": "Bạn phải đủ 18 tuổi trở lên"
+    }
   }
 }

@@ -41,13 +41,15 @@ export const birthdayValidation = {
     return current.isAfter(maxDate) || current.isBefore(minDate);
   },
 
-  getFormRules: (required = true) => {
+  getFormRules: (required = true, t = null) => {
     const rules = [];
 
     if (required) {
       rules.push({
         required: true,
-        message: 'Please select your date of birth!',
+        message: t
+          ? t('client:profile.completeProfile.validation.birthdayRequired')
+          : 'Please select your date of birth!',
       });
     }
 
@@ -58,11 +60,23 @@ export const birthdayValidation = {
         }
 
         if (!value && required) {
-          return Promise.reject(new Error('Birthday is required'));
+          return Promise.reject(
+            new Error(
+              t
+                ? t('client:profile.completeProfile.validation.birthdayRequired')
+                : 'Birthday is required'
+            )
+          );
         }
 
         if (!birthdayValidation.isValidBirthday(value)) {
-          return Promise.reject(new Error(`You must be at least 18 years old`));
+          return Promise.reject(
+            new Error(
+              t
+                ? t('client:profile.completeProfile.validation.ageRequirement')
+                : 'You must be at least 18 years old'
+            )
+          );
         }
 
         return Promise.resolve();
