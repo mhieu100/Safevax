@@ -56,9 +56,12 @@
     "view": "Xem",
     "bookingNow": "Đặt lịch ngay",
     "reviews": "đánh giá",
-    "addToCartSuccess": "Đã thêm vắc-xin vào giỏ hàng"
+    "addToCartSuccess": "Đã thêm vắc-xin vào giỏ hàng",
+    "add": "Thêm",
+    "book": "Đặt lịch"
   },
   "manufacturer": "Nhà sản xuất",
+  "pricePerDose": "Giá mỗi liều",
   "dosesRequired": "Số liều bắt buộc",
   "daysForNextDose": "Khoảng cách liều tiếp theo",
   "days": "ngày",

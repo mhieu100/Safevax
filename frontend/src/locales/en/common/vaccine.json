@@ -56,9 +56,12 @@
     "view": "View",
     "bookingNow": "Booking now",
     "reviews": "reviews",
-    "addToCartSuccess": "Add vaccine to cart success"
+    "addToCartSuccess": "Add vaccine to cart success",
+    "add": "Add",
+    "book": "Book"
   },
   "manufacturer": "Manufacturer",
+  "pricePerDose": "Price per dose",
   "dosesRequired": "Doses Required",
   "daysForNextDose": "Days for Next Dose",
   "days": "days",

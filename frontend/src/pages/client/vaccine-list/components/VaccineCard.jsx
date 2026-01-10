@@ -127,7 +127,7 @@ const VaccineCard = ({ vaccine }) => {
         <div className="mt-auto pt-4 border-t border-slate-100">
           <div className="flex items-end justify-between mb-4">
             <div>
-              <p className="text-xs text-slate-400 mb-0.5">Price per dose</p>
+              <p className="text-xs text-slate-400 mb-0.5">{t('vaccine.pricePerDose')}</p>
               <p className="text-xl font-bold text-blue-600 leading-none">
                 {formatPrice(vaccine.price)}
               </p>
@@ -145,7 +145,7 @@ const VaccineCard = ({ vaccine }) => {
                   : 'bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700'
               }`}
             >
-              Add
+              {t('vaccine.card.add')}
             </Button>
             <Button
               type="primary"
@@ -159,7 +159,7 @@ const VaccineCard = ({ vaccine }) => {
                   : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500'
               }`}
             >
-              Book
+              {t('vaccine.card.book')}
             </Button>
           </div>
         </div>
