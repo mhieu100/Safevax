@@ -105,6 +105,8 @@
     "bloodTypeRequired": "Please select your blood type!",
     "heightLabel": "Height (cm)",
     "weightLabel": "Weight (kg)",
+    "heightPlaceholder": "e.g. 175",
+    "weightPlaceholder": "e.g. 70",
     "submitLoading": "Creating Digital Card...",
     "submit": "Complete Profile & Create Digital Card",
     "termsText": "By clicking the button, you agree to our Terms of Service and Privacy Policy.",

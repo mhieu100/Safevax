@@ -105,6 +105,8 @@
     "bloodTypeRequired": "Vui lòng chọn nhóm máu!",
     "heightLabel": "Chiều cao (cm)",
     "weightLabel": "Cân nặng (kg)",
+    "heightPlaceholder": "Ví dụ: 175",
+    "weightPlaceholder": "Ví dụ: 70",
     "submitLoading": "Đang tạo thẻ số...",
     "submit": "Hoàn tất hồ sơ & Tạo thẻ số",
     "termsText": "Bằng cách nhấp vào nút này, bạn đồng ý với Điều khoản Dịch vụ và Chính sách Quyền riêng tư của chúng tôi.",
