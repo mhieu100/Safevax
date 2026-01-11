@@ -1,0 +1,54 @@
+Có 3 model chính tích hợp trực tiếp với blockchain:
+
+1. User.java (Định danh người dùng)
+blockchainIdentityHash: Mã băm định danh duy nhất của người dùng trên chuỗi.
+did: Decentralized Identifier (Định danh phi tập trung).
+ipfsDataHash: Hash trỏ tới dữ liệu hồ sơ mở rộng lưu trên IPFS.
+2. FamilyMember.java (Định danh thành viên gia đình)
+blockchainIdentityHash: Tương tự như User, dùng để định danh thành viên trên chuỗi.
+did: Định danh phi tập trung cho thành viên gia đình (ví dụ con cái, người già).
+ipfsDataHash: Hash dữ liệu IPFS của thành viên này.
+3. VaccineRecord.java (Chứng nhận tiêm chủng)
+Đây là model chứa nhiều thông tin blockchain nhất để phục vụ xác thực:
+
+patientIdentityHash: Hash định danh của bệnh nhân trên chuỗi (để liên kết hồ sơ với người dùng/thành viên).
+blockchainRecordId: ID định danh của bản ghi này trên smart contract.
+transactionHash: Mã băm giao dịch (TX Hash) chứng minh dữ liệu đã được ghi vào block.
+blockNumber: Số thứ tự khối chứa giao dịch.
+ipfsHash: Hash nội dung chi tiết của mũi tiêm (giảm tải lưu trữ on-chain).
+digitalSignature: Chữ ký số dùng để xác thực tính toàn vẹn và nguồn gốc dữ liệu.
+isVerified & verifiedAt: Trạng thái đã được xác thực trên chuỗi hay chưa.
+
+MÔ TẢ CÁC TÁC VỤ LIÊN QUAN ĐẾN BLOCKCHAIN (BE -> BLOCKCHAIN GATEWAY -> NETWORK)
+
+Hệ thống sử dụng kiến trúc Gateway, trong đó Backend gọi qua Blockchain Service (Microservice) để tương tác với mạng lưới.
+
+1. Tạo Định Danh Số (Digital Identity Creation)
+- Kích hoạt: Khi đăng ký User mới hoặc thêm Family Member.
+- Quy trình (IdentityService):
+  B1: Hash thông tin định danh (Email/GuardianEmail + Name + DOB + IdentityNum) bằng SHA-256.
+  B2: Tạo DID theo định dạng `did:vax:vietnam:{type}:{hash}`.
+  B3: Gọi API `POST /identity/create` sang Blockchain Service.
+- Dữ liệu on-chain: Mapping IdentityHash -> DID Owner Address.
+
+2. Ghi Nhận Tiêm Chủng (Vaccination Recording)
+- Kích hoạt: Khi bác sĩ hoàn thành mũi tiêm (`VaccineRecordService.createFromAppointment`).
+- Quy trình:
+  B1: Backend chuyển đổi dữ liệu tiêm chủng sang định dạng chuẩn quốc tế FHIR (Release 4) JSON.
+  B2: Upload file JSON này lên IPFS thông qua API `POST /ipfs/upload` (Blockchain Service). Nhận về IPFS Hash.
+  B3: Gửi transaction lên Blockchain qua `POST /vaccine-records/create` bao gồm:
+      - identityHash (Định danh bệnh nhân)
+      - vaccineId, doseNumber (Thông tin vaccine)
+      - doctorId, centerId (Thông tin người thực hiện)
+      - ipfsHash (Hash trỏ tới chi tiết hồ sơ FHIR)
+- Kết quả: Lưu `transactionHash`, `blockNumber`, `blockchainRecordId` vào Database để tra cứu sau này.
+
+3. Liên Kết Giấy Tờ (Document Verification)
+- Kích hoạt: Khi người dùng cập nhật CCCD hoặc Giấy khai sinh cho người thân (`IdentityService.link...`).
+- Quy trình:
+  B1: Cập nhật thông tin vào Database.
+  B2: Gọi API `POST /identity/link-document` để xác thực giấy tờ này thuộc về IdentityHash đó trên chuỗi.
+
+4. Truy Xuất & Xác Thực (Verification & Retrieval)
+- API `getVaccineRecordsByIdentity`: Lấy danh sách mũi tiêm từ Blockchain để so khớp với DB.
+- API `verifyOnBlockchain`: Kiểm tra trạng thái xác thực của bản ghi (đánh dấu `isVerified`).

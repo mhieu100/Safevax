@@ -1,0 +1,17 @@
+- family member -> hủy lịch , đổi lịch , lịch tiếp theo 
+- implement metamark payment
+- chat socket staff -> patient   https://chatgpt.com/c/693b325a-7538-8323-9bee-ae4b45adb592
+
+- reset password
+
+Xuất Chứng nhận (Certificate Export)
+Không phải nơi nào cũng có máy quét QR kỹ thuật số.
+Tính năng: Nút "Xuất PDF" hoặc "In chứng nhận".
+Yêu cầu: Tạo ra một bản PDF đẹp, chuẩn form (giống PC-Covid hoặc EU Digital Certificate), có QR code, song ngữ Anh/Việt để dùng cho mục đích xuất nhập cảnh hoặc nộp hồ sơ giấy.
+
+
+Phân tích Dữ liệu Y tế (Health Analytics)
+Tận dụng các trường dữ liệu sinh hiệu (height, weight, temperature, pulse, adverseReactions) trong 
+VaccineRecord
+Tính năng: Vẽ biểu đồ theo dõi sức khỏe sau tiêm qua các mũi tiêm khác nhau.
+AI Integration: Dùng AI để cảnh báo nếu phản ứng phụ (adverseReactions) có xu hướng nghiêm trọng hơn ở các mũi sau.

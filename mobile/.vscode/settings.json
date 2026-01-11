@@ -1,0 +1,19 @@
+{
+  "dart.flutterSdkPath": ".fvm/versions/3.29.0",
+  "search.exclude": {
+    "**/.fvm": true
+  },
+  "files.watcherExclude": {
+    "**/.fvm": true
+  },
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "[codeblock]": {
+    "files.encoding": "windows1252",
+    "editor.defaultFormatter": "DontenwillAG.codeblock"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.tabWidth": 2,
+  "prettier.printWidth": 120,
+  "prettier.trailingComma": "all"
+}
